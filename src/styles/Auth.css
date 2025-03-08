@@ -16,6 +16,11 @@
     background: rgba(0, 0, 0, 0.2); /* Noir avec 60% d'opacité */
     z-index: 1;
   }
+
+  .auth-box{
+    position: relative;
+    z-index: 2;
+  }
   .auth-box {
     background: rgba(0, 0, 0, 0.8);
     padding: 2rem;
