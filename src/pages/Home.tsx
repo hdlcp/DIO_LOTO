@@ -20,16 +20,19 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+<br></br>
+<br></br>
+<br></br>
 
-      {/* SECTION NEWSLETTER */}
-      <section className="newsletter">
+      {/* SECTION NEWSLETTER 
+    /  <section className="newsletter">
         <h2>SOUSCRIVEZ À NOTRE NEWSLETTER</h2>
         <p>Renseignez votre mail</p>
         <div className="newsletter-form">
           <input type="email" placeholder="Votre email" />
           <button className="subscribe-btn">S'ABONNER</button>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
