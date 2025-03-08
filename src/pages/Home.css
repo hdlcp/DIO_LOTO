@@ -1,0 +1,61 @@
+
+
+/* Assurez-vous que le contenu reste au-dessus de l'overlay */
+.hero, .newsletter, .footer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Boutons stylés */
+.btn {
+  padding: 12px 24px;
+  font-size: 18px;
+  border: 2px solid #ffd700;
+  background: transparent;
+  color: #ffd700;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+  background: #ffd700;
+  color: #0f0f0f;
+}
+
+/* Section Newsletter */
+.newsletter {
+  padding: 50px 20px;
+  background: #111;
+}
+
+/* Formulaire Newsletter */
+.newsletter-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.newsletter-form input {
+  padding: 10px;
+  width: 300px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+}
+
+.subscribe-btn {
+  background: #ffd700;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.subscribe-btn:hover {
+  background: white;
+  color: #111;
+}
+
+
