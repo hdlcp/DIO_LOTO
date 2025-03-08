@@ -1,7 +1,10 @@
 import React from "react";
-import "../styles/Home.css"; // Assurez-vous d'ajouter ce fichier pour le style
+import { useNavigate } from "react-router-dom"; // ✅ Assure-toi que c'est bien importé
+import "../styles/Home.css";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate(); // ✅ Déclare useNavigate avant de l'utiliser
+
   return (
     <div className="home-container">
       {/* SECTION HERO */}
@@ -13,19 +16,21 @@ const Home: React.FC = () => {
             pour les vrais passionnés de jeux à la recherche d'expériences inoubliables et d'opportunités de gagner gros.
           </p>
           <div className="hero-buttons">
-            <button className="btn play-btn">Jouer</button>
-            <button className="btn install-btn">
+            <button className="btn play-btn" onClick={() => navigate("/login")}>Jouer</button>
+
+            <button className="btn install-btn" onClick={() => navigate("/register")}>
               Installer Maintenant <span>📥</span>
             </button>
           </div>
         </div>
       </section>
-<br></br>
-<br></br>
-<br></br>
 
-      {/* SECTION NEWSLETTER 
-    /  <section className="newsletter">
+      <br />
+      <br />
+      <br />
+
+      {/* SECTION NEWSLETTER */}
+      {/* <section className="newsletter">
         <h2>SOUSCRIVEZ À NOTRE NEWSLETTER</h2>
         <p>Renseignez votre mail</p>
         <div className="newsletter-form">
