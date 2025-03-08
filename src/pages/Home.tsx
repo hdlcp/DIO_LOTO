@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <button className="btn play-btn" onClick={() => navigate("/login")}>Jouer</button>
 
             <button className="btn install-btn" onClick={() => navigate("/register")}>
-              Installer Maintenant <span>📥</span>
+              S'inscrire Maintenant <span>📥</span>
             </button>
           </div>
         </div>
