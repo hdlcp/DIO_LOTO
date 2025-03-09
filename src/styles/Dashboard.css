@@ -1,0 +1,97 @@
+/* ✅ Appliquer le background avec l'image */
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+  position: relative;
+  overflow: hidden; /* Supprime les scrollbars */
+}
+
+/* ✅ Effet de superposition sombre */
+.dashboard-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Noir avec 60% d'opacité */
+  z-index: 0;
+}
+
+/* ✅ Centrer le contenu */
+.dashboard-content {
+  width: 90%;
+  max-width: 1200px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ Style du Header */
+.dashboard-header {
+  background-color: #1877f2;
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* ✅ Section Solde */
+.balance-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.balance-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  min-width: 120px;
+}
+
+/* ✅ Boutons */
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+/* ✅ Personnalisation des boutons */
+.custom-button {
+  background: black !important;
+  color: yellow !important;
+  border: 1px solid yellow !important;
+  padding: 10px 15px !important;
+  border-radius: 5px !important;
+  transition: 0.3s !important;
+}
+
+.custom-button:hover {
+  background: yellow !important;
+  color: black !important;
+}
+
+/* ✅ Tableau Transactions */
+.transactions-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.view-more {
+  color: yellow;
+  text-align: right;
+  cursor: pointer;
+}

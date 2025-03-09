@@ -1,0 +1,87 @@
+/* Global Styles */
+.tickets-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+    position: relative;
+  }
+  
+  /* Overlay pour assombrir l'image */
+  .tickets-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Assombrissement */
+    z-index: 0;
+  }
+  
+  /* Retour */
+  .back-link {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: yellow;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 2;
+  }
+  
+  /* Carte Tickets */
+  .tickets-card {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    padding: 20px 40px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Informations Tickets */
+  .tickets-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Numéro de tickets */
+  .ticket-number {
+    background: gray;
+    padding: 8px 14px;
+    border-radius: 50%;
+    font-size: 22px;
+  }
+  
+  /* Icône */
+  .ticket-icon {
+    color: yellow;
+    font-size: 28px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tickets-card {
+      width: 90%;
+      padding: 15px;
+    }
+    
+    .tickets-info {
+      font-size: 18px;
+    }
+  
+    .ticket-icon {
+      font-size: 24px;
+    }
+  }
+  

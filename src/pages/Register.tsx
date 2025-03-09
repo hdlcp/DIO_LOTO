@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/Auth.css";
 
 const Register = () => {
+  const navigate = useNavigate(); 
+
   return (
     <div className="auth-container">
       <div className="auth-box">
@@ -27,7 +30,7 @@ const Register = () => {
             </select>
           </div>
 
-          <button className="auth-button">Suivant</button>
+          <button className="auth-button" onClick={() => navigate("/login")}>Suivant</button>
         </form>
 
         <p className="auth-text">
