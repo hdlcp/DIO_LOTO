@@ -67,7 +67,7 @@ const Header: React.FC = () => {
   
         {/* MENU NORMAL POUR GRAND ÉCRAN */}
         <div style={{ display: "none" }} className="menu-desktop">
-          <Button color="inherit" component={Link} to="/">Accueil</Button>
+          <Button color="inherit" component={Link} to="/dashboard">Accueil</Button>
           <Button color="inherit" component={Link} to="/guide">Guide</Button>
           <Button color="inherit" component={Link} to="/results">Résultats</Button>
           <Button color="inherit" component={Link} to="/commerciaux">Commerciaux</Button>
