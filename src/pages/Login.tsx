@@ -25,7 +25,10 @@ const Login = () => {
             Mot de passe oublié ?
           </Link>
 
-          <button className="auth-button" onClick={() => navigate("/dashboard")}>Connexion</button>
+          
+          <Link to="/dashboard">
+          <button className="auth-button" >Connexion</button>
+  </Link>
         </form>
 
         <p className="auth-text">
