@@ -1,0 +1,144 @@
+
+/* 📌 Commerciaux.css - Version améliorée Responsive */
+
+/* 🔹 Conteneur principal */
+.container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+    background-size: cover;
+    padding: 20px;
+}
+
+/* 🔹 Effet sombre sur l'arrière-plan */
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Sombre mais pas trop */
+    z-index: 0;
+}
+
+/* 🔹 Titre principal (ajusté pour être plus petit sur mobile) */
+.title {
+    font-size: 22px;
+    color: yellow;
+    margin-bottom: 20px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 90%;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 18px; /* Réduction sur mobile */
+        max-width: 100%;
+    }
+}
+
+/* 🔹 Bloc de chaque région */
+.region-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    padding: 20px;
+    width: 90%;
+    max-width: 900px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
+    position: relative;
+    z-index: 1;
+}
+
+/* 🔥 Animation douce au survol */
+.region-card:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* 🔹 Titre de la région */
+.region-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .region-title {
+        font-size: 18px;
+    }
+}
+
+/* 🔹 Tableau */
+.table-container {
+    background: none;
+    color: white;
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* 🔹 En-tête du tableau */
+.table-head {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 🔹 Ligne du tableau */
+.table-row {
+    transition: background 0.3s;
+}
+
+.table-row:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 🔹 Contact WhatsApp */
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #25D366;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.contact-link:hover {
+    transform: scale(1.05);
+    text-decoration: underline;
+}
+
+/* 🔹 Icône WhatsApp */
+.whatsapp-icon {
+    font-size: 22px;
+}
+
+/* ✅ RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .region-card {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table-head, .table-row {
+        font-size: 14px;
+    }
+
+    .whatsapp-icon {
+        font-size: 18px;
+    }
+}
