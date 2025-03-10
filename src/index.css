@@ -50,9 +50,7 @@ html, body, #root {
   }
 }
 
-* {
-  font-family: 'Luckiest Guy', cursive !important;
-}
+
 * {
   box-sizing: border-box; /* Assure que les marges et paddings sont bien gérés */
 }

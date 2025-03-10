@@ -13,6 +13,9 @@ import Withdrawal from "./pages/Withdrawal";
 import Tickets from "./pages/Tickets";
 import Cart from "./pages/Cart";
 import Play from "./pages/Play";
+import Games from "./pages/Games";
+import CountrySelection from "./pages/CountrySelection";
+
 
 const App: React.FC = () => {
   return (
@@ -30,7 +33,8 @@ const App: React.FC = () => {
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/play" element={<Play />} />
-        
+        <Route path="/games" element={<Games />} />
+        <Route path="/countrySelection" element={<CountrySelection />} />
       </Routes>
       <Footer />
     </>

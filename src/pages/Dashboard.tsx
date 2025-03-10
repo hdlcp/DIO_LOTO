@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
   <Link to="/cart">
     <Button variant="contained" className="custom-button">🛒 PANIER</Button>
   </Link>
-  <Link to="/play">
+  <Link to="/games">
     <Button variant="contained" className="custom-button">🎲 JOUER</Button>
   </Link>
 </div>
