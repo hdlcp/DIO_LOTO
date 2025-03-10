@@ -47,7 +47,7 @@ const Header: React.FC = () => {
   sx={{ "& .MuiDrawer-paper": { backgroundColor: "#0D0D0D" } }} // Fond noir
 >
   <List>
-    <ListItem component={Link} to="/" onClick={handleDrawerToggle} sx={{ color: "white" }}>
+    <ListItem component={Link} to="/dashboard" onClick={handleDrawerToggle} sx={{ color: "white" }}>
       Accueil
     </ListItem>
     <ListItem component={Link} to="/guide" onClick={handleDrawerToggle} sx={{ color: "white" }}>

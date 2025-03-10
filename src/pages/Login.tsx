@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import "../styles/Auth.css"; 
 
 const Login = () => {
-  const navigate = useNavigate(); 
 
   return (
     <div className="auth-container">
@@ -28,7 +26,7 @@ const Login = () => {
           
           <Link to="/dashboard">
           <button className="auth-button" >Connexion</button>
-  </Link>
+          </Link>
         </form>
 
         <p className="auth-text">
