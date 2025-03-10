@@ -36,6 +36,11 @@
     color: #FFA500; /* Orange */
   }
   
+  .click-link {
+    color: yellow;
+    text-decoration: none;
+    font-weight: bold;
+  }
   
   .games-header {
     text-align: center;
@@ -62,7 +67,7 @@
   }
   
   .game-card {
-    background: rgba(163, 89, 160, 0.9);
+    background: rgba(163, 89, 160, 0.5);
     border-radius: 10px;
     padding: 20px;
     width: 300px;

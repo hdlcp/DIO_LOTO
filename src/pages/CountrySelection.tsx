@@ -10,12 +10,12 @@ import Togo from "../assets/togo.png";
 
 
 const countries = [
-  { name: "Benin", flag: Benin, path: "/loto/benin" },
-  { name: "Ghana", flag: Ghana, path: "/loto/ghana" },
-  { name: "Côte d'Ivoire", flag: CoteIvoire, path: "/loto/cote-ivoire" },
-  { name: "Nigeria", flag: Nigeria, path: "/loto/nigeria" },
-  { name: "Burkina Faso", flag: Burkina, path: "/loto/burkina" },
-  { name: "Togo", flag: Togo, path: "/loto/togo" },
+  { name: "Benin", flag: Benin, path: "/choicePlay" },
+  { name: "Ghana", flag: Ghana, path: "/choicePlay" },
+  { name: "Côte d'Ivoire", flag: CoteIvoire, path: "/choicePlay" },
+  { name: "Nigeria", flag: Nigeria, path: "/choicePlay" },
+  { name: "Burkina Faso", flag: Burkina, path: "/choicePlay" },
+  { name: "Togo", flag: Togo, path: "/choicePlay" },
 ];
 
 const CountrySelection = () => {

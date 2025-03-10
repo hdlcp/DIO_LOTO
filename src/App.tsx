@@ -12,9 +12,11 @@ import Footer from "./components/Footer";
 import Withdrawal from "./pages/Withdrawal";
 import Tickets from "./pages/Tickets";
 import Cart from "./pages/Cart";
-import Play from "./pages/Play";
+import ChoicePlay from "./pages/ChoicePlay";
 import Games from "./pages/Games";
+import BetForm from "./pages/BetForm";
 import CountrySelection from "./pages/CountrySelection";
+import AcceuilP from "./pages/AcceuilP";
 
 
 const App: React.FC = () => {
@@ -23,6 +25,7 @@ const App: React.FC = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/acceuil" element={<AcceuilP />} />
         <Route path="/guide" element={<Guide />} />
         <Route path="/results" element={<Results />} />
         <Route path="/commerciaux" element={<Commerciaux />} />
@@ -32,9 +35,11 @@ const App: React.FC = () => {
         <Route path="/withdrawal" element={<Withdrawal />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/play" element={<Play />} />
+        <Route path="/choicePlay" element={<ChoicePlay />} />
         <Route path="/games" element={<Games />} />
         <Route path="/countrySelection" element={<CountrySelection />} />
+        <Route path="/loto/bet" element={<BetForm />} />
+
       </Routes>
       <Footer />
     </>

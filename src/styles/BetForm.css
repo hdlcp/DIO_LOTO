@@ -1,4 +1,5 @@
-.country-selection-container {
+
+.bet-form-container {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -9,7 +10,7 @@
     padding: 20px;
   }
 
-  .country-selection-container::before {
+  .bet-form-container::before {
     content: "";
     position: absolute;
     top: 0;
@@ -20,57 +21,60 @@
     z-index: 0;
   }
   
+
+  
   .back-button {
     display: inline-block;
     text-decoration: none;
     color: yellow;
     font-size: 18px;
     margin-bottom: 20px;
-    z-index: 2;
-
-  }
-
-  .back-button:hover {
-    color: #FFA500; /* Orange */
+    z-index: 1;
   }
   
   .title {
     color: yellow;
     font-size: 24px;
     font-weight: bold;
-    z-index: 2;
+    z-index: 1;
   }
   
-  .countries-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    justify-content: center;
+  .bet-section {
+    background: rgba(255, 255, 255, 0.3);
     padding: 20px;
-    z-index: 2;
-  }
-  
-  .country-card {
-    background: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
-    padding: 20px;
-    cursor: pointer;
-    text-align: center;
+    display: inline-block;
+    text-align: left;
+    z-index: 1;
+  }
+
+  .bet-select {
+    z-index: 1;
   }
   
-  .country-icon {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .country-button {
-    background:rgba(163, 89, 160, 0.9);
-    color: rgb(255, 255, 255);
-    padding: 10px;
+  label {
+    display: block;
+    margin-top: 10px;
     font-weight: bold;
+    z-index: 1;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .bet-button {
+    background: yellow;
+    color: black;
+    padding: 10px;
     border: none;
     cursor: pointer;
     width: 100%;
+    margin-top: 20px;
     border-radius: 5px;
   }
   

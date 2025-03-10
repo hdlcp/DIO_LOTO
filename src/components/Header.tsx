@@ -47,7 +47,7 @@ const Header: React.FC = () => {
   sx={{ "& .MuiDrawer-paper": { backgroundColor: "#0D0D0D" } }} // Fond noir
 >
   <List>
-    <ListItem component={Link} to="/dashboard" onClick={handleDrawerToggle} sx={{ color: "white" }}>
+    <ListItem component={Link} to="/acceuil" onClick={handleDrawerToggle} sx={{ color: "white" }}>
       Accueil
     </ListItem>
     <ListItem component={Link} to="/guide" onClick={handleDrawerToggle} sx={{ color: "white" }}>
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
   
         {/* MENU NORMAL POUR GRAND ÉCRAN */}
         <div style={{ display: "none" }} className="menu-desktop">
-          <Button color="inherit" component={Link} to="/dashboard">Accueil</Button>
+          <Button color="inherit" component={Link} to="/acceuil">Accueil</Button>
           <Button color="inherit" component={Link} to="/guide">Guide</Button>
           <Button color="inherit" component={Link} to="/results">Résultats</Button>
           <Button color="inherit" component={Link} to="/commerciaux">Commerciaux</Button>
