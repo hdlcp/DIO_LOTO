@@ -1,5 +1,5 @@
 import { Button } from "@mui/material"; // Boutons Material UI
-import { color, motion } from "framer-motion"; // Animation Framer Motion
+import { motion } from "framer-motion"; // Animation Framer Motion
 import "../styles/Games.css"; // Import du fichier CSS
 import retirer from "../assets/retirer.png";
 import recharger from "../assets/recharger.png";
