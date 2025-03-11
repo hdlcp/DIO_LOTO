@@ -1,0 +1,104 @@
+
+
+  .results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+    padding: 20px;
+  }
+
+  .results-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Assombrissement */
+    z-index: 0;
+  }
+
+  .results-title{
+    z-index: 1;
+    color: yellow;
+  }
+
+  
+  /* Grille des résultats */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 1;
+  }
+  
+  /* Carte de chaque résultat */
+  .result-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .result-card:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Image des boules de billard */
+  .ball-icon {
+    width: 50px;
+    margin-bottom: 10px;
+  }
+  
+  /* Overlay des gagnants */
+  .winners-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1;
+  }
+  
+  /* Contenu des gagnants */
+  .winners-content {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  /* Image du gagnant */
+  .winner-image {
+    width: 80px;
+    margin-bottom: 10px;
+  }
+  
+  /* Bouton de fermeture */
+  button {
+    background: #ffcc00;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background: #ff9900;
+  }
+  

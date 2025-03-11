@@ -15,14 +15,14 @@ const commerciauxData = [
 const Commerciaux: React.FC = () => {
   return (
     <div className="container">
-      <motion.h2 
+      <motion.div
         className="title"
         initial={{ opacity: 0, y: -20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5 }}
       >
-        Contactez un commercial pour recharger votre compte via WhatsApp 📲.
-      </motion.h2>
+        <p>Contactez un commercial pour recharger votre compte via WhatsApp 📲</p>
+      </motion.div>
 
       {commerciauxData.map((region, index) => (
         <motion.div

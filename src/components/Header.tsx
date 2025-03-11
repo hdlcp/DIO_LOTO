@@ -1,98 +1,145 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, Button, IconButton, Menu, MenuItem, Drawer, List, ListItem } from "@mui/material";
-import LanguageIcon from "@mui/icons-material/Language";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { AppBar, Toolbar, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LanguageIcon  from "@mui/icons-material/Language";
+import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import StoreIcon from "@mui/icons-material/Store";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import PersonIcon from "@mui/icons-material/Person";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LoginIcon from "@mui/icons-material/Login";
+import logo from "../assets/logo-dio-loto.png";
+import eighteenIcon from "../assets/loto.png"; // Ajoute ton image "18+"
 import { Link } from "react-router-dom";
-import logo from "../assets/logo-dio-loto.png"; // Assure-toi que le chemin est correct
 
 const Header: React.FC = () => {
-  // 🛠️ Déplace ces lignes DANS le composant !
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [langMenuOpen, setLangMenuOpen] = useState<null | HTMLElement>(null);
+  const [language, setLanguage] = useState("fr"); // Langue par défaut : Français
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleProfileMenuClose = () => {
     setAnchorEl(null);
   };
 
+  const handleLangMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setLangMenuOpen(event.currentTarget);
+  };
+
+  const handleLangMenuClose = (lang: string) => {
+    setLanguage(lang);
+    setLangMenuOpen(null);
+  };
+
   return (
-    <AppBar position="sticky" sx={{ background: "#0D0D0D", padding: "10px 40px" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
+    <AppBar position="sticky" sx={{ background: "rgba(163, 89, 160)", padding: "10px 20px" }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         
-        {/* Logo */}
-        <Link to="/">
-          <img src={logo} alt="Dio Loto Logo" style={{ height: 50 }} />
-        </Link>
-  
-        {/* MENU BURGER POUR MOBILE */}
-        <IconButton 
-          onClick={handleDrawerToggle} 
-          sx={{ display: { xs: "block", md: "none" }, color: "white" }}
-        >
+        {/* Icône du menu hamburger */}
+        <IconButton onClick={handleDrawerToggle} sx={{ color: "white" }}>
           <MenuIcon />
         </IconButton>
-  
-        <Drawer
-  anchor="left"
-  open={mobileOpen}
-  onClose={handleDrawerToggle}
-  sx={{ "& .MuiDrawer-paper": { backgroundColor: "#0D0D0D" } }} // Fond noir
->
-  <List>
-    <ListItem component={Link} to="/acceuil" onClick={handleDrawerToggle} sx={{ color: "white" }}>
-      Accueil
-    </ListItem>
-    <ListItem component={Link} to="/guide" onClick={handleDrawerToggle} sx={{ color: "white" }}>
-      Guide
-    </ListItem>
-    <ListItem component={Link} to="/results" onClick={handleDrawerToggle} sx={{ color: "white" }}>
-      Résultats
-    </ListItem>
-    <ListItem component={Link} to="/commerciaux" onClick={handleDrawerToggle} sx={{ color: "white" }}>
-      Commerciaux
-    </ListItem>
-    <ListItem component={Link} to="/login" onClick={handleDrawerToggle} sx={{ color: "white" }}>
-      Connexion
-    </ListItem>
-  </List>
-</Drawer>
-  
-        {/* MENU NORMAL POUR GRAND ÉCRAN */}
-        <div style={{ display: "none" }} className="menu-desktop">
-          <Button color="inherit" component={Link} to="/acceuil">Accueil</Button>
-          <Button color="inherit" component={Link} to="/guide">Guide</Button>
-          <Button color="inherit" component={Link} to="/results">Résultats</Button>
-          <Button color="inherit" component={Link} to="/commerciaux">Commerciaux</Button>
-          <Button color="inherit" component={Link} to="/login">Connexion</Button>
-        </div>
-  
+
+        {/* Logo au centre */}
+        <img src={logo} alt="Dio Loto Logo" style={{ height: 60 }} />
+
         {/* Langue & Profil */}
-        <div>
-          <IconButton color="inherit">
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {/* Langue */}
+          <IconButton color="inherit" onClick={handleLangMenuOpen}>
             <LanguageIcon />
+            <Typography variant="body2" sx={{ marginLeft: 1 }}>
+              {language === "fr" ? "FR" : "EN"}
+            </Typography>
           </IconButton>
-  
-          <IconButton color="inherit" onClick={handleMenuOpen}>
+          <Menu anchorEl={langMenuOpen} open={Boolean(langMenuOpen)} onClose={() => setLangMenuOpen(null)}>
+            <MenuItem onClick={() => handleLangMenuClose("fr")}>🇫🇷 Français</MenuItem>
+            <MenuItem onClick={() => handleLangMenuClose("en")}>🇬🇧 English</MenuItem>
+          </Menu>
+
+          {/* Profil */}
+          <IconButton color="inherit" onClick={handleProfileMenuOpen}>
             <AccountCircleIcon />
           </IconButton>
-  
-          {/* Menu déroulant Profil */}
-          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-            <MenuItem onClick={handleMenuClose}>Mon Compte</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Déconnexion</MenuItem>
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleProfileMenuClose}>
+            <MenuItem component={Link} to="/dashboard" onClick={handleProfileMenuClose}>
+              <DashboardIcon sx={{ marginRight: 1 }} /> Dashboard
+            </MenuItem>
+            <MenuItem component={Link} to="/profile" onClick={handleProfileMenuClose}>
+              <PersonIcon sx={{ marginRight: 1 }} /> Mon Compte
+            </MenuItem>
+            <Divider />
+            <MenuItem component={Link} to="/" onClick={handleProfileMenuClose}>
+              <ExitToAppIcon sx={{ marginRight: 1 }} /> Déconnexion
+            </MenuItem>
           </Menu>
         </div>
+
       </Toolbar>
+
+      {/* Menu latéral Drawer */}
+      <Drawer
+        anchor="left"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        sx={{ "& .MuiDrawer-paper": { backgroundColor: "#0D0D0D", width: "75%" } }}
+      >
+        <List>
+        <ListItem component={Link} to="/acceuil" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+
+<ListItemIcon sx={{ color: "white" }}><HomeIcon /></ListItemIcon>
+<ListItemText primary="Accueil" sx={{ color: "white" }} />
+</ListItem>
+<ListItem component={Link} to="/guide" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+
+<ListItemIcon sx={{ color: "white" }}><InfoIcon /></ListItemIcon>
+<ListItemText primary="Guide" sx={{ color: "white" }} />
+</ListItem>
+<ListItem component={Link} to="/results" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+
+<ListItemIcon sx={{ color: "white" }}><SportsSoccerIcon /></ListItemIcon>
+<ListItemText primary="Résultats" sx={{ color: "white" }} />
+</ListItem>
+<ListItem component={Link} to="/commerciaux" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+
+<ListItemIcon sx={{ color: "white" }}><StoreIcon /></ListItemIcon>
+<ListItemText primary="Commerciaux" sx={{ color: "white" }} />
+</ListItem>
+<ListItem component={Link} to="/login" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+
+<ListItemIcon sx={{ color: "white" }}><LoginIcon /></ListItemIcon>
+<ListItemText primary="Connexion" sx={{ color: "white" }} />
+</ListItem>
+        </List>
+
+        <Divider sx={{ backgroundColor: "white", margin: "10px 0" }} />
+
+        {/* Icône Interdit aux -18 ans */}
+        <div style={{ textAlign: "center", padding: "10px" }}>
+          <img src={eighteenIcon} alt="Interdit -18" style={{ height: 40 }} />
+          <Typography variant="body2" sx={{ color: "white" }}>Interdit aux -18 ans</Typography>
+        </div>
+      </Drawer>
     </AppBar>
   );
 };
 
 export default Header;
+
+
+
+
+
+
+

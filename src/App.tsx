@@ -8,7 +8,7 @@ import Guide from "./pages/Guide";
 import Dashboard from "./pages/Dashboard";
 import Commerciaux from "./pages/Commerciaux";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+{/*import Footer from "./components/Footer";*/}
 import Withdrawal from "./pages/Withdrawal";
 import Tickets from "./pages/Tickets";
 import Cart from "./pages/Cart";
@@ -17,6 +17,7 @@ import Games from "./pages/Games";
 import BetForm from "./pages/BetForm";
 import CountrySelection from "./pages/CountrySelection";
 import AcceuilP from "./pages/AcceuilP";
+import Profile from "./pages/Profile";
 
 
 const App: React.FC = () => {
@@ -39,9 +40,9 @@ const App: React.FC = () => {
         <Route path="/games" element={<Games />} />
         <Route path="/countrySelection" element={<CountrySelection />} />
         <Route path="/loto/bet" element={<BetForm />} />
+        <Route path="/profile" element={<Profile />} />
 
       </Routes>
-      <Footer />
     </>
   );
 };

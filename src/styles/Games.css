@@ -36,11 +36,12 @@
     color: #FFA500; /* Orange */
   }
   
-  .click-link {
+  .click-link p{
     color: yellow;
     text-decoration: none;
     font-weight: bold;
   }
+  
   
   .games-header {
     text-align: center;

@@ -30,7 +30,7 @@ const AcceuilP = () => {
         >
           <img src={recharger} alt="Loto" className="game-icon" />
           <h3><b>Recharger votre compte</b></h3>
-          <Link to="" className="">
+          <Link to="/commerciaux" className="">
             <Button variant="contained" className="play-button">
               RECHARGER
             </Button>

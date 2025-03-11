@@ -1,0 +1,119 @@
+/* 📌 Profil.css - Style moderne et responsive */
+.profil-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #131920;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.profil-section {
+    background: #1d2630;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #2a3a4d;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: #aaa;
+}
+
+.input-group input:focus {
+    border: 1px solid #1abc9c;
+}
+
+/* 🔹 Boutons */
+.save-btn {
+    background: #1abc9c;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.save-btn:hover {
+    background: #16a085;
+}
+
+/* 🔥 Suppression de compte */
+.delete-section {
+    background: #1d2630;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+/* ✅ RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .profil-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .profil-section {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .input-group input {
+        font-size: 13px;
+    }
+}
