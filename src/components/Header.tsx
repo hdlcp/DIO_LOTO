@@ -12,7 +12,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
 import logo from "../assets/logo-dio-loto.png";
-import eighteenIcon from "../assets/loto.png"; // Ajoute ton image "18+"
+//import eighteenIcon from "../assets/loto.png";  Ajoute ton image "18+"
 import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
@@ -93,7 +93,7 @@ const Header: React.FC = () => {
         anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
-        sx={{ "& .MuiDrawer-paper": { backgroundColor: "#0D0D0D", width: "75%" } }}
+      sx={{ "& .MuiDrawer-paper": { backgroundColor: "rgb(163, 89, 160)", width: "75%" } }}
       >
         <List>
         <ListItem component={Link} to="/acceuil" onClick={handleDrawerToggle} sx={{ color: "white", display: "flex", alignItems: "center", gap: 1 }}>
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
 
         {/* Icône Interdit aux -18 ans */}
         <div style={{ textAlign: "center", padding: "10px" }}>
-          <img src={eighteenIcon} alt="Interdit -18" style={{ height: 40 }} />
+          <img src={logo} alt="logo loto dio" style={{ height: 70 }} />
           <Typography variant="body2" sx={{ color: "white" }}>Interdit aux -18 ans</Typography>
         </div>
       </Drawer>

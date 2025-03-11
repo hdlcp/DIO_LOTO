@@ -58,7 +58,7 @@ p {
 
 /* 🔹 Boutons */
 .save-btn {
-    background: #1abc9c;
+    background: rgb(163, 89, 160);
     color: white;
     border: none;
     padding: 10px;
@@ -71,7 +71,7 @@ p {
 }
 
 .save-btn:hover {
-    background: #16a085;
+    background:rgba(65, 34, 64, 0.988);
 }
 
 /* 🔥 Suppression de compte */
