@@ -28,7 +28,7 @@ const Guide = () => {
         {openSection === "info" && (
           <div className="panel">
             <p>
-              Pour participer aux jeux sur le site "LEBONHEUR", vous avez 02 options : 
+              Pour participer aux jeux sur l'application mobile "DIO LOTO", vous avez 02 options : 
               <br />
               👉 Si vous n'avez pas de compte, cliquez sur "JOUER" puis "Connexion" pour vous inscrire.
               <br />
