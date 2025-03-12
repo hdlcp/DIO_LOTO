@@ -12,8 +12,8 @@ const Home: React.FC = () => {
         <div className="hero-content">
           <h1>DIO LOTO</h1>
           <p>
-            À seulement un clic de l'excitation, de l'aventure et de la chance, notre site est conçu
-            pour les vrais passionnés de jeux à la recherche d'expériences inoubliables et d'opportunités de gagner gros.
+          <b>Une vie ,une passion, une richesse</b><br></br>
+          Pariez sur DIO LOTO pour gagner vos jeux .nous faisons de vous des millionnaires. Avec DIO LOTO vous êtes toujours gagnant.
           </p>
           <div className="hero-buttons">
             <button className="btn play-btn" onClick={() => navigate("/login")}>Jouer</button>

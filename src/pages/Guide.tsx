@@ -64,8 +64,8 @@ const Guide = () => {
         {openSection === "formula" && (
           <div className="panel">
             <p><b>Turbo 2 :</b> Parier sur 2 numéros dans les 22 premiers tirés.</p>
-            <p><b>Turbo 3 :</b> Parier sur 3 numéros parmi les 33 premiers tirés.</p>
-            <p><b>Turbo 4 :</b> Parier sur 4 numéros parmi les 44 premiers tirés.</p>
+            <p><b>Turbo 3 :</b> parier sur les trois premiers numéros tirés ; soit en win ou machine.</p>
+            <p><b>Turbo 4 :</b> parier sur 4 premiers numéro tirés soit en win ou en machine.</p>
             <p><b>Base :</b> Un numéro doit impérativement sortir avec un autre placé en dessous.</p>
           </div>
         )}
