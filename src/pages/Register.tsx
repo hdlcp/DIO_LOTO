@@ -16,17 +16,13 @@ const Register = () => {
           </div>
 
           <div className="input-group">
-            <label>Prénom</label>
-            <input type="text" placeholder="Votre prénom" />
+            <label>email</label>
+            <input type="email" placeholder="Votre email" />
           </div>
-
+            <label>mot de passe</label>
+            <input type="password" placeholder="Votre mot de passe" />
           <div className="input-group">
-            <label>Devise</label>
-            <select>
-              <option>Euro (€)</option>
-              <option>Dollars ($)</option>
-              <option>Franc CFA (FCFA)</option>
-            </select>
+            
           </div>
           <Link to="/login">
             <button className="auth-button" >Suivant</button>

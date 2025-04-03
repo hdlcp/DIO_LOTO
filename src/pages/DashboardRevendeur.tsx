@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button, Table, TableHead, TableRow, TableCell } from "@mui/material";
 import "../styles/Dashboard.css"; // ✅ Import du CSS
 
-const Dashboard: React.FC = () => {
+const DashboardRevendeur: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-content">
@@ -33,6 +33,15 @@ const Dashboard: React.FC = () => {
             className="balance-box"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <h3>Solde revendeur</h3>
+            <p>0 XOF</p>
+          </motion.div>
+          <motion.div
+            className="balance-box"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
             <h3>Gains</h3>
@@ -43,6 +52,9 @@ const Dashboard: React.FC = () => {
         {/* ✅ Boutons avec Material UI */}
 
 <div className="buttons-container">
+  <Link to="/recharger">
+    <Button variant="contained" className="custom-button"> RECHARGER</Button>
+  </Link>
   <Link to="/recharger">
     <Button variant="contained" className="custom-button">💰 RECHARGER AVEC GAIN</Button>
   </Link>
@@ -79,4 +91,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardRevendeur;

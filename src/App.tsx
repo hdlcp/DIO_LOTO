@@ -18,6 +18,8 @@ import BetForm from "./pages/BetForm";
 import CountrySelection from "./pages/CountrySelection";
 import AcceuilP from "./pages/AcceuilP";
 import Profile from "./pages/Profile";
+import DashboardRevendeur from "./pages/DashboardRevendeur";
+import Recharger from "./pages/Recharger";
 
 
 const App: React.FC = () => {
@@ -41,6 +43,8 @@ const App: React.FC = () => {
         <Route path="/countrySelection" element={<CountrySelection />} />
         <Route path="/loto/bet" element={<BetForm />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/dashbordRevendeur" element={<DashboardRevendeur />} />
+        <Route path="/recharger" element={<Recharger />} />
 
       </Routes>
     </>
