@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./AuthContext";
 import Home from "./pages/Home";
 import Results from "./pages/Results";
 import Login from "./pages/Login";
@@ -20,13 +21,14 @@ import AcceuilP from "./pages/AcceuilP";
 import Profile from "./pages/Profile";
 import DashboardRevendeur from "./pages/DashboardRevendeur";
 import Recharger from "./pages/Recharger";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App: React.FC = () => {
   return (
-    <>
+    <AuthProvider>
       <Header />
       <Routes>
+        {/* Routes publiques */}
         <Route path="/" element={<Home />} />
         <Route path="/acceuil" element={<AcceuilP />} />
         <Route path="/guide" element={<Guide />} />
@@ -34,23 +36,62 @@ const App: React.FC = () => {
         <Route path="/commerciaux" element={<Commerciaux />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/withdrawal" element={<Withdrawal />} />
-        <Route path="/tickets" element={<Tickets />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/choicePlay" element={<ChoicePlay />} />
-        <Route path="/games" element={<Games />} />
         <Route path="/countrySelection" element={<CountrySelection />} />
-        <Route path="/loto/bet" element={<BetForm />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/dashbordRevendeur" element={<DashboardRevendeur />} />
-        <Route path="/recharger" element={<Recharger />} />
 
+        {/* Routes protégées (nécessitent d'être connecté) */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/withdrawal" element={
+          <ProtectedRoute>
+            <Withdrawal />
+          </ProtectedRoute>
+        } />
+        <Route path="/tickets" element={
+          <ProtectedRoute>
+            <Tickets />
+          </ProtectedRoute>
+        } />
+        <Route path="/cart" element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        } />
+        <Route path="/choicePlay" element={
+          <ProtectedRoute>
+            <ChoicePlay />
+          </ProtectedRoute>
+        } />
+        <Route path="/games" element={
+          <ProtectedRoute>
+            <Games />
+          </ProtectedRoute>
+        } />
+        <Route path="/loto/bet" element={
+          <ProtectedRoute>
+            <BetForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashbordRevendeur" element={
+          <ProtectedRoute>
+            <DashboardRevendeur />
+          </ProtectedRoute>
+        } />
+        <Route path="/recharger" element={
+          <ProtectedRoute>
+            <Recharger />
+          </ProtectedRoute>
+        } />
       </Routes>
-    </>
+    </AuthProvider>
   );
 };
-
-
 
 export default App;
