@@ -16,7 +16,6 @@ import Cart from "./pages/Cart";
 import ChoicePlay from "./pages/ChoicePlay";
 import Games from "./pages/Games";
 import BetForm from "./pages/BetForm";
-import CountrySelection from "./pages/CountrySelection";
 import AcceuilP from "./pages/AcceuilP";
 import Profile from "./pages/Profile";
 import DashboardRevendeur from "./pages/DashboardRevendeur";
@@ -36,7 +35,6 @@ const App: React.FC = () => {
         <Route path="/commerciaux" element={<Commerciaux />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/countrySelection" element={<CountrySelection />} />
 
         {/* Routes protégées (nécessitent d'être connecté) */}
         <Route path="/dashboard" element={

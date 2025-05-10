@@ -1,80 +1,191 @@
-
 .bet-form-container {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+  padding: 20px;
+  position: relative;
+}
 
-    justify-content: center;
-    min-height: 100vh;
-    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
-    padding: 20px;
-  }
+.bet-form-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Assombrissement */
+  z-index: 0;
+}
 
-  .bet-form-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Assombrissement */
-    z-index: 0;
-  }
-  
+.back-button {
+  display: inline-block;
+  text-decoration: none;
+  color: yellow;
+  font-size: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
 
-  
-  .back-button {
-    display: inline-block;
-    text-decoration: none;
-    color: yellow;
-    font-size: 18px;
-    margin-bottom: 20px;
-    z-index: 1;
-  }
-  
-  .title {
-    color: yellow;
-    font-size: 24px;
-    font-weight: bold;
-    z-index: 1;
-  }
-  
-  .bet-section {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 20px;
-    border-radius: 10px;
-    display: inline-block;
-    text-align: left;
-    z-index: 1;
-  }
+.title {
+  color: yellow;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
 
-  .bet-select {
-    z-index: 1;
-  }
-  
-  label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-    z-index: 1;
-  }
-  
-  input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: none;
-  }
-  
-  .bet-button {
-    background: yellow;
-    color: black;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 5px;
-  }
-  
+.bet-select,
+.formula-select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: none;
+  position: relative;
+  z-index: 1;
+}
+
+.bet-section {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+.bet-section p {
+  margin-top: 0;
+  font-size: 18px;
+  color: yellow;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: none;
+}
+
+.number-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.number-input-group input {
+  flex: 1;
+  margin: 0;
+}
+
+.add-number-btn,
+.generate-numbers-btn {
+  background-color: yellow;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.add-number-btn:hover,
+.generate-numbers-btn:hover {
+  background-color: #e6e600;
+}
+
+.add-number-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.selected-numbers {
+  margin-bottom: 15px;
+}
+
+.number-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.number-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: yellow;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.remove-number {
+  background: none;
+  border: none;
+  color: #ff0000;
+  margin-left: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.gains-display {
+  background-color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+  color: black;
+}
+
+.bet-button {
+  background: yellow;
+  color: black;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+}
+
+.bet-button:hover {
+  background-color: #e6e600;
+}
+
+.bet-button.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.disabled-link {
+  pointer-events: none;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}

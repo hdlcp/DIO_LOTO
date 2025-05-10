@@ -33,7 +33,7 @@ const Games = () => {
           <img src={lotoImage} alt="Loto" className="game-icon" />
           <h3>LOTO</h3>
           <p>Le jeu de Boule est un jeu de société où l'objectif est de remplir sa grille de nombres en premier.</p>
-          <Link to="/countrySelection" className="">
+          <Link to="/choicePlay" className="">
             <Button variant="contained" className="play-button">
               JOUER
             </Button>

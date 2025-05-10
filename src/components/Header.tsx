@@ -170,11 +170,7 @@ const Header: React.FC = () => {
             </ListItem>
           ) : (
             <ListItem 
-              onClick={() => {
-                logout();
-                navigate("/");
-                handleDrawerToggle();
-              }} 
+            onClick={() => handleMenuItemClick("/")} 
               sx={{ color: "white", display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
             >
               <ListItemIcon sx={{ color: "white" }}><ExitToAppIcon /></ListItemIcon>
