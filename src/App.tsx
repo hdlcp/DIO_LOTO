@@ -21,6 +21,7 @@ import Profile from "./pages/Profile";
 import DashboardRevendeur from "./pages/DashboardRevendeur";
 import Recharger from "./pages/Recharger";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CountrySelection from "./pages/CountrySelection";
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ const App: React.FC = () => {
         <Route path="/commerciaux" element={<Commerciaux />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
 
         {/* Routes protégées (nécessitent d'être connecté) */}
         <Route path="/dashboard" element={
@@ -87,6 +89,11 @@ const App: React.FC = () => {
             <Recharger />
           </ProtectedRoute>
         } />
+        <Route path="/country" element={
+          <ProtectedRoute>
+          <CountrySelection/>
+          </ProtectedRoute>
+          } />
       </Routes>
     </AuthProvider>
   );

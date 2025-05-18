@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../styles/Games.css";
 
 // Import des images des drapeaux
 import Benin from "../assets/benin.png";
 import Ghana from "../assets/ghana.png";
-import Nigeria from "../assets/nigeria.png";
-import Burkina from "../assets/burkina.png";
+import Niger from "../assets/niger.png";
 import CoteIvoire from "../assets/cote-ivoire.png";
 import Togo from "../assets/togo.png";
 
@@ -18,14 +17,14 @@ import lotoImage from "../assets/loto.png";
 // Définition des types
 interface GameItem {
   time: string;
-  available: boolean;
+  name: string;
 }
 
 interface CountryGame {
   name: string;
   flag: string;
-  times: string[];
-  weekendTimes?: string[];
+  games: GameItem[];
+  weekendGames?: GameItem[];
   hasDoubleChance: boolean;
 }
 
@@ -34,47 +33,67 @@ interface CountryGamesType {
 }
 
 const ChoicePlay = () => {
-  const [selectedCountry, setSelectedCountry] = useState<string>("benin");
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const [availableGames, setAvailableGames] = useState<GameItem[]>([]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const country = queryParams.get("country") || "benin";
   
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+
   // Configuration des pays et leurs jeux
   const countryGames: CountryGamesType = {
     benin: {
       name: "Bénin",
       flag: Benin,
-      times: ["11:00", "14:00", "18:00", "21:00", "00:00"],
+      games: [
+        { time: "11:00", name: "benin11" },
+        { time: "14:00", name: "benin14" },
+        { time: "18:00", name: "benin18" },
+        { time: "21:00", name: "benin21" },
+        { time: "00:00", name: "benin00" }
+      ],
       hasDoubleChance: false
     },
     ghana: {
       name: "Ghana",
       flag: Ghana,
-      times: ["20:00"],
+      games: [
+        { time: "20:00", name: "ghana20" }
+      ],
       hasDoubleChance: false
     },
     coteIvoire: {
       name: "Côte d'Ivoire",
       flag: CoteIvoire,
-      times: ["07:00", "10:00", "13:00", "16:00", "21:00", "23:00"],
-      weekendTimes: ["01:00", "03:00"],
+      games: [
+        { time: "07:00", name: "coteivoire7" },
+        { time: "10:00", name: "coteivoire10" },
+        { time: "13:00", name: "coteivoire13" },
+        { time: "16:00", name: "coteivoire16" },
+        { time: "21:00", name: "coteivoire21" },
+        { time: "23:00", name: "coteivoire23" }
+      ],
+      weekendGames: [
+        { time: "01:00", name: "coteivoire1" },
+        { time: "03:00", name: "coteivoire3" }
+      ],
       hasDoubleChance: true
     },
-    nigeria: {
-      name: "Nigeria",
-      flag: Nigeria,
-      times: ["12:00", "17:00"],
-      hasDoubleChance: false
-    },
-    burkina: {
-      name: "Burkina Faso",
-      flag: Burkina,
-      times: ["14:00", "19:00"],
+    nigeria: { 
+      name: "Niger",
+      flag: Niger,
+      games: [
+        { time: "15:00", name: "niger15" }
+      ],
       hasDoubleChance: false
     },
     togo: {
       name: "Togo",
       flag: Togo,
-      times: ["08:00", "13:00", "18:00"],
+      games: [
+        { time: "08:00", name: "togo8" },
+        { time: "13:00", name: "togo13" },
+        { time: "18:00", name: "togo18" }
+      ],
       hasDoubleChance: true
     }
   };
@@ -83,25 +102,6 @@ const ChoicePlay = () => {
   const isWeekend = (): boolean => {
     const day = currentTime.getDay();
     return day === 0 || day === 6; // 0 est dimanche, 6 est samedi
-  };
-
-
-  // Fonction pour vérifier si un jeu est encore disponible
-  const isGameAvailable = (gameTime: string): boolean => {
-    // Conversion de gameTime en objets Date pour comparaison
-    const [hours, minutes] = gameTime.split(":").map(Number);
-    
-    const gameDateTime = new Date(currentTime);
-    gameDateTime.setHours(hours, minutes, 0, 0);
-    
-    // Si l'heure du jeu est déjà passée aujourd'hui, ce n'est plus disponible
-    if (gameDateTime <= currentTime) {
-      return false;
-    }
-    
-    // Vérifier si on est à moins de 5 minutes du début
-    const diffInMinutes = (gameDateTime.getTime() - currentTime.getTime()) / (1000 * 60);
-    return diffInMinutes > 5;
   };
 
   // Fonction pour obtenir le jour actuel en français
@@ -119,53 +119,44 @@ const ChoicePlay = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Mettre à jour les jeux disponibles quand le pays sélectionné ou l'heure change
-  useEffect(() => {
-    if (selectedCountry in countryGames) {
-      const country = countryGames[selectedCountry];
-      const games: GameItem[] = [];
-      
-      // Ajouter les horaires standards
-      country.times.forEach((time: string) => {
-        if (isGameAvailable(time)) {
-          games.push({
-            time: time,
-            available: true
-          });
-        }
-      });
-      
-      // Ajouter les horaires du weekend pour la Côte d'Ivoire
-      if (selectedCountry === "coteIvoire" && isWeekend() && country.weekendTimes) {
-        country.weekendTimes.forEach((time: string) => {
-          if (isGameAvailable(time)) {
-            games.push({
-              time: time,
-              available: true
-            });
-          }
-        });
-      }
-      
-      // Trier les jeux par heure
-      games.sort((a: GameItem, b: GameItem) => {
-        const timeA = a.time.split(":").map(Number);
-        const timeB = b.time.split(":").map(Number);
-        
-        if (timeA[0] !== timeB[0]) {
-          return timeA[0] - timeB[0];
-        }
-        return timeA[1] - timeB[1];
-      });
-      
-      setAvailableGames(games);
+  // Obtenir les jeux du pays sélectionné
+  const getGamesForCountry = (): GameItem[] => {
+    const countryData = countryGames[country];
+    if (!countryData) return [];
+
+    let games = [...countryData.games];
+    
+    // Ajouter les jeux du weekend pour la Côte d'Ivoire si c'est le weekend
+    if (country === "coteIvoire" && isWeekend() && countryData.weekendGames) {
+      games = [...games, ...countryData.weekendGames];
     }
-  }, [selectedCountry, currentTime]);
+    
+    // Trier les jeux par heure
+    games.sort((a, b) => {
+      const timeA = a.time.split(":").map(Number);
+      const timeB = b.time.split(":").map(Number);
+      
+      if (timeA[0] !== timeB[0]) {
+        return timeA[0] - timeB[0];
+      }
+      return timeA[1] - timeB[1];
+    });
+    
+    return games;
+  };
+
+  const games = getGamesForCountry();
+  const selectedCountryData = countryGames[country] || {
+    name: "Pays inconnu",
+    flag: "",
+    games: [],
+    hasDoubleChance: false
+  };
 
   return (
     <div className="games-container">
       {/* Bouton retour avec animation */}
-      <Link to="/games" className="back-link">
+      <Link to="/country" className="back-link">
         ‹ Retour
       </Link>
       
@@ -197,66 +188,38 @@ const ChoicePlay = () => {
         padding: "0 10px",
         zIndex: 2
       }}>
-        {/* Sélection des pays - horizontalement scrollable sur mobile */}
-        <div className="country-scroll" style={{ 
-          display: "flex", 
-          overflowX: "auto", 
-          gap: "10px",
-          padding: "10px 0",
-          width: "100%",
-          scrollbarWidth: "none" as "none", // Firefox
-          msOverflowStyle: "none" as "none", // IE/Edge
-        }}>
-          {Object.keys(countryGames).map((countryKey: string) => (
-            <motion.div
-              key={countryKey}
-              className="country-pill"
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedCountry(countryKey)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                minWidth: "110px", // Assure que les pilules ne sont pas trop petites
-                padding: "8px 12px",
-                borderRadius: "20px",
-                background: selectedCountry === countryKey 
-                  ? "rgba(255, 215, 0, 0.8)" // Or pour sélectionné
-                  : "rgba(163, 89, 160, 0.8)", // Violet pour non sélectionné
-                color: selectedCountry === countryKey ? "black" : "white",
-                fontWeight: "bold",
-                fontSize: "14px",
-                cursor: "pointer",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                gap: "8px", // Espace entre l'image et le texte
-                flexShrink: 0, // Empêche la réduction
-              }}
-            >
-              <img 
-                src={countryGames[countryKey].flag} 
-                alt={countryGames[countryKey].name} 
-                style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  borderRadius: "50%",
-                  objectFit: "cover"
-                }} 
-              />
-              {countryGames[countryKey].name}
-            </motion.div>
-          ))}
+        {/* Affichage du pays sélectionné */}
+        <div 
+          className="selected-country"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+            marginBottom: "20px"
+          }}
+        >
+          <img 
+            src={selectedCountryData.flag} 
+            alt={selectedCountryData.name} 
+            style={{ 
+              width: "30px", 
+              height: "30px", 
+              borderRadius: "50%",
+              objectFit: "cover"
+            }} 
+          />
+          <h3 style={{ 
+            color: "white", 
+            margin: 0,
+            fontSize: "20px" 
+          }}>
+            {selectedCountryData.name}
+          </h3>
         </div>
         
-        {/* Style pour cacher la scrollbar sur Chrome, Safari, Opera */}
-        <style>
-          {`
-            .country-scroll::-webkit-scrollbar {
-              display: none;
-            }
-          `}
-        </style>
-        
         {/* Information Double Chance */}
-        {selectedCountry in countryGames && countryGames[selectedCountry].hasDoubleChance && (
+        {selectedCountryData.hasDoubleChance && (
           <div className="double-chance-info" style={{ 
             color: "white", 
             backgroundColor: "rgba(0, 128, 0, 0.6)", 
@@ -279,7 +242,7 @@ const ChoicePlay = () => {
           marginBottom: "15px",
           fontSize: "18px" 
         }}>
-          {selectedCountry in countryGames && `Jeux disponibles pour ${countryGames[selectedCountry].name}`}
+          {`Jeux disponibles pour ${selectedCountryData.name}`}
         </h3>
         
         {/* Affichage des jeux disponibles - optimisé pour mobile */}
@@ -289,8 +252,8 @@ const ChoicePlay = () => {
           gap: "15px",
           width: "100%" 
         }}>
-          {availableGames.length > 0 ? (
-            availableGames.map((game, index) => (
+          {games.length > 0 ? (
+            games.map((game, index) => (
               <motion.div
                 key={index}
                 className="game-item"
@@ -319,7 +282,7 @@ const ChoicePlay = () => {
                     margin: "0 0 5px 0",
                     fontSize: "14px" 
                   }}>
-                    {getCurrentDay()}
+                    {game.name}
                   </p>
                   <h3 style={{ 
                     color: "white", 
@@ -330,7 +293,7 @@ const ChoicePlay = () => {
                   </h3>
                 </div>
                 <Link 
-                  to={`/loto/bet?country=${selectedCountry}&time=${game.time}&doubleChance=${selectedCountry in countryGames ? countryGames[selectedCountry].hasDoubleChance : false}`}
+                  to={`/loto/bet?country=${country}&time=${game.time}&doubleChance=${selectedCountryData.hasDoubleChance}&gameName=${game.name}`}
                   style={{ 
                     textDecoration: "none",
                     marginLeft: "auto" 
@@ -360,8 +323,8 @@ const ChoicePlay = () => {
               textAlign: "center",
               fontSize: "15px"
             }}>
-              <p style={{ margin: "0 0 10px 0" }}>Aucun jeu disponible pour le moment.</p>
-              <p style={{ margin: 0 }}>Veuillez revenir plus tard ou choisir un autre pays.</p>
+              <p style={{ margin: "0 0 10px 0" }}>Aucun jeu disponible pour ce pays.</p>
+              <p style={{ margin: 0 }}>Veuillez sélectionner un autre pays.</p>
             </div>
           )}
         </div>

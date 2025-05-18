@@ -33,6 +33,7 @@ const BetForm = () => {
   const country = queryParams.get("country") || "benin";
   const gameTime = queryParams.get("time") || "";
   const hasDoubleChance = queryParams.get("doubleChance") === "true";
+  const gameName = queryParams.get("gameName") || "";
 
   const [betType, setBetType] = useState<BetType>("FirstouonBK");
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -329,7 +330,7 @@ const BetForm = () => {
       {/* Bouton Retour */}
       <Link to="/choicePlay" className="back-button">‹ Retour</Link>
       
-      <h2 className="title"> Formulaire de pari - {countryName} {gameTime}H</h2>
+      <h2 className="title">{gameName} - {countryName} {gameTime}H</h2>
       
       {/* Sélection du type de pari */}
       <label>Type de pari</label>
