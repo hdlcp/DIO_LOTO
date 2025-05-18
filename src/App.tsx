@@ -38,7 +38,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
         
 
-        {/* Routes protégées (nécessitent d'être connecté) */}
+        {/* Routes protégées pour utilisateurs normaux */}
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
@@ -79,11 +79,6 @@ const App: React.FC = () => {
             <Profile />
           </ProtectedRoute>
         } />
-        <Route path="/dashbordRevendeur" element={
-          <ProtectedRoute>
-            <DashboardRevendeur />
-          </ProtectedRoute>
-        } />
         <Route path="/recharger" element={
           <ProtectedRoute>
             <Recharger />
@@ -91,9 +86,16 @@ const App: React.FC = () => {
         } />
         <Route path="/country" element={
           <ProtectedRoute>
-          <CountrySelection/>
+            <CountrySelection />
           </ProtectedRoute>
-          } />
+        } />
+
+        {/* Routes protégées pour revendeurs */}
+        <Route path="/dashbordRevendeur" element={
+          <ProtectedRoute requireRevendeur>
+            <DashboardRevendeur />
+          </ProtectedRoute>
+        } />
       </Routes>
     </AuthProvider>
   );

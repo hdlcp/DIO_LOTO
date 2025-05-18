@@ -1,37 +1,33 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import "../styles/Auth.css";
 import { useAuth } from "../AuthContext";
 // Icons pour afficher/masquer le mot de passe
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { login, loading, error } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError(null);
+
     try {
-      // Appel de la fonction login du contexte d'authentification qui retourne maintenant un boolean
-      const loginSuccess = await login(email, password);
-      
-      if (loginSuccess) {
-        // Connexion réussie, rediriger vers la page sauvegardée ou dashboard par défaut
+      const success = await login(email, password);
+      if (success) {
+        // Récupérer l'URL de redirection sauvegardée ou utiliser le dashboard par défaut
         const redirectPath = sessionStorage.getItem('redirectAfterLogin') || '/dashboard';
         sessionStorage.removeItem('redirectAfterLogin'); // Nettoyer après utilisation
         navigate(redirectPath);
-      } else {
-        // La connexion a échoué, pas de redirection
-        console.log("Échec de connexion, pas de redirection");
       }
     } catch (err) {
-      console.error("Erreur lors de la connexion:", err);
-      // Ne pas rediriger
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de la connexion');
     }
   };
 
@@ -42,38 +38,44 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 className="auth-title">Connexion</h2>
-
-        {error && <div className="error-message">{error}</div>}
-
+        <h2 className="auth-title">Connexion à votre compte</h2>
         <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="error-message" role="alert">
+              <span>{error}</span>
+            </div>
+          )}
           <div className="input-group">
-            <label>Email</label>
-            <input 
-              type="email" 
-              placeholder="Votre email" 
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </div>
-
           <div className="input-group">
-            <label>Mot de passe</label>
-            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-              <input 
+            <label htmlFor="password">Mot de passe</label>
+            <div style={{ position: "relative" }}>
+              <input
+                id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Votre mot de passe" 
+                required
+                placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                style={{ flex: "1" }}
               />
               <div 
                 onClick={togglePasswordVisibility} 
                 style={{ 
                   position: "absolute", 
                   right: "10px", 
+                  top: "50%",
+                  transform: "translateY(-50%)",
                   cursor: "pointer" 
                 }}
               >
@@ -82,23 +84,20 @@ const Login = () => {
             </div>
           </div>
 
-          <Link to="/forgot-password" className="forgot-password">
-            Mot de passe oublié ?
-          </Link>
-
-          <button 
-            type="submit" 
-            className="auth-button"
+          <button
+            type="submit"
             disabled={loading}
+            className="auth-button"
           >
-            {loading ? "Chargement..." : "Connexion"}
+            {loading ? 'Connexion en cours...' : 'Se connecter'}
           </button>
-        </form>
 
-        <p className="auth-text">
-          Vous n'avez pas de compte ?{" "}
-          <Link to="/register" className="auth-link">Inscrivez-vous</Link>
-        </p>
+          <div className="auth-text">
+            <Link to="/register" className="auth-link">
+              Pas encore de compte ? Inscrivez-vous
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );

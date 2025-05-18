@@ -5,32 +5,35 @@ import { useAuth } from "../AuthContext";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-
-const Register = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Register: React.FC = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { register, loading, error } = useAuth();
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const { register, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError(null);
+
+    // Validation des mots de passe
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return;
+    }
+
     try {
-      // On utilise la valeur retournée par register pour décider de la redirection
       const success = await register(firstName, lastName, email, password);
-      
-      // On redirige vers la page de connexion uniquement si l'inscription a réussi
       if (success) {
-        navigate("/login");
+        // Rediriger vers le dashboard après inscription réussie
+        navigate('/dashboard');
       }
-      // Si l'inscription échoue, l'utilisateur reste sur la page actuelle
-      // et l'erreur sera affichée via le state "error" du contexte d'authentification
     } catch (err) {
-      // L'erreur est déjà gérée dans le contexte d'authentification
-      console.error("Erreur lors de l'inscription:", err);
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription');
     }
   };
 
@@ -41,60 +44,94 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 className="auth-title">Inscrivez-vous</h2>
-
-        {error && <div className="error-message">{error}</div>}
-
+        <h2 className="auth-title">Créer un compte</h2>
         <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="error-message" role="alert">
+              <span>{error}</span>
+            </div>
+          )}
           <div className="input-group">
-            <label>Nom</label>
-            <input 
-              type="text" 
-              placeholder="Votre nom" 
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+            <label htmlFor="firstName">Prénom</label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
               required
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Prénom</label>
-            <input 
-              type="text" 
-              placeholder="Votre prénom" 
+              placeholder="Prénom"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              required
             />
           </div>
-
           <div className="input-group">
-            <label>Email</label>
-            <input 
-              type="email" 
-              placeholder="Votre email" 
+            <label htmlFor="lastName">Nom</label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              required
+              placeholder="Nom"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </div>
-
           <div className="input-group">
-            <label>Mot de passe</label>
-            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-              <input 
+            <label htmlFor="password">Mot de passe</label>
+            <div style={{ position: "relative" }}>
+              <input
+                id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Votre mot de passe" 
+                required
+                placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                style={{ flex: "1" }}
               />
               <div 
                 onClick={togglePasswordVisibility} 
                 style={{ 
                   position: "absolute", 
                   right: "10px", 
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer" 
+                }}
+              >
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </div>
+            </div>
+          </div>
+          <div className="input-group">
+            <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
+            <div style={{ position: "relative" }}>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="Confirmer le mot de passe"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <div 
+                onClick={togglePasswordVisibility} 
+                style={{ 
+                  position: "absolute", 
+                  right: "10px", 
+                  top: "50%",
+                  transform: "translateY(-50%)",
                   cursor: "pointer" 
                 }}
               >
@@ -103,19 +140,20 @@ const Register = () => {
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            className="auth-button"
+          <button
+            type="submit"
             disabled={loading}
+            className="auth-button"
           >
-            {loading ? "Chargement..." : "S'inscrire"}
+            {loading ? 'Inscription en cours...' : 'S\'inscrire'}
           </button>
-        </form>
 
-        <p className="auth-text">
-          Vous avez déjà un compte ?{" "}
-          <Link to="/login" className="auth-link">Connexion</Link>
-        </p>
+          <div className="auth-text">
+            <Link to="/login" className="auth-link">
+              Déjà un compte ? Connectez-vous
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );
