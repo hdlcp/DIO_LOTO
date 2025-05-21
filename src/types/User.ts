@@ -9,4 +9,10 @@ export interface User {
   created: string;
   updatedAt: string;
   isRevendeur?: boolean; // Optionnel car déterminé après la vérification du rôle
+  // Champs spécifiques aux revendeurs (optionnels)
+  uniqueResellerId?: string;
+  soldeRevendeur?: number;
+  whatsapp?: string;
+  pays?: string;
+  status?: string;
 } 

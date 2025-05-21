@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/BetForm.css"; // Fichier CSS
+import BetCouponDisplay from '../components/BetCouponDisplay';
 
 // Définitions des types TypeScript
 type BetType = "FirstouonBK" | "NAP" | "Twosûrs" | "Permutations" | "DoubleChance" | "DoubleNumber" | "Annagrammesimple";
@@ -26,14 +27,29 @@ type CountryNames = {
   [key: string]: string;
 }
 
+// Liste des jeux qui ont l'option Double Chance
+const doubleChanceGames: string[] = [
+  "togo8",
+  "coteivoire7",
+  "coteivoire10",
+  "coteivoire13",
+  "coteivoire16",
+  "coteivoire21",
+  "coteivoire23",
+  "coteivoire1",
+  "coteivoire3",
+];
+
 const BetForm = () => {
   // Récupération des paramètres d'URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const country = queryParams.get("country") || "benin";
   const gameTime = queryParams.get("time") || "";
-  const hasDoubleChance = queryParams.get("doubleChance") === "true";
   const gameName = queryParams.get("gameName") || "";
+
+  // Vérifier si le jeu actuel a la double chance
+  const currentGameHasDoubleChance = doubleChanceGames.includes(gameName);
 
   const [betType, setBetType] = useState<BetType>("FirstouonBK");
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -45,6 +61,10 @@ const BetForm = () => {
   const [maxNumbersAllowed, setMaxNumbersAllowed] = useState<number>(1);
   const [currentNumber, setCurrentNumber] = useState<string>("");
   const [countryName, setCountryName] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCouponDisplay, setShowCouponDisplay] = useState(false);
+  const [couponDetails, setCouponDetails] = useState<any>(null);
 
   // Mapping des codes pays vers les noms complets
   const countryNames: CountryNames = {
@@ -57,8 +77,23 @@ const BetForm = () => {
 
   // Initialisation du nom du pays
   useEffect(() => {
-    const countryKey = country as keyof typeof countryNames;
-    setCountryName(countryNames[countryKey] || country);
+    const initializeGame = async () => {
+      setLoading(true);
+      try {
+        // Suppression du fetching de countryData car elle n'est pas utilisée ici
+        // const countryData = await gameService.getCountryGames(country);
+        
+        setCountryName(countryNames[country] || country);
+      } catch (error) {
+        // Gérer l'erreur si l'initialisation du nom du pays échoue (peu probable mais géré)
+        console.error("Erreur lors de l'initialisation du jeu:", error);
+        setError("Impossible d'initialiser les informations du jeu.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeGame();
   }, [country]);
 
   // Définition des multiplicateurs pour les différents jeux
@@ -153,17 +188,17 @@ const BetForm = () => {
         break;
       case "DoubleChance":
         options = ["Win", "Machine"];
-        minNums = maxNums = 1;
+        minNums = maxNums = 1; // Assumer 1 numéro pour DoubleChance (à confirmer)
         break;
       case "DoubleNumber":
         options = ["PermDoubleNumber"];
-        minNums = 0;
-        maxNums = 0;
+        minNums = 0; // Pas de sélection de numéro individuelle, c'est un type spécial
+        maxNums = 0; // Pas de sélection de numéro individuelle
         break;
       case "Annagrammesimple":
         options = ["Directe"];
-        minNums = 0;
-        maxNums = 0;
+        minNums = 0; // Pas de sélection de numéro individuelle
+        maxNums = 0; // Pas de sélection de numéro individuelle
         break;
     }
 
@@ -171,13 +206,27 @@ const BetForm = () => {
     setMinNumbersRequired(minNums);
     setMaxNumbersAllowed(maxNums);
     setFormula(options.length > 0 ? options[0] : "Directe");
-    setNumbers([]);
-  }, [betType]);
+    // Réinitialiser les numéros sélectionnés si le type de pari change et les numéros ne correspondent plus
+    if (numbers.length > maxNums) {
+        setNumbers([]);
+    }
+    // Recalculer les gains avec le nouveau type/formule
+    if (stake !== "" && (numbers.length >= minNums || betType === "DoubleNumber" || betType === "Annagrammesimple")) {
+       const calculatedGains = calculateGains();
+       setGains(calculatedGains);
+    }
+
+  }, [betType, numbers.length]); // Ajouter numbers.length comme dépendance pour recalculer les gains si des numéros sont ajoutés/supprimés
 
   // Fonction pour calculer les gains
   const calculateGains = () => {
     const amount = parseFloat(stake);
-    if (isNaN(amount) || amount < 10 || amount > 5000) return "";
+    // Vérifier si la mise est valide et si les numéros requis sont sélectionnés (sauf pour types spéciaux)
+    if (isNaN(amount) || amount < 10 || amount > 5000 || 
+        (numbers.length < minNumbersRequired && betType !== "DoubleNumber" && betType !== "Annagrammesimple")) 
+    {
+      return ""; // Retourne vide si la mise ou les numéros sont invalides
+    }
 
     let calculatedGain = 0;
 
@@ -198,23 +247,24 @@ const BetForm = () => {
         const permTypeObj = gameMultipliers.Permutations[permType as keyof typeof gameMultipliers.Permutations];
         const maxKey = Object.keys(permTypeObj).slice(-1)[0];
         
+        // Le gain pour Permde7à20boules semble être fixe selon votre ancien code, sinon c'est misé x multiplicateur
         calculatedGain = 
           permType === "Permde7à20boules" 
-            ? permTypeObj[maxKey] // Gain fixe pour perm 7-20
-            : amount * permTypeObj[maxKey]; // Multiplicateur pour perm 3-6
+            ? permTypeObj[maxKey] 
+            : amount * permTypeObj[maxKey]; 
         break;
       }
       case "DoubleChance": {
-        // Double chance divise le gain: 60% Win, 40% Machine
-        const baseMultiplier = 14; // Utilise le multiplicateur de base FirstouonBK Directe
-        calculatedGain = amount * baseMultiplier * gameMultipliers.DoubleChance[formula as keyof typeof gameMultipliers.DoubleChance];
+        // Double chance a des multiplicateurs spécifiques définis dans gameMultipliers.DoubleChance
+        calculatedGain = amount * gameMultipliers.DoubleChance[formula as keyof typeof gameMultipliers.DoubleChance];
         break;
       }
       case "DoubleNumber":
-        // Utilise les mêmes règles que les permutations pour 8 boules
+        // Le gain pour DoubleNumber semble être misé x multiplicateur PermDoubleNumber
         calculatedGain = amount * gameMultipliers.DoubleNumber.PermDoubleNumber;
         break;
       case "Annagrammesimple":
+        // Le gain pour Annagramme simple semble être misé x multiplicateur Directe
         calculatedGain = amount * gameMultipliers.Annagrammesimple.Directe;
         break;
     }
@@ -225,12 +275,16 @@ const BetForm = () => {
   // Gestion du changement de mise
   const handleStakeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (value === "" || (Number(value) >= 10 && Number(value) <= 5000)) {
-      setStake(value);
-      if (numbers.length >= minNumbersRequired || betType === "DoubleNumber" || betType === "Annagrammesimple") {
-        const calculatedGains = calculateGains();
-        setGains(calculatedGains);
-      }
+    // Permettre la saisie de n'importe quelle valeur, la validation se fera ailleurs (par isCouponValid)
+    setStake(value);
+    
+    // Recalculer les gains si la mise est un nombre valide et les numéros sont suffisants ou type spécial
+    const amount = parseFloat(value);
+    if (!isNaN(amount) && amount >= 10 && amount <= 5000 && (numbers.length >= minNumbersRequired || betType === "DoubleNumber" || betType === "Annagrammesimple")) {
+      const calculatedGains = calculateGains();
+      setGains(calculatedGains);
+    } else {
+      setGains(""); // Effacer les gains si la mise est invalide ou les numéros insuffisants
     }
   };
 
@@ -244,7 +298,7 @@ const BetForm = () => {
       return;
     }
     
-    if (numbers.length >= maxNumbersAllowed) {
+    if (maxNumbersAllowed > 0 && numbers.length >= maxNumbersAllowed) {
       alert(`Vous ne pouvez pas sélectionner plus de ${maxNumbersAllowed} numéros pour cette formule.`);
       return;
     }
@@ -253,7 +307,7 @@ const BetForm = () => {
     setNumbers(newNumbers);
     setCurrentNumber("");
     
-    // Recalculer les gains si la mise est déjà saisie
+    // Recalculer les gains si la mise est déjà saisie et les numéros sont suffisants
     if (stake !== "" && newNumbers.length >= minNumbersRequired) {
       const calculatedGains = calculateGains();
       setGains(calculatedGains);
@@ -278,8 +332,12 @@ const BetForm = () => {
   const generateAutoNumbers = () => {
     if (betType === "DoubleNumber") {
       // Pour Double Number, on utilise les doubles (11, 22, 33, etc.)
-      setNumbers([11, 22, 33, 44, 55, 66, 77, 88]);
-      if (stake !== "") {
+      const doubleNums = [];
+      for(let i = 1; i <= 9; i++) {
+          doubleNums.push(i * 11);
+      }
+      setNumbers(doubleNums);
+       if (stake !== "") {
         const calculatedGains = calculateGains();
         setGains(calculatedGains);
       }
@@ -288,6 +346,8 @@ const BetForm = () => {
     
     if (betType === "Annagrammesimple") {
       // Pour Annagramme simple, on simule les 37 anagrammes
+      // Cette logique est une simulation, l'implémentation réelle dépendra de l'API ou de règles spécifiques
+      setNumbers([]); // Pas de numéros individuels sélectionnés pour Annagramme
       alert("Les 37 anagrammes seront automatiquement joués.");
       if (stake !== "") {
         const calculatedGains = calculateGains();
@@ -298,7 +358,8 @@ const BetForm = () => {
     
     // Générer aléatoirement le nombre requis de numéros
     const autoNumbers: number[] = [];
-    while (autoNumbers.length < minNumbersRequired) {
+    const numToGenerate = minNumbersRequired > 0 ? minNumbersRequired : 1; // Générer au moins 1 si min est 0
+    while (autoNumbers.length < numToGenerate) {
       const num = Math.floor(Math.random() * 90) + 1;
       if (!autoNumbers.includes(num)) {
         autoNumbers.push(num);
@@ -315,20 +376,64 @@ const BetForm = () => {
 
   // Déterminer si le bouton "Ajouter le coupon" doit être activé
   const isCouponValid = () => {
+    const isValidStake = stake !== "" && parseFloat(stake) >= 10 && parseFloat(stake) <= 5000;
+    
     if (betType === "DoubleNumber" || betType === "Annagrammesimple") {
-      return stake !== "" && parseFloat(stake) >= 10 && parseFloat(stake) <= 5000;
+      return isValidStake;
     }
     
-    return numbers.length >= minNumbersRequired && 
-           stake !== "" && 
-           parseFloat(stake) >= 10 && 
-           parseFloat(stake) <= 5000;
+    return numbers.length >= minNumbersRequired && isValidStake;
   };
+
+  // Gérer l'ajout du coupon
+  const handleAddCoupon = () => {
+    if (isCouponValid()) {
+      // Ici, nous allons collecter les données du coupon et les stocker
+      const newCouponDetails = {
+        ticketNumber: Math.floor(Math.random() * 100000000).toString(), // Générer un numéro de ticket simple pour l'exemple
+        date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+        gameName: gameName,
+        betType: betType,
+        numbers: numbers,
+        formula: formula,
+        stake: stake,
+        gains: gains,
+        prise: 1, // Assumons une prise de 1 pour l'exemple
+      };
+      setCouponDetails(newCouponDetails);
+      setShowCouponDisplay(true); // Afficher l'interface du coupon
+    }
+  };
+
+  // Gérer la suppression du coupon affiché
+  const handleDeleteCouponDisplay = () => {
+    setShowCouponDisplay(false);
+    setCouponDetails(null); // Optionnel: effacer les détails stockés si nécessaire
+  };
+
+  if (loading) {
+    // Utilisation de l'overlay pour le chargement initial de la page BetForm
+    return (
+        <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <div className="loading-text">Chargement du formulaire de pari...</div>
+        </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <div className="error-message">{error}</div>
+        <Link to="/choicePlay" className="back-button">Retour aux jeux</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="bet-form-container">
       {/* Bouton Retour */}
-      <Link to="/choicePlay" className="back-button">‹ Retour</Link>
+      <Link to={`/choicePlay?country=${country}`} className="back-button">‹ Retour</Link>
       
       <h2 className="title">{gameName} - {countryName} {gameTime}H</h2>
       
@@ -343,7 +448,8 @@ const BetForm = () => {
         <option value="NAP">NAP</option>
         <option value="Twosûrs">Two sûrs</option>
         <option value="Permutations">Les permutations</option>
-        {hasDoubleChance && <option value="DoubleChance">La double chance</option>}
+        {/* Afficher l'option Double Chance uniquement si le jeu actuel la supporte */}
+        {currentGameHasDoubleChance && <option value="DoubleChance">La double chance</option>}
         <option value="DoubleNumber">Double Number</option>
         <option value="Annagrammesimple">Annagramme simple</option>
       </select>
@@ -352,14 +458,18 @@ const BetForm = () => {
         <p><b>{betType}</b></p>
         
         {/* Sélection des numéros */}
-        {betType !== "DoubleNumber" && betType !== "Annagrammesimple" && (
+        {/* Masquer la section numéros pour DoubleNumber et Annagramme simple */}
+        {betType !== 'DoubleNumber' && betType !== 'Annagrammesimple' && (minNumbersRequired > 0 || maxNumbersAllowed > 0) && (
           <>
             <label>
               Entrez {minNumbersRequired === maxNumbersAllowed 
                 ? minNumbersRequired === 1 
                   ? "un nombre" 
                   : `${minNumbersRequired} nombres` 
-                : `entre ${minNumbersRequired} et ${maxNumbersAllowed} nombres`} entre 1 et 90
+                : maxNumbersAllowed > 0 
+                  ? `entre ${minNumbersRequired} et ${maxNumbersAllowed} nombres`
+                  : `${minNumbersRequired} ou plus de nombres`
+                } entre 1 et 90
             </label>
             <div className="number-input-group">
               <input
@@ -373,13 +483,16 @@ const BetForm = () => {
               <button 
                 className="add-number-btn"
                 onClick={addNumber}
-                disabled={currentNumber === "" || parseInt(currentNumber) < 1 || parseInt(currentNumber) > 90}
+                disabled={currentNumber === "" || parseInt(currentNumber) < 1 || parseInt(currentNumber) > 90 || (maxNumbersAllowed > 0 && numbers.length >= maxNumbersAllowed)}
               >
                 Ajouter
               </button>
-              <button className="generate-numbers-btn" onClick={generateAutoNumbers}>
-                Auto
-              </button>
+              {/* Le bouton Auto n'est pertinent que si des numéros sont requis */}
+              {(minNumbersRequired > 0 || maxNumbersAllowed > 0) && (
+                <button className="generate-numbers-btn" onClick={generateAutoNumbers}>
+                  Auto
+                </button>
+              )}
             </div>
             
             {/* Affichage des numéros sélectionnés */}
@@ -407,23 +520,35 @@ const BetForm = () => {
         )}
         
         {/* Sélection d'une formule */}
-        <label>Formule</label>
-        <select 
-          className="formula-select"
-          value={formula} 
-          onChange={(e) => {
-            setFormula(e.target.value);
-            // Mettre à jour les gains si applicable
-            if (numbers.length >= minNumbersRequired && stake !== "") {
-              const calculatedGains = calculateGains();
-              setGains(calculatedGains);
-            }
-          }}
-        >
-          {formulaOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
+        {/* Masquer la sélection de formule pour DoubleNumber et Annagramme simple s'ils n'ont qu'une seule option */}
+        {formulaOptions.length > 1 && betType !== "DoubleNumber" && betType !== "Annagrammesimple" && (
+          <>
+            <label>Formule</label>
+            <select 
+              className="formula-select"
+              value={formula} 
+              onChange={(e) => {
+                setFormula(e.target.value);
+                // Mettre à jour les gains si applicable
+                const canCalculate = stake !== '' && (
+                  (minNumbersRequired > 0 && numbers.length >= minNumbersRequired) ||
+                  maxNumbersAllowed === 0
+                );
+
+                if (canCalculate) {
+                  const calculatedGains = calculateGains();
+                  setGains(calculatedGains);
+                } else {
+                  setGains('');
+                }
+              }}
+            >
+              {formulaOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </>
+        )}
         
         {/* Mise entre 10 et 5000 */}
         <label>Mise (entre 10 et 5000)</label>
@@ -441,15 +566,30 @@ const BetForm = () => {
         <input type="text" value={gains} readOnly className="gains-display" />
         
         {/* Bouton Ajouter le coupon */}
-        <Link to="/dashboard" className={!isCouponValid() ? "disabled-link" : ""}>
-          <button 
-            className={`bet-button ${!isCouponValid() ? "disabled" : ""}`}
-            disabled={!isCouponValid()}
-          >
-            AJOUTER LE COUPON AU PARI
-          </button>
-        </Link>
+        <button
+          className={`bet-button ${!isCouponValid() ? "disabled" : ""}`}
+          disabled={!isCouponValid()}
+          onClick={handleAddCoupon}
+        >
+          AJOUTER LE COUPON AU PARI
+        </button>
       </div>
+      
+      {/* Afficher l'interface du coupon si showCouponDisplay est true */}
+      {showCouponDisplay && couponDetails && (
+        <BetCouponDisplay 
+          ticketNumber={couponDetails.ticketNumber}
+          date={couponDetails.date}
+          gameName={couponDetails.gameName}
+          betType={couponDetails.betType}
+          numbers={couponDetails.numbers}
+          formula={couponDetails.formula}
+          stake={couponDetails.stake}
+          gains={couponDetails.gains}
+          prise={couponDetails.prise}
+          onDelete={handleDeleteCouponDisplay}
+        />
+      )}
     </div>
   );
 };

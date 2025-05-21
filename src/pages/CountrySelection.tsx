@@ -8,12 +8,18 @@ import CoteIvoire from "../assets/cote-ivoire.png";
 import Togo from "../assets/togo.png";
 import Niger from "../assets/niger.png";
 
-const countries = [
-  { name: "Benin", flag: Benin, path: "/choicePlay", code: "benin" },
-  { name: "Ghana", flag: Ghana, path: "/choicePlay", code: "ghana" },
-  { name: "Côte d'Ivoire", flag: CoteIvoire, path: "/choicePlay", code: "coteIvoire" },
-  { name: "Togo", flag: Togo, path: "/choicePlay", code: "togo" },
-  { name: "Niger", flag: Niger, path: "/choicePlay", code: "nigeria" },
+interface Country {
+  name: string;
+  flag: string;
+  code: string;
+}
+
+const countries: Country[] = [
+  { name: "Benin", flag: Benin, code: "benin" },
+  { name: "Ghana", flag: Ghana, code: "ghana" },
+  { name: "Côte d'Ivoire", flag: CoteIvoire, code: "coteIvoire" },
+  { name: "Togo", flag: Togo, code: "togo" },
+  { name: "Niger", flag: Niger, code: "niger" },
 ];
 
 const CountrySelection = () => {
@@ -47,11 +53,13 @@ const CountrySelection = () => {
             onClick={() => handleCountryClick(country.code)}
           >
             <img 
-              src={`${country.flag}`} 
+              src={country.flag} 
               alt={country.name} 
               className="country-icon" 
             />
-            <button className="country-button">{country.name}</button>
+            <button className="country-button">
+              {country.name}
+            </button>
           </motion.div>
         ))}
       </div>

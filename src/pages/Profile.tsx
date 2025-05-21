@@ -39,7 +39,7 @@ const Profil: React.FC = () => {
     try {
       if (!user || !token) throw new Error("Non authentifié");
 
-      const updatedUser = await userService.updateUser(user.id, {
+      await userService.updateUser(user.id, {
         firstName,
         lastName,
         email,

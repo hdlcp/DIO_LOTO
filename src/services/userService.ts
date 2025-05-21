@@ -2,6 +2,13 @@ import { User } from '../types/User';
 
 const API_URL = 'https://dio-loto-api.onrender.com/api';
 
+interface UserRoleResponse {
+  message: string;
+  role: 'user' | 'reseller';
+  userInfo?: User;
+  resellerInfo?: User;
+}
+
 export const userService = {
   // Récupérer tous les utilisateurs
   getAllUsers: async (token: string): Promise<User[]> => {
@@ -93,7 +100,7 @@ export const userService = {
   },
 
   // Vérifier le rôle de l'utilisateur
-  checkUserRole: async (email: string, token: string): Promise<boolean> => {
+  checkUserRole: async (email: string, token: string): Promise<UserRoleResponse> => {
     const response = await fetch(`${API_URL}/auth/check-role`, {
       method: 'POST',
       headers: {
@@ -104,7 +111,7 @@ export const userService = {
     });
     if (!response.ok) throw new Error('Erreur lors de la vérification du rôle');
     const data = await response.json();
-    return data.isRevendeur;
+    return data as UserRoleResponse;
   },
 
   // Mise à jour du mot de passe

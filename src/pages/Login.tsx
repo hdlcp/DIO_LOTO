@@ -11,7 +11,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login, loading } = useAuth();
+  const { login, loading, isRevendeur } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,10 +21,12 @@ const Login: React.FC = () => {
     try {
       const success = await login(email, password);
       if (success) {
-        // Récupérer l'URL de redirection sauvegardée ou utiliser le dashboard par défaut
-        const redirectPath = sessionStorage.getItem('redirectAfterLogin') || '/dashboard';
-        sessionStorage.removeItem('redirectAfterLogin'); // Nettoyer après utilisation
-        navigate(redirectPath);
+        // Vérifier le rôle et rediriger
+        if (isRevendeur()) {
+          navigate('/dashbordRevendeur');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de la connexion');

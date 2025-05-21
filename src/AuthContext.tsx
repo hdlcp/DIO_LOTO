@@ -45,12 +45,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (storedToken && storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
-          // Vérifier le rôle de l'utilisateur
-          const isRevendeur = await userService.checkUserRole(parsedUser.email, storedToken);
-          parsedUser.isRevendeur = isRevendeur;
+          // Vérifier le rôle de l'utilisateur et obtenir toutes les infos
+          const roleCheckResponse = await userService.checkUserRole(parsedUser.email, storedToken);
           
+          // Mettre à jour l'objet utilisateur stocké avec les informations complètes
+          let updatedUser = { ...parsedUser, isRevendeur: roleCheckResponse.role === 'reseller' };
+
+          if (roleCheckResponse.role === 'reseller' && roleCheckResponse.resellerInfo) {
+            // Ajouter les informations spécifiques au revendeur
+            updatedUser = {
+              ...updatedUser,
+              ...roleCheckResponse.resellerInfo
+            };
+          } else if (roleCheckResponse.role === 'user' && roleCheckResponse.userInfo) {
+            // Ajouter les informations spécifiques à l'utilisateur simple (si différentes)
+            updatedUser = {
+              ...updatedUser,
+              ...roleCheckResponse.userInfo
+            };
+          }
+          
+          localStorage.setItem('user', JSON.stringify(updatedUser));
           setToken(storedToken);
-          setUser(parsedUser);
+          setUser(updatedUser);
         } catch (err) {
           logout();
         }
@@ -76,15 +93,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const { user: userData, token: newToken } = await userService.login(email, password);
       
-      // Vérifier le rôle de l'utilisateur
-      const isRevendeur = await userService.checkUserRole(userData.email, newToken);
-      userData.isRevendeur = isRevendeur;
+      // Vérifier le rôle de l'utilisateur et obtenir toutes les infos
+      const roleCheckResponse = await userService.checkUserRole(userData.email, newToken);
+      
+      // Mettre à jour l'objet utilisateur stocké avec les informations complètes
+      let updatedUser = { ...userData, isRevendeur: roleCheckResponse.role === 'reseller' };
+
+      if (roleCheckResponse.role === 'reseller' && roleCheckResponse.resellerInfo) {
+        // Ajouter les informations spécifiques au revendeur
+        updatedUser = {
+          ...updatedUser,
+          ...roleCheckResponse.resellerInfo
+        };
+      } else if (roleCheckResponse.role === 'user' && roleCheckResponse.userInfo) {
+        // Ajouter les informations spécifiques à l'utilisateur simple (si différentes)
+        updatedUser = {
+          ...updatedUser,
+          ...roleCheckResponse.userInfo
+        };
+      }
       
       localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       
       setToken(newToken);
-      setUser(userData);
+      setUser(updatedUser);
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue lors de la connexion';
@@ -107,16 +140,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         password,
       });
       
-      // Vérifier le rôle de l'utilisateur
-      const isRevendeur = await userService.checkUserRole(userData.email, newToken);
-      userData.isRevendeur = isRevendeur;
+      // Vérifier le rôle de l'utilisateur et obtenir toutes les infos
+      const roleCheckResponse = await userService.checkUserRole(userData.email, newToken);
+      
+      // Mettre à jour l'objet utilisateur stocké avec les informations complètes
+      let updatedUser = { ...userData, isRevendeur: roleCheckResponse.role === 'reseller' };
+
+      if (roleCheckResponse.role === 'reseller' && roleCheckResponse.resellerInfo) {
+        // Ajouter les informations spécifiques au revendeur
+        updatedUser = {
+          ...updatedUser,
+          ...roleCheckResponse.resellerInfo
+        };
+      } else if (roleCheckResponse.role === 'user' && roleCheckResponse.userInfo) {
+        // Ajouter les informations spécifiques à l'utilisateur simple (si différentes)
+        updatedUser = {
+          ...updatedUser,
+          ...roleCheckResponse.userInfo
+        };
+      }
       
       localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       
       setToken(newToken);
-      setUser(userData);
-        return true;
+      setUser(updatedUser);
+      return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription';
       setError(errorMessage);

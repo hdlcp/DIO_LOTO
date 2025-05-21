@@ -13,7 +13,7 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { register, loading } = useAuth();
+  const { register, loading, isRevendeur } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,8 +29,12 @@ const Register: React.FC = () => {
     try {
       const success = await register(firstName, lastName, email, password);
       if (success) {
-        // Rediriger vers le dashboard après inscription réussie
-        navigate('/dashboard');
+        // Vérifier le rôle et rediriger
+        if (isRevendeur()) {
+          navigate('/dashbordRevendeur');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription');
