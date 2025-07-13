@@ -1,87 +1,437 @@
 /* Global Styles */
 .tickets-container {
+  min-height: 100vh;
+  width: 100%;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
-    position: relative;
+  box-sizing: border-box;
   }
   
   /* Overlay pour assombrir l'image */
   .tickets-container::before {
     content: "";
-    position: absolute;
+  position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Assombrissement */
-    z-index: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+/* Bouton retour */
+.back-link {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.back-link:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* En-tête avec le nombre de tickets */
+.tickets-header {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+  z-index: 2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.tickets-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: #fff;
+}
+
+/* Numéro de tickets */
+.ticket-number {
+  background: #2196f3;
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 50%;
+  font-size: 2em;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+/* Icône */
+.ticket-icon {
+  font-size: 2.5em;
+  color: #2196f3;
+  flex-shrink: 0;
+}
+
+.ticket-text {
+  font-size: 1.8em;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Liste des tickets */
+.tickets-list {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  z-index: 2;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+}
+
+/* Carte de ticket */
+.ticket-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.ticket-card:hover {
+  transform: translateY(-5px);
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  gap: 10px;
+}
+
+.ticket-game {
+  font-weight: bold;
+  color: #2196f3;
+  font-size: 1.2em;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
+}
+
+.ticket-date {
+  color: #666;
+  font-size: 0.9em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ticket-details > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5px 0;
+  gap: 10px;
+  min-height: 20px;
+}
+
+.label {
+  color: #666;
+  font-size: 0.9em;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.value {
+  font-weight: 500;
+  color: #333;
+  word-break: break-word;
+  text-align: right;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Styles spécifiques au numéro de ticket dans les cartes */
+.ticket-id-row .value {
+  font-size: 0.75em;
+  color: #666;
+  word-break: break-all;
+  line-height: 1.3;
+  max-width: 100%;
+}
+
+/* Gestion des numéros joués (peuvent être très longs) */
+.ticket-numbers .value {
+  font-size: 0.85em;
+  word-break: break-all;
+  line-height: 1.4;
+  max-width: 100%;
+}
+
+.ticket-gain .value {
+  color: #4caf50;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.ticket-status {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #eee;
+}
+
+.status-en-cours-de-traitement {
+  color: #ffa726;
+  font-weight: bold;
+}
+
+.status-validé {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.status-rejeté {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* Boutons d'actions pour le panier */
+.ticket-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.validate-button,
+.delete-button {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.validate-button {
+  background: #4caf50;
+  color: white;
+}
+
+.validate-button:hover {
+  background: #45a049;
+}
+
+.delete-button {
+  background: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #da190b;
+}
+
+/* Messages d'état */
+.loading,
+.error-message,
+.no-tickets {
+  background: rgba(255, 255, 255, 0.95);
+  color: rgb(0, 0, 0);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px;
+  z-index: 2;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: #f44336;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tickets-container {
+    padding: 10px;
   }
   
-  /* Retour */
   .back-link {
-    position: absolute;
-    top: 40px;
-    left: 20px;
-    color: yellow;
-    font-weight: bold;
-    text-decoration: none;
-    z-index: 2;
+    top: 10px;
+    left: 10px;
+    font-size: 1em;
+    padding: 8px 15px;
   }
   
-  /* Carte Tickets */
-  .tickets-card {
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    padding: 20px 40px;
-    border-radius: 10px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
+  .tickets-header {
+    padding: 15px;
+    margin-bottom: 20px;
   }
   
-  /* Informations Tickets */
   .tickets-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
+    gap: 15px;
+    flex-wrap: wrap;
   }
   
-  /* Numéro de tickets */
   .ticket-number {
-    background: gray;
-    padding: 8px 14px;
-    border-radius: 50%;
-    font-size: 22px;
+    padding: 10px 20px;
+    font-size: 1.5em;
   }
   
-  /* Icône */
+  .ticket-text {
+    font-size: 1.4em;
+  }
+
   .ticket-icon {
-    color: yellow;
-    font-size: 28px;
+    font-size: 2em;
   }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .tickets-card {
-      width: 90%;
-      padding: 15px;
-    }
-    
-    .tickets-info {
-      font-size: 18px;
-    }
-  
-    .ticket-icon {
-      font-size: 24px;
-    }
+  .tickets-list {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0 5px;
   }
   
+  .ticket-card {
+    padding: 15px;
+    margin: 0;
+  }
+  
+  .ticket-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+  
+  .ticket-game {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  
+  .ticket-date {
+    font-size: 0.85em;
+  }
+  
+  .ticket-details > div {
+    font-size: 0.9em;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+  
+  .label {
+    font-size: 0.85em;
+    min-width: auto;
+  }
+  
+  .value {
+    font-size: 0.9em;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .ticket-id-row .value {
+    font-size: 0.7em;
+  }
+  
+  .ticket-numbers .value {
+    font-size: 0.8em;
+  }
+  
+  .ticket-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .validate-button,
+  .delete-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .tickets-container {
+    padding: 5px;
+  }
+  
+  .tickets-header {
+    padding: 10px;
+  }
+  
+  .tickets-info {
+    gap: 10px;
+  }
+  
+  .ticket-number {
+    padding: 8px 16px;
+    font-size: 1.3em;
+  }
+  
+  .ticket-text {
+    font-size: 1.2em;
+  }
+  
+  .ticket-icon {
+    font-size: 1.8em;
+  }
+  
+  .ticket-card {
+    padding: 12px;
+  }
+  
+  .ticket-game {
+    font-size: 1em;
+  }
+  
+  .ticket-details > div {
+    font-size: 0.85em;
+  }
+  
+  .value {
+    font-size: 0.85em;
+  }
+  
+  .ticket-id-row .value {
+    font-size: 0.65em;
+  }
+  
+  .ticket-numbers .value {
+    font-size: 0.75em;
+  }
+}

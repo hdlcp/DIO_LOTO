@@ -12,16 +12,21 @@ import Header from "./components/Header";
 {/*import Footer from "./components/Footer";*/}
 import Withdrawal from "./pages/Withdrawal";
 import Tickets from "./pages/Tickets";
-import Cart from "./pages/Cart";
+import Panier from "./pages/Panier";
+import HistoryWithdrawal from "./pages/HistoryWithdrawal";
 import ChoicePlay from "./pages/ChoicePlay";
 import Games from "./pages/Games";
 import BetForm from "./pages/BetForm";
 import AcceuilP from "./pages/AcceuilP";
 import Profile from "./pages/Profile";
 import DashboardRevendeur from "./pages/DashboardRevendeur";
-import Recharger from "./pages/Recharger";
+import Recharger_user from "./pages/Recharger_user";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CountrySelection from "./pages/CountrySelection";
+import RechargerWithGain from "./pages/Recharger_with_gain";
+import ForgetPassword from "./pages/ForgetPassword";
+import EnterCode from "./pages/EnterCode";
+import Notifications from "./pages/Notifications";
 
 const App: React.FC = () => {
   return (
@@ -36,7 +41,8 @@ const App: React.FC = () => {
         <Route path="/commerciaux" element={<Commerciaux />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route path="/forgetPassword" element={<ForgetPassword />} />
+        <Route path="/entrerCode" element={<EnterCode />} />
 
         {/* Routes protégées pour utilisateurs normaux */}
         <Route path="/dashboard" element={
@@ -54,9 +60,14 @@ const App: React.FC = () => {
             <Tickets />
           </ProtectedRoute>
         } />
-        <Route path="/cart" element={
+        <Route path="/panier" element={
           <ProtectedRoute>
-            <Cart />
+            <Panier />
+          </ProtectedRoute>
+        } />
+        <Route path="/historyWithdrawal" element={
+          <ProtectedRoute>
+            <HistoryWithdrawal />
           </ProtectedRoute>
         } />
         <Route path="/choicePlay" element={
@@ -79,9 +90,14 @@ const App: React.FC = () => {
             <Profile />
           </ProtectedRoute>
         } />
-        <Route path="/recharger" element={
+        <Route path="/recharger_user" element={
           <ProtectedRoute>
-            <Recharger />
+            <Recharger_user />
+          </ProtectedRoute>
+        } />
+        <Route path="/recharger-with-gain" element={
+          <ProtectedRoute>
+            <RechargerWithGain />
           </ProtectedRoute>
         } />
         <Route path="/country" element={
@@ -89,7 +105,11 @@ const App: React.FC = () => {
             <CountrySelection />
           </ProtectedRoute>
         } />
-
+        <Route path="/notifications" element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        } />
         {/* Routes protégées pour revendeurs */}
         <Route path="/dashbordRevendeur" element={
           <ProtectedRoute requireRevendeur>

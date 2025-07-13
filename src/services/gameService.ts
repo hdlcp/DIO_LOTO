@@ -21,12 +21,13 @@ const formatCountryName = (country: string): string => {
   const countryMapping: { [key: string]: string } = {
     'benin': 'Benin',
     'ghana': 'Ghana',
-    'coteIvoire': 'CoteIvoire',
+    'coteIvoire': 'Côte d\'Ivoire',
     'togo': 'Togo',
     'niger': 'Niger'
   };
   
-  return countryMapping[country.toLowerCase()] || country;
+  const formattedCountry = countryMapping[country.toLowerCase()] || country;
+  return encodeURIComponent(formattedCountry);
 };
 
 export const gameService = {
@@ -126,6 +127,27 @@ export const gameService = {
     } catch (error) {
       console.error('Error in getCountryGames:', error);
       throw error;
+    }
+  },
+
+  // Récupérer les annonces
+  getAnnonces: async (): Promise<{ id: number; titre: string; description: string; created: string; updatedAt: string; }[]> => {
+    try {
+      const response = await fetch(`${API_URL}/annonces`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error in getAnnonces:', error);
+      throw new Error('Erreur lors de la récupération des annonces');
     }
   }
 }; 

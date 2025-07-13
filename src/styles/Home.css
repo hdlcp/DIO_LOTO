@@ -1,18 +1,16 @@
-
-
 .home-container {
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
-
+  flex-direction: column;
 }
 
 /* Overlay pour assombrir l'image */
 .home-container::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -22,26 +20,161 @@
 }
 
 /* Assurez-vous que le contenu reste au-dessus de l'overlay */
-.hero, .newsletter, .footer {
+.hero, .newsletter, .announcements-section {
   position: relative;
   z-index: 2;
+}
+
+/* Section Hero */
+.hero {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  padding-top: 400px; /* Espace pour le header */
+  text-align: center;
+  color: white;
+  min-height: 100vh;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 /* Boutons stylés */
 .btn {
   padding: 12px 24px;
   font-size: 18px;
-  border: 2px solid #ffd700;
+  border: 2px solid rgb(163, 89, 160);
   background: transparent;
-  color: #ffd700;
+  color: rgb(163, 89, 160);
   cursor: pointer;
   margin: 10px;
   transition: all 0.3s ease-in-out;
+  border-radius: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn:hover {
-  background: #ffd700;
+  background: #b4adea;
   color: #0f0f0f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(163, 89, 160, 0.4);
+}
+
+/* Section Bande d'Annonces */
+.announcements-section {
+  background: rgba(26, 26, 46, 0.95);
+  padding: 40px 20px;
+  border-top: 3px solid #ffd700;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.announcements-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffd700);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.announcements-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 0 15px;
+}
+
+.announcement-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.announcement-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.announcement-item:hover::before {
+  left: 100%;
+}
+
+.announcement-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+.announcement-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  display: block;
+  text-align: center;
+}
+
+.announcement-content h3 {
+  color: #ffd700;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.announcement-content p {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+  opacity: 0.9;
 }
 
 /* Section Newsletter */
@@ -77,6 +210,67 @@
 .subscribe-btn:hover {
   background: white;
   color: #111;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+  }
+  
+  .btn {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+  
+  .announcements-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .announcement-item {
+    padding: 20px;
+  }
+  
+  .announcement-icon {
+    font-size: 2rem;
+  }
+  
+  .announcement-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .announcement-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .announcements-section {
+    padding: 30px 15px;
+  }
+  
+  .announcement-item {
+    padding: 15px;
+  }
 }
 
 

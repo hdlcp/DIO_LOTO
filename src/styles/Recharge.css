@@ -23,14 +23,14 @@
 
 .back-link {
   position: fixed;
-  top: 20px;
+  top: 100px;
   left: 20px;
   color: #fff;
   text-decoration: none;
-  font-size: 1.2em;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 10px 20px;
+  font-size: 1.1em;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 16px;
   border-radius: 5px;
   transition: background 0.3s ease;
 }
@@ -41,66 +41,58 @@
 
 .withdrawal-box {
   background: rgba(255, 255, 255, 0.3);
-  padding: 30px;
+  padding: 25px;
   border-radius: 15px;
   width: 100%;
   max-width: 500px;
-  margin-top: 80px;
-  z-index: 2;
+  margin-top: 160px;
+  z-index: 5;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .withdrawal-title {
   text-align: center;
-  color: rgb(163, 89, 160);
+  color: rgb(0, 0, 0);
   margin-bottom: 30px;
   font-size: 1.8em;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
+/* Labels et inputs */
+.withdrawal-box label {
   display: block;
   margin-bottom: 8px;
   color: #000000;
   font-weight: 500;
 }
 
-.form-group input,
-.form-group select {
+.withdrawal-box input {
   width: 100%;
   padding: 12px;
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 1em;
   transition: border-color 0.3s ease;
-}
-.form-group select {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1em;
-  transition: border-color 0.3s ease;
+  margin-bottom: 20px;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.withdrawal-box input:focus {
   border-color: #2196f3;
   outline: none;
-}
-
-.form-group select:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
 }
 
 .error-message {
   color: #f44336;
   font-size: 0.9em;
-  margin-top: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 0.9em;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .withdraw-button {
@@ -126,14 +118,6 @@
   cursor: not-allowed;
 }
 
-.info-text {
-  text-align: center;
-  color: #020202;
-  margin-top: 20px;
-  font-size: 0.9em;
-  line-height: 1.4;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .withdrawal-container {
@@ -141,15 +125,15 @@
   }
 
   .back-link {
-    top: 10px;
-    left: 10px;
+    top: 90px;
+    left: 15px;
     font-size: 1em;
-    padding: 8px 15px;
+    padding: 6px 12px;
   }
 
   .withdrawal-box {
     padding: 20px;
-    margin-top: 60px;
+    margin-top: 140px;
   }
 
   .withdrawal-title {
@@ -157,14 +141,10 @@
     margin-bottom: 20px;
   }
 
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  .form-group input,
-  .form-group select {
+  .withdrawal-box input {
     padding: 10px;
     font-size: 0.9em;
+    margin-bottom: 15px;
   }
 
   .withdraw-button {
@@ -172,5 +152,3 @@
     font-size: 1em;
   }
 }
- 
-  

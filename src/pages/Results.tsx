@@ -1,24 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import "../styles/Results.css"; // Ajoute les styles ici
 import rejouer from "../assets/loto.png";
-
-// Exemple de données (à remplacer par une API si nécessaire)
-const results = [
-  { id: 1, date: "2025-03-11", time: "23:00", country: "🇧🇯", numbers: "01-21-17-33-34" },
-  { id: 2, date: "2025-03-10", time: "21:00", country: "🇳🇬", numbers: "39-51-70-32-79" },
-  { id: 3, date: "2025-03-10", time: "21:00", country: "🇧🇯", numbers: "02-83-72-47-90", mac: "50-57-80-38-31" },
-  { id: 4, date: "2025-03-10", time: "18:00", country: "🇹🇬", numbers: "11-23-45-67-89" },
-];
+import { getResults, Result } from "../services/resultService";
 
 const Results: React.FC = () => {
   const [selectedResult, setSelectedResult] = useState<number | null>(null);
+  const [results, setResults] = useState<Result[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { width, height } = useWindowSize(); // Pour s'assurer que les confettis couvrent tout l'écran
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        setLoading(true);
+        const response = await getResults();
+        setResults(response.results);
+        setError(null);
+      } catch (err) {
+        setError("Erreur lors du chargement des résultats");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, []);
 
   const handleClick = (id: number) => {
     setSelectedResult(id);
   };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR');
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  if (loading) {
+    return (
+      <div className="results-container">
+        <div className="loading">Chargement des résultats...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="results-container">
+        <div className="error">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="results-container">
@@ -29,9 +69,19 @@ const Results: React.FC = () => {
         {results.map((result) => (
           <div key={result.id} className="result-card" onClick={() => handleClick(result.id)}>
             <img src={rejouer} alt="Ball" className="ball-icon" />
-            <p>📅 {result.date}</p>
-            <p>⏰ {result.time}</p>
-            <p>{result.country}</p>
+            <p>📅 {formatDate(result.createdAt)}</p>
+            <p>⏰ {formatTime(result.createdAt)}</p>
+            <p>🏳️ {result.game.pays}</p>
+            <p>🎮 {result.game.nom}</p>
+            <p>
+              <strong>Numéros :</strong> {result.numbers}
+              {result.numbers2 && (
+                <>
+                  <br />
+                  <strong>Double Chance :</strong> {result.numbers2}
+                </>
+              )}
+            </p>
           </div>
         ))}
       </div>
@@ -45,12 +95,19 @@ const Results: React.FC = () => {
             <h3>Félicitations aux heureux gagnants ! 🎉</h3>
             <p>
               <strong>Numéros gagnants :</strong> {results.find((r) => r.id === selectedResult)?.numbers}
+              {results.find((r) => r.id === selectedResult)?.numbers2 && (
+                <>
+                  <br />
+                  <strong>Numéros gagnants (Double Chance) :</strong> {results.find((r) => r.id === selectedResult)?.numbers2}
+                </>
+              )}
             </p>
-            {results.find((r) => r.id === selectedResult)?.mac && (
-              <p>
-                <strong>Mac :</strong> {results.find((r) => r.id === selectedResult)?.mac}
+            <p>
+              <strong>Jeu :</strong> {results.find((r) => r.id === selectedResult)?.game.nom}
               </p>
-            )}
+            <p>
+              <strong>Pays :</strong> {results.find((r) => r.id === selectedResult)?.game.pays}
+            </p>
             <button onClick={() => setSelectedResult(null)}>Fermer</button>
           </div>
         </div>

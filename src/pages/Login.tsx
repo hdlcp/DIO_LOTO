@@ -10,16 +10,24 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { login, loading, isRevendeur } = useAuth();
+  const [rememberMe, setRememberMe] = useState(false);
+  const { login, loading, isRevendeur, error: authError } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+
+    // Validation basique
+    if (!email.trim()) {
+      return;
+    }
+
+    if (!password.trim()) {
+      return;
+    }
 
     try {
-      const success = await login(email, password);
+      const success = await login(email, password, rememberMe);
       if (success) {
         // Vérifier le rôle et rediriger
         if (isRevendeur()) {
@@ -29,7 +37,8 @@ const Login: React.FC = () => {
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de la connexion');
+      // L'erreur est déjà gérée dans le contexte d'authentification
+      setPassword(''); // Réinitialiser le mot de passe en cas d'erreur
     }
   };
 
@@ -37,14 +46,18 @@ const Login: React.FC = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleInputChange = (setter: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(e.target.value);
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-box">
         <h2 className="auth-title">Connexion à votre compte</h2>
         <form onSubmit={handleSubmit}>
-          {error && (
+          {authError && (
             <div className="error-message" role="alert">
-              <span>{error}</span>
+              <span>{authError}</span>
             </div>
           )}
           <div className="input-group">
@@ -56,7 +69,8 @@ const Login: React.FC = () => {
               required
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleInputChange(setEmail)}
+              className={authError ? 'error' : ''}
             />
           </div>
           <div className="input-group">
@@ -69,7 +83,8 @@ const Login: React.FC = () => {
                 required
                 placeholder="Mot de passe"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleInputChange(setPassword)}
+                className={authError ? 'error' : ''}
               />
               <div 
                 onClick={togglePasswordVisibility} 
@@ -78,14 +93,23 @@ const Login: React.FC = () => {
                   right: "10px", 
                   top: "50%",
                   transform: "translateY(-50%)",
-                  cursor: "pointer" 
+                  cursor: "pointer",
+                  color: "white"
                 }}
               >
                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </div>
             </div>
           </div>
-
+          <div className="input-group remember-me-group">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+            />
+            <label htmlFor="rememberMe">Se souvenir de moi</label>
+          </div>
           <button
             type="submit"
             disabled={loading}
@@ -93,10 +117,13 @@ const Login: React.FC = () => {
           >
             {loading ? 'Connexion en cours...' : 'Se connecter'}
           </button>
-
           <div className="auth-text">
             <Link to="/register" className="auth-link">
               Pas encore de compte ? Inscrivez-vous
+            </Link>
+            <br />
+            <Link to="/forgetPassword" className="auth-link">
+              Mot de passe oublié ?
             </Link>
           </div>
         </form>

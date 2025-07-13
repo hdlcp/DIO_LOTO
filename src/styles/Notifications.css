@@ -1,0 +1,111 @@
+/* ✅ Appliquer le background avec l'image */
+.notifications-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+  position: relative;
+  overflow: hidden; /* Supprime les scrollbars */
+}
+
+/* ✅ Effet de superposition sombre */
+.notifications-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Noir avec 60% d'opacité */
+  z-index: 0;
+}
+
+/* ✅ Centrer le contenu */
+.notifications-content {
+  width: 90%;
+  max-width: 1200px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ Style du Header */
+.notifications-header {
+  background-color: rgb(65, 105, 225);
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* Ajout du style responsive pour notifications mobile */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.notification-card {
+  background: #222;
+  border-radius: 8px;
+  padding: 14px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-card.unread {
+  border-left: 4px solid #2e5;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.notif-title {
+  font-size: 1.1em;
+}
+
+.notif-date {
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.notif-message {
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #fff;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.no-notification {
+  color: #ccc;
+  text-align: center;
+  padding: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .notification-card {
+    padding: 12px 6px;
+  }
+  .notif-title {
+    font-size: 1em;
+  }
+  .notif-message {
+    font-size: 0.95em;
+  }
+}
+

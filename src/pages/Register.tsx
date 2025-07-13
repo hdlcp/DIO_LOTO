@@ -16,13 +16,50 @@ const Register: React.FC = () => {
   const { register, loading, isRevendeur } = useAuth();
   const navigate = useNavigate();
 
+  const validateForm = (): boolean => {
+    if (!firstName.trim()) {
+      setError('Veuillez entrer votre prénom');
+      return false;
+    }
+
+    if (!lastName.trim()) {
+      setError('Veuillez entrer votre nom');
+      return false;
+    }
+
+    if (!email.trim()) {
+      setError('Veuillez entrer votre adresse email');
+      return false;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      setError('Veuillez entrer une adresse email valide');
+      return false;
+    }
+
+    if (!password.trim()) {
+      setError('Veuillez entrer un mot de passe');
+      return false;
+    }
+
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères');
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    // Validation des mots de passe
-    if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
+    if (!validateForm()) {
       return;
     }
 
@@ -33,16 +70,22 @@ const Register: React.FC = () => {
         if (isRevendeur()) {
           navigate('/dashbordRevendeur');
         } else {
-          navigate('/dashboard');
+        navigate('/dashboard');
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription');
+      const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription';
+      setError(errorMessage);
     }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (setter: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(e.target.value);
+    setError(null); // Effacer l'erreur lors de la modification
   };
 
   return (
@@ -64,7 +107,8 @@ const Register: React.FC = () => {
               required
               placeholder="Prénom"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={handleInputChange(setFirstName)}
+              className={error && !firstName.trim() ? 'error' : ''}
             />
           </div>
           <div className="input-group">
@@ -76,7 +120,8 @@ const Register: React.FC = () => {
               required
               placeholder="Nom"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={handleInputChange(setLastName)}
+              className={error && !lastName.trim() ? 'error' : ''}
             />
           </div>
           <div className="input-group">
@@ -88,7 +133,8 @@ const Register: React.FC = () => {
               required
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleInputChange(setEmail)}
+              className={error && !email.trim() ? 'error' : ''}
             />
           </div>
           <div className="input-group">
@@ -101,7 +147,8 @@ const Register: React.FC = () => {
                 required
                 placeholder="Mot de passe"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleInputChange(setPassword)}
+                className={error && !password.trim() ? 'error' : ''}
               />
               <div 
                 onClick={togglePasswordVisibility} 
@@ -110,7 +157,8 @@ const Register: React.FC = () => {
                   right: "10px", 
                   top: "50%",
                   transform: "translateY(-50%)",
-                  cursor: "pointer" 
+                  cursor: "pointer",
+                  color: "white"
                 }}
               >
                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
@@ -127,7 +175,8 @@ const Register: React.FC = () => {
                 required
                 placeholder="Confirmer le mot de passe"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleInputChange(setConfirmPassword)}
+                className={error && password !== confirmPassword ? 'error' : ''}
               />
               <div 
                 onClick={togglePasswordVisibility} 
@@ -136,7 +185,8 @@ const Register: React.FC = () => {
                   right: "10px", 
                   top: "50%",
                   transform: "translateY(-50%)",
-                  cursor: "pointer" 
+                  cursor: "pointer",
+                  color: "white"
                 }}
               >
                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}

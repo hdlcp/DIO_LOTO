@@ -8,7 +8,7 @@ interface AuthContextType {
   token: string | null;
   loading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<boolean>; // Retourne true si login réussi
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>; // Ajout du paramètre rememberMe
   register: (firstName: string, lastName: string, email: string, password: string) => Promise<boolean>; // Retourne true si register réussi
   logout: () => void;
   getUserInfo: (userId: string | number) => Promise<User>;
@@ -31,16 +31,25 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  // On lit d'abord dans sessionStorage, puis dans localStorage
+  const getInitialToken = () => sessionStorage.getItem('token') || localStorage.getItem('token');
+  const getInitialUser = () => {
+    const sessionUser = sessionStorage.getItem('user');
+    if (sessionUser) return JSON.parse(sessionUser);
+    const localUser = localStorage.getItem('user');
+    if (localUser) return JSON.parse(localUser);
+    return null;
+  };
+  const [user, setUser] = useState<User | null>(getInitialUser());
+  const [token, setToken] = useState<string | null>(getInitialToken());
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   // Vérifie si un token existe au chargement et vérifie le rôle
   useEffect(() => {
     const checkToken = async () => {
-      const storedToken = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
+      const storedToken = sessionStorage.getItem('token') || localStorage.getItem('token');
+      const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
       
       if (storedToken && storedUser) {
         try {
@@ -65,7 +74,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             };
           }
           
-          localStorage.setItem('user', JSON.stringify(updatedUser));
+          // On met à jour dans le storage où on a trouvé le token
+          if (sessionStorage.getItem('token')) {
+            sessionStorage.setItem('user', JSON.stringify(updatedUser));
+          } else {
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+          }
           setToken(storedToken);
           setUser(updatedUser);
         } catch (err) {
@@ -86,7 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return !!user?.isRevendeur;
   };
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string, rememberMe: boolean = false): Promise<boolean> => {
     setLoading(true);
     setError(null);
     
@@ -113,9 +127,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         };
       }
       
-      localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      
+      // Stockage selon rememberMe
+      if (rememberMe) {
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+      } else {
+        sessionStorage.setItem('token', newToken);
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
       setToken(newToken);
       setUser(updatedUser);
       return true;
@@ -165,7 +188,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setToken(newToken);
       setUser(updatedUser);
-      return true;
+        return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription';
       setError(errorMessage);
@@ -178,6 +201,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     setToken(null);
     setUser(null);
   };

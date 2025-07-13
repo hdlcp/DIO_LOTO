@@ -17,7 +17,7 @@ interface Country {
 const countries: Country[] = [
   { name: "Benin", flag: Benin, code: "benin" },
   { name: "Ghana", flag: Ghana, code: "ghana" },
-  { name: "Côte d'Ivoire", flag: CoteIvoire, code: "coteIvoire" },
+  { name: "Côte d'Ivoire", flag: CoteIvoire, code: "Côte d'Ivoire" },
   { name: "Togo", flag: Togo, code: "togo" },
   { name: "Niger", flag: Niger, code: "niger" },
 ];

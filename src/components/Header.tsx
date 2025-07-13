@@ -72,7 +72,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ background: "rgba(163, 89, 160)", padding: "10px 20px" }}>
+    <AppBar position="sticky" sx={{ background: "rgb(65, 105, 225)", padding: "10px 20px" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         
         {/* Icône du menu hamburger */}
@@ -124,7 +124,7 @@ const Header: React.FC = () => {
         anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
-        sx={{ "& .MuiDrawer-paper": { backgroundColor: "rgb(163, 89, 160)", width: "75%" } }}
+        sx={{ "& .MuiDrawer-paper": { backgroundColor: "rgb(65, 105, 225)", width: "75%" } }}
       >
         <List>
           <ListItem 
@@ -156,7 +156,7 @@ const Header: React.FC = () => {
             sx={{ color: "white", display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
           >
             <ListItemIcon sx={{ color: "white" }}><StoreIcon /></ListItemIcon>
-            <ListItemText primary="Commerciaux" sx={{ color: "white" }} />
+            <ListItemText primary="Revendeurs" sx={{ color: "white" }} />
           </ListItem>
           
           {/* Afficher soit "Connexion" soit "Déconnexion" en fonction de l'état d'authentification */}

@@ -2,44 +2,43 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background: url("../assets/background.jpg") no-repeat center center/cover;
+    padding: 20px;
   }
   
   .auth-container::before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2); /* Noir avec 60% d'opacité */
+    background: rgba(0, 0, 0, 0.7);
     z-index: 1;
   }
 
   .auth-box{
     position: relative;
     z-index: 2;
-  }
-  .auth-box {
     background: rgba(0, 0, 0, 0.8);
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     text-align: center;
-    width: 350px;
-    border: 1px solid yellow;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgb(163, 89, 160);
   }
-  
   .auth-title {
-    color: yellow;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+    color: rgb(163, 89, 160);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
   }
   
   .input-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     text-align: left;
   }
   
@@ -47,44 +46,133 @@
     color: white;
     display: block;
     font-weight: bold;
+    margin-bottom: 0.5rem;
   }
   
   .input-group input,
   .input-group select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid yellow;
-    background: transparent;
+    padding: 12px;
+    border: 1px solid rgb(163, 89, 160);
+    background: rgba(255, 255, 255, 0.1);
     color: white;
     border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .input-group input:focus,
+  .input-group select:focus {
+    outline: none;
+    border-color: rgb(163, 89, 160);
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  }
+  
+  .error-message {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .error-message::before {
+    content: "⚠️";
+    font-size: 1.1rem;
   }
   
   .auth-button {
     width: 100%;
-    padding: 10px;
-    background: yellow;
+    padding: 12px;
+    background: rgb(163, 89, 160);
     color: black;
     border: none;
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .auth-button:hover:not(:disabled) {
+    background: rgb(163, 89, 160);
+    transform: translateY(-1px);
+  }
+  
+  .auth-button:disabled {
+    background: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
   
   .auth-text {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     color: white;
   }
   
   .auth-link {
-    color: yellow;
+    color: rgb(163, 89, 160);
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
   }
   
-  .forgot-password {
-    display: block;
-    margin: 10px 0;
-    color: yellow;
-    text-decoration: none;
+  .auth-link:hover {
+    color: rgb(163, 89, 160);
+    text-decoration: underline;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 480px) {
+    .auth-box {
+      padding: 1.5rem;
+    }
+
+    .auth-title {
+      font-size: 1.5rem;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 10px;
+    }
+
+    .error-message {
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+  }
+  
+  .input-group.remember-me-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.2rem;
+    text-align: left;
+  }
+
+  .input-group.remember-me-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: rgb(163, 89, 160);
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .input-group.remember-me-group label {
+    color: white;
+    font-weight: normal;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1rem;
+    display: inline;
+    line-height: 1;
   }
   

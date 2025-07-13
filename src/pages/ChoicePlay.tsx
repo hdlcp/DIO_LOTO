@@ -20,7 +20,7 @@ const flagMap: { [key: string]: string } = {
   benin: Benin,
   ghana: Ghana,
   niger: Niger,
-  coteIvoire: CoteIvoire,
+  "Côte d'Ivoire": CoteIvoire,
   togo: Togo
 };
 
@@ -28,7 +28,7 @@ const countryNames: { [key: string]: string } = {
   benin: "Bénin",
   ghana: "Ghana",
   niger: "Niger",
-  coteIvoire: "Côte d'Ivoire",
+  "Côte d'Ivoire": "Côte d'Ivoire",
   togo: "Togo"
 };
 

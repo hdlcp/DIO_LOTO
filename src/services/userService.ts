@@ -48,8 +48,13 @@ export const userService = {
       },
       body: JSON.stringify(userData),
     });
-    if (!response.ok) throw new Error('Erreur lors de la création de l\'utilisateur');
+    
     const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Erreur lors de l\'inscription');
+    }
+    
     return {
       user: data.data,
       token: data.token,
@@ -91,8 +96,18 @@ export const userService = {
       },
       body: JSON.stringify({ email, password }),
     });
-    if (!response.ok) throw new Error('Erreur lors de la connexion');
+    
     const data = await response.json();
+    
+    if (!response.ok) {
+      // Si l'API renvoie un message d'erreur, on le propage
+      if (data.message) {
+        throw new Error(data.message);
+      }
+      // Sinon, on utilise un message d'erreur par défaut
+      throw new Error('Erreur lors de la connexion');
+    }
+    
     return {
       user: data.data,
       token: data.token,
@@ -109,8 +124,13 @@ export const userService = {
       },
       body: JSON.stringify({ email }),
     });
-    if (!response.ok) throw new Error('Erreur lors de la vérification du rôle');
+    
     const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Erreur lors de la vérification du rôle');
+    }
+    
     return data as UserRoleResponse;
   },
 

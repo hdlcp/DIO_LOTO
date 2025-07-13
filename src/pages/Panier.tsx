@@ -6,7 +6,7 @@ import ticketService, { Ticket } from "../services/ticketService";
 import { formatGainsForDisplay } from "../utils/formatUtils";
 import "../styles/Tickets.css";
 
-const Tickets = () => {
+const Panier = () => {
   const { user, token } = useAuth();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ const Tickets = () => {
       }
 
       try {
-        const response = await ticketService.getUserTickets(user.uniqueUserId, token);
+        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
         setTickets(response.tickets);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erreur lors du chargement des tickets");
@@ -32,6 +32,47 @@ const Tickets = () => {
 
     fetchTickets();
   }, [user, token]);
+
+  // Nouvelle fonction pour valider un ticket
+  const handleValidate = async (ticketId: number) => {
+    if (!token) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await ticketService.validateTicket(ticketId, token);
+      // Recharger la liste après validation
+      if (user?.uniqueUserId) {
+        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
+        setTickets(response.tickets);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur lors de la validation du ticket");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Nouvelle fonction pour supprimer un ticket
+  const handleDelete = async (ticketId: number) => {
+    if (!token) return;
+    // Confirmation avant suppression
+    const confirmDelete = window.confirm("Voulez-vous vraiment supprimer ce ticket du panier ?");
+    if (!confirmDelete) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await ticketService.deleteTicket(ticketId, token);
+      // Recharger la liste après suppression
+      if (user?.uniqueUserId) {
+        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
+        setTickets(response.tickets);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur lors de la suppression du ticket");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -58,7 +99,7 @@ const Tickets = () => {
       <div className="tickets-header">
         <div className="tickets-info">
           <span className="ticket-number">{tickets.length}</span>
-          <span className="ticket-text">Tickets</span>
+          <span className="ticket-text">Panier</span>
           <FaTicketAlt className="ticket-icon" />
         </div>
       </div>
@@ -104,6 +145,23 @@ const Tickets = () => {
                     {ticket.statut}
                   </span>
                 </div>
+                {/* Boutons dynamiques pour tickets non validés */}
+                {ticket.statut !== "validé" && (
+                  <div className="ticket-actions" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                    <button
+                      className="validate-button"
+                      onClick={() => handleValidate(ticket.id)}
+                    >
+                      Valider
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDelete(ticket.id)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))
@@ -113,4 +171,4 @@ const Tickets = () => {
   );
 };
 
-export default Tickets;
+export default Panier;

@@ -1,18 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { useAuth } from "../AuthContext";
+import { resellerService, Reseller } from "../services/resellerService";
 import "../styles/Commerciaux.css"; // 🔹 Import du CSS
 
-const commerciauxData = [
-  { region: "ABIDJAN", data: [{ id: 1, name: "Leo Zio", contact: "+225 07 12 34 56" }, { id: 2, name: "Mr Eddy", contact: "+225 05 98 76 54" }] },
-  { region: "BOUAKE", data: [{ id: 1, name: "Mr Yao", contact: "+225 01 23 45 67" }, { id: 2, name: "Joseph Konan", contact: "+225 07 89 01 23" }, { id: 3, name: "Mr Kone", contact: "+225 05 67 89 45" }] },
-  { region: "YAMOUSSOUKRO", data: [{ id: 1, name: "Mr BOUAKE", contact: "+225 07 12 45 78" }, { id: 2, name: "Mr GOHI", contact: "+225 01 98 76 54" }, { id: 3, name: "Luc Coulibaly", contact: "+225 05 43 21 09" }] },
-  { region: "DALOA", data: [{ id: 1, name: "Mr DROH", contact: "+225 01 22 33 44" }, { id: 2, name: "Leo Konan", contact: "+225 07 99 88 77" }] },
-  { region: "SAN PEDRO", data: [{ id: 1, name: "Mr Seraphin", contact: "+225 05 66 77 88" }, { id: 2, name: "Tony Yao", contact: "+225 01 44 55 66" }] },
-];
-
 const Commerciaux: React.FC = () => {
+  const { token } = useAuth();
+  const [resellers, setResellers] = useState<Reseller[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchResellers = async () => {
+      try {
+        if (!token) throw new Error("Non authentifié");
+        const data = await resellerService.getAllResellers(token);
+        setResellers(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erreur lors du chargement des revendeurs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResellers();
+  }, [token]);
+
+  // Fonction pour gérer l'ouverture de WhatsApp
+  const handleWhatsAppClick = (whatsappNumber: string) => {
+    const cleanNumber = whatsappNumber.replace(/\s/g, "");
+    const whatsappUrl = `https://wa.me/${cleanNumber}`;
+    
+    // Pour les applications mobiles, on utilise window.location.href
+    window.location.href = whatsappUrl;
+  };
+
+  // Grouper les revendeurs par pays
+  const resellersByCountry = resellers.reduce((acc, reseller) => {
+    if (!acc[reseller.pays]) {
+      acc[reseller.pays] = [];
+    }
+    acc[reseller.pays].push(reseller);
+    return acc;
+  }, {} as { [key: string]: Reseller[] });
+
+  if (loading) {
+    return <div className="container">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="container error-message">{error}</div>;
+  }
+
   return (
     <div className="container">
       <motion.div
@@ -24,15 +65,15 @@ const Commerciaux: React.FC = () => {
         <p>Contactez un commercial pour recharger votre compte via WhatsApp 📲</p>
       </motion.div>
 
-      {commerciauxData.map((region, index) => (
+      {Object.entries(resellersByCountry).map(([country, countryResellers], index) => (
         <motion.div
-          key={index}
+          key={country}
           className="region-card"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
         >
-          <h3 className="region-title">{region.region}</h3>
+          <h3 className="region-title">{country}</h3>
           <TableContainer component={Paper} className="table-container">
             <Table>
               <TableHead className="table-head">
@@ -43,19 +84,18 @@ const Commerciaux: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {region.data.map((com, idx) => (
-                  <TableRow key={idx} className="table-row">
-                    <TableCell>{com.id}</TableCell>
-                    <TableCell>{com.name}</TableCell>
+                {countryResellers.map((reseller, idx) => (
+                  <TableRow key={reseller.id} className="table-row">
+                    <TableCell>{idx + 1}</TableCell>
+                    <TableCell>{`${reseller.user.firstName} ${reseller.user.lastName}`}</TableCell>
                     <TableCell>
-                      <a
-                        href={`https://wa.me/${com.contact.replace(/\s/g, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <div
+                        onClick={() => handleWhatsAppClick(reseller.whatsapp)}
                         className="contact-link"
+                        style={{ cursor: 'pointer' }}
                       >
-                        <WhatsAppIcon className="whatsapp-icon" /> {com.contact}
-                      </a>
+                        <WhatsAppIcon className="whatsapp-icon" /> {reseller.whatsapp}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -22,18 +22,17 @@
   .back-button {
     display: inline-block;
     text-decoration: none;
-    color: yellow;
-    font-size: 18px;
+    color:rgb(163, 89, 160);
     margin-bottom: 20px;
     z-index: 2;
   }
   
   .back-button:hover {
-    color: #FFA500; /* Orange */
+    color: #402cd7; /* Orange */
   }
   
   .title {
-    color: yellow;
+    color: rgb(163, 89, 160);
     font-size: 24px;
     font-weight: bold;
     z-index: 2;
@@ -49,7 +48,7 @@
   }
   
   .country-card {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(65, 146, 225, 0.2);
     border-radius: 10px;
     padding: 20px;
     cursor: pointer;
@@ -62,7 +61,7 @@
   }
   
   .country-button {
-    background: rgba(163, 89, 160, 0.9);
+    background: rgb(163, 89, 160);
     color: rgb(255, 255, 255);
     padding: 10px;
     font-weight: bold;

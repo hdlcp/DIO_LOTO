@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Button, Table, TableHead, TableRow, TableCell } from "@mui/material";
+import { Button } from "@mui/material";
 import "../styles/Dashboard.css";
 import { useAuth } from "../AuthContext";
+import { getUserNotifications } from "../services/notificationService";
 
 // Interface pour les données utilisateur
 interface UserData {
@@ -24,6 +25,8 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
@@ -67,7 +70,16 @@ const Dashboard: React.FC = () => {
     };
 
     fetchUserData();
-  }, [token, navigate]);
+  }, [token, navigate, location.pathname]);
+
+  useEffect(() => {
+    // Charger les notifications utilisateur
+    if (userData?.uniqueUserId && token) {
+      getUserNotifications(userData.uniqueUserId, token)
+        .then(res => setNotifications((res.data as { notifications: any[] }).notifications.slice(0, 5)))
+        .catch(console.error);
+    }
+  }, [userData, token]);
 
   const handleLogout = () => {
     logout();
@@ -108,34 +120,34 @@ const Dashboard: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          Dashboard 📁 - Bienvenue {userData?.firstName} {userData?.lastName}
+          Bienvenue {userData?.firstName} {userData?.lastName}
         </motion.div>
 
-        {/* Balance Section */}
+        {/* Balance Section avec nouveau design */}
         <div className="balance-section">
           <motion.div
-            className="balance-box"
+            className="balance-box main-balance"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h3>Solde principale</h3>
-            <p>{userData?.solde} XOF</p>
+            <h3>💰 Solde principale</h3>
+            <p>{userData?.solde?.toLocaleString() || 0} XOF</p>
           </motion.div>
           <motion.div
-            className="balance-box"
+            className="balance-box gains-balance"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <h3>Gains</h3>
-            <p>{userData?.gain} XOF</p>
+            <h3>🎯 Gains</h3>
+            <p>{userData?.gain?.toLocaleString() || 0} XOF</p>
           </motion.div>
         </div>
 
         {/* Boutons avec Material UI */}
         <div className="buttons-container">
-          <Link to="/recharger">
+          <Link to="/recharger-with-gain">
             <Button variant="contained" className="custom-button">💰 RECHARGER AVEC GAIN</Button>
           </Link>
           <Link to="/withdrawal">
@@ -144,27 +156,41 @@ const Dashboard: React.FC = () => {
           <Link to="/tickets">
             <Button variant="contained" className="custom-button">🎟️ TICKETS</Button>
           </Link>
-          <Link to="/cart">
-            <Button variant="contained" className="custom-button">🛒 PANIER</Button>
+          <Link to="/historyWithdrawal">
+            <Button variant="contained" className="custom-button">💸 HISTORIQUE DES RETRAITS</Button>
           </Link>
           <Link to="/games">
             <Button variant="contained" className="custom-button">🎲 JOUER</Button>
           </Link>
+          <Link to="/panier">
+            <Button variant="contained" className="custom-button">PANIER</Button>
+          </Link>
           <Button variant="contained" onClick={handleLogout} className="custom-button">🚪 DÉCONNEXION</Button>
         </div>
 
-        {/* Tableau Transactions */}
+        {/* Aperçu Notifications */}
         <div className="transactions-container">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ color: "white", fontWeight: "bold" }}>ID</TableCell>
-                <TableCell style={{ color: "white", fontWeight: "bold" }}>Date</TableCell>
-                <TableCell style={{ color: "white", fontWeight: "bold" }}>Description</TableCell>
-              </TableRow>
-            </TableHead>
-          </Table>
-          <p className="view-more">Voir plus...</p>
+          <div className="notifications-list">
+            {notifications.length === 0 ? (
+              <div className="no-notification">Aucune notification</div>
+            ) : notifications.map((notif) => (
+              <div
+                key={notif.id}
+                className={`notification-card${notif.isRead ? ' read' : ' unread'}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/notifications')}
+              >
+                <div className="notif-header">
+                  <span className="notif-title">{notif.title}</span>
+                  <span className="notif-date">{new Date(notif.created).toLocaleString()}</span>
+                </div>
+                <div className="notif-message">
+                  {notif.message.length > 40 ? notif.message.slice(0, 40) + '...' : notif.message}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="view-more" onClick={() => navigate("/notifications")}>Voir plus...</p>
         </div>
       </div>
     </div>

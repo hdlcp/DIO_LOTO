@@ -1,0 +1,1 @@
+export const API_URL = 'https://dio-loto-api.onrender.com/api'; 

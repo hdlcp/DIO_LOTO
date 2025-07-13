@@ -2,190 +2,370 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   min-height: 100vh;
   background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
+  background-attachment: fixed;
   padding: 20px;
   position: relative;
+  z-index: 1;
+  overflow-y: auto;
 }
 
 .bet-form-container::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8); /* Assombrissement */
-  z-index: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: -1;
 }
 
-.back-button {
+.back-link {
   display: inline-block;
   text-decoration: none;
-  color: yellow;
-  font-size: 24px;
+  color: #a359a0;
+  font-size: 1.2em;
   margin-bottom: 20px;
+  align-self: flex-start;
   position: relative;
-  z-index: 1;
-}
-
-.title {
-  color: yellow;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.bet-select,
-.formula-select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  z-index: 2;
+  padding: 5px 10px;
   border-radius: 5px;
-  border: none;
-  position: relative;
-  z-index: 1;
+  transition: background-color 0.3s ease;
 }
 
-.bet-section {
-  background: rgba(255, 255, 255, 0.3);
-  padding: 20px;
+.back-link:hover {
+  background-color: rgba(163, 89, 160, 0.2);
+}
+
+.bet-form-header {
+  color: #fff;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+  background-color: rgba(163, 89, 160, 0.8);
+  padding: 15px 20px;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+}
+
+.bet-form-header h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.8em;
+  color: #fff;
+}
+
+.bet-form-header p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #eee;
+}
+
+.bet-form-content {
+  background: rgba(30, 30, 30, 0.9);
+  padding: 30px;
+  border-radius: 15px;
   text-align: left;
   position: relative;
-  z-index: 1;
-  color: white;
-}
-
-.bet-section p {
-  margin-top: 0;
-  font-size: 18px;
-  color: yellow;
-}
-
-label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
-  color: white;
-  position: relative;
-  z-index: 1;
-}
-
-input[type="number"],
-input[type="text"] {
+  z-index: 2;
+  color: #fff;
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  border: none;
+  max-width: 500px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
 }
 
-.number-input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+.form-group {
+  margin-bottom: 20px;
 }
 
-.number-input-group input {
-  flex: 1;
-  margin: 0;
-}
-
-.add-number-btn,
-.generate-numbers-btn {
-  background-color: yellow;
-  color: black;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
   font-weight: bold;
-  transition: background-color 0.3s;
+  color: #fff;
+  font-size: 1.1em;
 }
 
-.add-number-btn:hover,
-.generate-numbers-btn:hover {
-  background-color: #e6e600;
+.form-group select,
+.form-group input[type="number"],
+.form-group input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: #fff;
+  font-size: 1em;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.add-number-btn:disabled {
-  background-color: #cccccc;
+.form-group input[type="number"]:focus,
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+  border-color: #a359a0;
+  box-shadow: 0 0 0 3px rgba(163, 89, 160, 0.4);
+}
+
+.form-group input[type="number"]:disabled {
+  background-color: #333;
+  color: #888;
   cursor: not-allowed;
-  color: #666;
 }
 
-.selected-numbers {
-  margin-bottom: 15px;
-}
-
-.number-tags {
+.numbers-input-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 15px;
 }
 
-.number-tag {
+.number-input {
+  flex-grow: 1;
+  min-width: 80px;
+  text-align: center;
+}
+
+.add-number-button,
+.auto-numbers-button {
+  background-color: #a359a0;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-number-button:hover,
+.auto-numbers-button:hover {
+  background-color: #8a4a87;
+  transform: translateY(-2px);
+}
+
+.add-number-button:disabled,
+.auto-numbers-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  color: #aaa;
+}
+
+.selected-numbers-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed #666;
+  border-radius: 8px;
+  min-height: 40px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.selected-number-tag {
   display: inline-flex;
   align-items: center;
-  background-color: yellow;
-  color: black;
-  padding: 6px 12px;
+  background-color: #a359a0;
+  color: #fff;
+  padding: 8px 12px;
   border-radius: 20px;
   font-weight: bold;
+  font-size: 0.9em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.remove-number {
+.selected-number-tag button {
   background: none;
   border: none;
-  color: #ff0000;
-  margin-left: 5px;
+  color: #fff;
+  margin-left: 8px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1.2em;
   line-height: 1;
+  padding: 0;
 }
 
-.gains-display {
-  background-color: rgba(255, 255, 255, 0.8);
-  font-weight: bold;
-  color: black;
+.selected-number-tag button:hover {
+  color: #ffcccc;
 }
 
-.bet-button {
-  background: yellow;
-  color: black;
-  padding: 12px;
+.submit-button {
+  background: linear-gradient(45deg, #a359a0, #8a4a87);
+  color: #fff;
+  padding: 15px;
   border: none;
   cursor: pointer;
   width: 100%;
-  margin-top: 20px;
-  border-radius: 5px;
+  margin-top: 30px;
+  border-radius: 10px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1.2em;
   text-transform: uppercase;
-  transition: background-color 0.3s;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.bet-button:hover {
-  background-color: #e6e600;
+.submit-button:hover {
+  background: linear-gradient(45deg, #8a4a87, #a359a0);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-.bet-button.disabled {
-  background-color: #cccccc;
+.submit-button:disabled {
+  background: #555;
   cursor: not-allowed;
-  color: #666;
+  color: #aaa;
+  box-shadow: none;
+  transform: none;
 }
 
-.disabled-link {
-  pointer-events: none;
+@media (max-width: 600px) {
+  .bet-form-container {
+    padding: 10px;
+  }
+
+  .bet-form-header,
+  .bet-form-content {
+    width: 95%;
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  .bet-form-header h2 {
+    font-size: 1.5em;
+  }
+
+  .form-group select,
+  .form-group input[type="number"],
+  .form-group input[type="text"] {
+    padding: 10px;
 }
 
-.full-width {
+  .numbers-input-container {
+    flex-direction: column;
+  }
+
+  .number-input,
+  .add-number-button,
+  .auto-numbers-button {
   width: 100%;
+  }
+
+  .submit-button {
+    font-size: 1em;
+    padding: 12px;
+  }
+}
+
+/* Affichage des anagrammes */
+.anagrammes-display {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.anagrammes-display h4 {
+  color: #ffd700;
+  text-align: center;
   margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.anagrammes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.anagramme-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.anagramme-pair:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+.anagramme-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 30px;
+}
+
+.anagramme-separator {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Responsive pour les anagrammes */
+@media (max-width: 768px) {
+  .anagrammes-grid {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 8px;
+  }
+  
+  .anagramme-number {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+    min-width: 25px;
+  }
+  
+  .anagramme-separator {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .anagrammes-grid {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 6px;
+  }
+  
+  .anagramme-number {
+    font-size: 0.6rem;
+    padding: 3px 5px;
+    min-width: 20px;
+  }
+  
+  .anagramme-separator {
+    font-size: 0.8rem;
+  }
 }
