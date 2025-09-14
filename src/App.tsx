@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 import Home from "./pages/Home";
@@ -27,8 +27,44 @@ import RechargerWithGain from "./pages/Recharger_with_gain";
 import ForgetPassword from "./pages/ForgetPassword";
 import EnterCode from "./pages/EnterCode";
 import Notifications from "./pages/Notifications";
+import LoadingScreen from "./components/LoadingScreen";
 
 const App: React.FC = () => {
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+
+  useEffect(() => {
+    // Vérifier si l'utilisateur a déjà vu l'écran de chargement dans cette session
+    const hasSeenLoading = sessionStorage.getItem('hasSeenLoadingScreen');
+    
+    if (hasSeenLoading) {
+      setShowLoadingScreen(false);
+    }
+
+    // Enregistrer le service worker pour PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW enregistré avec succès: ', registration.scope);
+          })
+          .catch((registrationError) => {
+            console.log('Échec de l\'enregistrement SW: ', registrationError);
+          });
+      });
+    }
+  }, []);
+
+  const handleVideoEnd = () => {
+    // Marquer que l'utilisateur a vu l'écran de chargement
+    sessionStorage.setItem('hasSeenLoadingScreen', 'true');
+    setShowLoadingScreen(false);
+  };
+
+  // Afficher l'écran de chargement si nécessaire
+  if (showLoadingScreen) {
+    return <LoadingScreen onVideoEnd={handleVideoEnd} />;
+  }
+
   return (
     <AuthProvider>
       <Header />
