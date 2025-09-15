@@ -1,38 +1,56 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
+    <!-- SEO & Accessibilité -->
+    <meta name="description" content="DioLoto - Application de loterie mobile" />
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#a359a0" />
-    <meta name="description" content="DioLoto - Application de loterie mobile" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="DioLoto" />
     <meta name="msapplication-TileColor" content="#a359a0" />
     <meta name="msapplication-tap-highlight" content="no" />
-    
+
     <!-- Manifest -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="152x152" href="%PUBLIC_URL%/icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/icon-192x192.png" />
-    
-    <!-- Splash Screens pour iOS -->
-    <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/icon-512x512.png" />
-    
-    <!-- Icônes pour différentes tailles -->
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/icon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/icon-192x192.png" />
-    
-    <title>DIO LOTO</title>
+    <link rel="apple-touch-icon" sizes="120x120" href="/icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/icon-167x167.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png" />
+
+    <!-- Favicon en plusieurs tailles -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png" />
+
+    <!-- Splash Screens iOS (exemples pour quelques résolutions) -->
+    <link rel="apple-touch-startup-image" href="/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
+    <link rel="apple-touch-startup-image" href="/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+    <link rel="apple-touch-startup-image" href="/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" />
+
+    <title>DioLoto</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .then(reg => console.log("✅ Service Worker enregistré :", reg))
+            .catch(err => console.warn("❌ Échec d'enregistrement du SW :", err));
+        });
+      }
+    </script>
   </body>
 </html>
