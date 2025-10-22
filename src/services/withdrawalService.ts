@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://dio-loto-api.onrender.com/api';
+const API_URL = 'https://dio-loto-api-jaz1.onrender.com/api';
 
 export interface Withdrawal {
   id: number;

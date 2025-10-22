@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://dio-loto-api.onrender.com/api/notifications";
+const BASE_URL = "https://dio-loto-api-jaz1.onrender.com/api/notifications";
 
 export const getUserNotifications = (userId: string, token: string) =>
   axios.get(`${BASE_URL}/user/${userId}`, {

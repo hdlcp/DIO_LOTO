@@ -1,6 +1,6 @@
 import { Game } from '../types/Game';
 
-const API_URL = 'https://dio-loto-api.onrender.com/api';
+const API_URL = 'https://dio-loto-api-jaz1.onrender.com/api';
 
 export interface GameTime {
   time: string;
