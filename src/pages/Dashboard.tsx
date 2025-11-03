@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
     // Charger les informations utilisateur
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`https://dio-loto-api.onrender.com/api/users/${userId}`, {
+        const response = await fetch(`https://dio-loto-api-jaz1.onrender.com/api/users/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

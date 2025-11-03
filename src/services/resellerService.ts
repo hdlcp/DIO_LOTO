@@ -30,7 +30,7 @@ export const resellerService = {
   // Récupérer tous les revendeurs
   getAllResellers: async (token: string): Promise<Reseller[]> => {
     try {
-      const response = await fetch(`${API_URL}/resellers`, {
+      const response = await fetch(`${API_URL}/resellers?status=actif`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
