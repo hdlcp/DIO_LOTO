@@ -331,11 +331,10 @@ const BetForm = () => {
         };
       });
 
-      // Attendre 2 secondes avant de rediriger
+      /// Attendre 5 secondes avant de réinitialiser le formulaire
       setTimeout(() => {
         resetForm();
-        navigate('/tickets');
-      }, 2000);
+      }, 5000);
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de la création du ticket");
