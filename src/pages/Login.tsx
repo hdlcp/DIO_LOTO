@@ -29,12 +29,15 @@ const Login: React.FC = () => {
     try {
       const success = await login(email, password, rememberMe);
       if (success) {
-        // Vérifier le rôle et rediriger
-        if (isRevendeur()) {
-          navigate('/dashbordRevendeur');
-        } else {
-          navigate('/dashboard');
-        }
+        // Petite pause pour laisser le temps au contexte de se mettre à jour
+        setTimeout(() => {
+          // Vérifier le rôle et rediriger
+          if (isRevendeur()) {
+            navigate('/dashbordRevendeur');
+          } else {
+            navigate('/dashboard');
+          }
+        }, 500); // 500ms de délai
       }
     } catch (err) {
       // L'erreur est déjà gérée dans le contexte d'authentification

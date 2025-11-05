@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../styles/BetForm.css";
 import BetCouponDisplay from '../components/BetCouponDisplay';
 import { useAuth } from "../AuthContext";
@@ -29,7 +29,6 @@ const countryNames: { [key: string]: string } = {
 };
 
 const BetForm = () => {
-  const navigate = useNavigate();
   const { user, token } = useAuth();
   
   // Récupération des paramètres d'URL
@@ -304,7 +303,7 @@ const BetForm = () => {
       setError("Vous devez être connecté pour valider le coupon");
       return;
     }
-    
+
     try {
       setLoading(true);
       const isDoubleChance = formula.includes('DoubleChance');
@@ -321,7 +320,7 @@ const BetForm = () => {
       };
 
       const response = await ticketService.createTicket(ticketData, token);
-      
+
       // Mettre à jour le numéro de ticket
       setCouponDetails((prev) => {
         if (!prev) return null;
@@ -368,8 +367,10 @@ const BetForm = () => {
       await ticketService.createTicket(ticketData, token);
       setShowCouponDisplay(false);
       setCouponDetails(null);
-      // Rediriger vers la page panier après ajout réussi
-      navigate('/panier');
+      // Réinitialiser le formulaire après 5 secondes (comme pour la validation)
+      setTimeout(() => {
+        resetForm();
+      }, 5000);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de l\'ajout au panier");
       setShowCouponDisplay(false);

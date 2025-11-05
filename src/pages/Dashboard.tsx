@@ -20,7 +20,7 @@ interface UserData {
 }
 
 const Dashboard: React.FC = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, refreshUserData } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,32 +35,15 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    // Récupération de l'ID utilisateur depuis localStorage
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser) {
-      navigate("/login");
-      return;
-    }
-    
-    const user = JSON.parse(storedUser);
-    const userId = user.id || user.uniqueUserId;
-
-    // Charger les informations utilisateur
+    // Charger les informations utilisateur depuis l'API
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`https://dio-loto-api-jaz1.onrender.com/api/users/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Échec de récupération des informations utilisateur');
+        const freshUserData = await refreshUserData();
+        if (freshUserData) {
+          setUserData(freshUserData);
+        } else {
+          throw new Error('Impossible de récupérer les données utilisateur');
         }
-        
-        setUserData(data.data);
       } catch (err) {
         setError("Impossible de charger les informations utilisateur");
         console.error("Erreur lors du chargement des données:", err);
@@ -70,7 +53,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchUserData();
-  }, [token, navigate, location.pathname]);
+  }, [token, navigate, location.pathname, refreshUserData]);
 
   useEffect(() => {
     // Charger les notifications utilisateur

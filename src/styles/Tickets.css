@@ -104,15 +104,21 @@
 
 /* Carte de ticket */
 .ticket-card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #a259e6 0%, #6c47b6 100%); /* Violet dégradé comme l'aperçu */
+  color: #fff;
+  border-radius: 18px;
+  padding: 24px 20px; /* Réduit le padding */
+  box-shadow: 0 8px 32px rgba(80, 40, 120, 0.18);
   transition: transform 0.3s ease;
   box-sizing: border-box;
   overflow: hidden;
   word-wrap: break-word;
   max-width: 100%;
+  text-align: center !important; /* Centré comme demandé */
+  min-height: 240px; /* Hauteur réduite */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .ticket-card:hover {
@@ -120,166 +126,258 @@
 }
 
 .ticket-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #eee;
-  gap: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .ticket-game {
   font-weight: bold;
-  color: #2196f3;
-  font-size: 1.2em;
+  color: #fff;
+  font-size: 1.6em; /* Plus gros */
+  margin-bottom: 12px;
   word-break: break-word;
-  flex: 1;
-  min-width: 0;
+  line-height: 1.2;
 }
 
 .ticket-date {
-  color: #666;
-  font-size: 0.9em;
-  white-space: nowrap;
-  flex-shrink: 0;
+  color: #f3eaff;
+  font-size: 1.1rem; /* Plus gros */
+  display: block;
+  margin-bottom: 8px;
 }
 
 .ticket-details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 18px; /* Plus d'espace */
+  flex: 1; /* Occupe l'espace disponible */
+  justify-content: space-between;
 }
 
 .ticket-details > div {
+  margin-bottom: 12px;
+  width: 100%; /* Occupe toute la largeur */
+  text-align: center !important; /* Centré comme demandé */
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 5px 0;
-  gap: 10px;
-  min-height: 20px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .label {
-  color: #666;
-  font-size: 0.9em;
-  flex-shrink: 0;
-  min-width: 80px;
+  color: #f3eaff;
+  font-size: 1.2rem !important; /* Titre plus gros */
+  margin-bottom: 4px;
+  display: block;
+  font-weight: 700 !important; /* Gras pour les titres */
+  text-align: center !important;
+  width: 100%;
 }
 
 .value {
-  font-weight: 500;
-  color: #333;
+  font-weight: 300 !important; /* Très léger pour les valeurs */
+  color: #fff;
   word-break: break-word;
-  text-align: right;
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  font-size: 1rem !important; /* Valeurs à 1rem */
+  line-height: 1.4;
+  margin-bottom: 16px;
+  text-align: center !important;
+  width: 100%;
 }
 
 /* Styles spécifiques au numéro de ticket dans les cartes */
 .ticket-id-row .value {
-  font-size: 0.75em;
-  color: #666;
+  font-size: 0.9rem;
+  color: #fff;
   word-break: break-all;
-  line-height: 1.3;
+  line-height: 1.4;
   max-width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-top: 4px;
 }
 
 /* Gestion des numéros joués (peuvent être très longs) */
 .ticket-numbers .value {
-  font-size: 0.85em;
+  font-size: 1rem;
   word-break: break-all;
   line-height: 1.4;
   max-width: 100%;
 }
 
 .ticket-gain .value {
-  color: #4caf50;
+  color: #fff;
   font-weight: bold;
   word-break: break-word;
 }
 
 .ticket-status {
-  margin-top: 15px;
+  margin-top: 18px;
   padding-top: 15px;
-  border-top: 2px solid #eee;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
 }
 
-.status-en-cours-de-traitement {
-  color: #ffa726;
-  font-weight: bold;
-}
-
-.status-validé {
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.status-rejeté {
-  color: #f44336;
-  font-weight: bold;
+.status-full-width {
+  width: 100%;
+  display: block;
 }
 
 /* Boutons d'actions pour le panier */
 .ticket-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .validate-button,
 .delete-button {
-  flex: 1;
-  min-width: 100px;
-  padding: 10px 15px;
+  padding: 12px 16px;
   border: none;
-  border-radius: 8px;
-  font-size: 0.9em;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s;
+  width: 100%;
 }
 
 .validate-button {
-  background: #4caf50;
+  background: #2ecc71;
   color: white;
 }
 
 .validate-button:hover {
-  background: #45a049;
+  background: #27ae60;
 }
 
 .delete-button {
-  background: #f44336;
+  background: #e74c3c;
   color: white;
 }
 
 .delete-button:hover {
-  background: #da190b;
+  background: #c0392b;
+}
+
+/* Nouveaux styles pour les statuts user-friendly - MEME TAILLE QUE LES BOUTONS */
+.status-won,
+.status-lost,
+.status-attributed,
+.status-pending {
+  color: #ffffff; /* Blanc pur */
+  font-weight: 500; /* Même poids que les boutons */
+  font-size: 1rem; /* Même taille que les boutons */
+  background: transparent; /* Fond transparent */
+  padding: 12px 16px; /* Même padding que les boutons */
+  border-radius: 6px; /* Même border-radius que les boutons */
+  border: 2px solid; /* Bordure pleine */
+  width: 100%; /* Occupe toute la largeur */
+  text-align: center;
+  margin-top: 12px;
+  text-transform: uppercase; /* MAJUSCULES */
+  letter-spacing: 1px; /* Espacement des lettres */
+  box-shadow: none; /* Pas d'ombre */
+  animation: none; /* Pas d'animation */
+}
+
+.status-won {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.status-lost {
+  border-color: #f44336;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.status-attributed {
+  border-color: #ff9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.status-pending {
+  border-color: #2196f3;
+  background: rgba(33, 150, 243, 0.1);
+}
+
+/* Animations pour attirer l'attention */
+@keyframes pulse-green {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Boutons d'actions pour le panier */
+.ticket-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.validate-button,
+.delete-button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.validate-button {
+  background: #2ecc71;
+  color: white;
+}
+
+.validate-button:hover {
+  background: #27ae60;
+}
+
+.delete-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #c0392b;
 }
 
 /* Messages d'état */
 .loading,
 .error-message,
 .no-tickets {
-  background: rgba(255, 255, 255, 0.95);
-  color: rgb(0, 0, 0);
-  padding: 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #a259e6 0%, #6c47b6 100%);
+  color: #fff;
+  padding: 24px 20px;
+  border-radius: 18px;
   text-align: center;
   margin: 20px;
   z-index: 2;
   width: 100%;
   max-width: 600px;
   box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(80, 40, 120, 0.18);
+  font-size: 1.1rem;
 }
 
 .error-message {
-  color: #f44336;
-  background: rgba(244, 67, 54, 0.1);
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
 }
 
 /* Responsive Design */
@@ -350,7 +448,7 @@
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    text-align: center;
+    text-align: center !important;
   }
   
   .label {
@@ -360,7 +458,7 @@
   
   .value {
     font-size: 0.9em;
-    text-align: center;
+    text-align: left !important;
     width: 100%;
   }
   

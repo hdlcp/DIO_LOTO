@@ -6,6 +6,22 @@ import ticketService, { Ticket } from "../services/ticketService";
 import { formatGainsForDisplay } from "../utils/formatUtils";
 import "../styles/Tickets.css";
 
+// Fonction pour mapper les statuts API vers un affichage user-friendly
+const getStatusDisplay = (apiStatus: string) => {
+  switch (apiStatus.toLowerCase()) {
+    case 'validé':
+      return { text: '🎉 GAGNÉ', className: 'status-won' };
+    case 'invalidé':
+      return { text: '❌ PERDU', className: 'status-lost' };
+    case 'attribué':
+      return { text: '💰 ATTRIBUÉ', className: 'status-attributed' };
+    case 'en attente':
+      return { text: '⏳ EN ATTENTE', className: 'status-pending' };
+    default:
+      return { text: apiStatus.toUpperCase(), className: 'status-default' };
+  }
+};
+
 const Tickets = () => {
   const { user, token } = useAuth();
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -99,10 +115,9 @@ const Tickets = () => {
                   <span className="value">{formatGainsForDisplay(ticket.gains)}</span>
                 </div>
                 <div className="ticket-status">
-                  <span className="label">Statut:</span>
-                  <span className={`value status-${ticket.statut.replace(/\s+/g, '-').toLowerCase()}`}>
-                    {ticket.statut}
-                  </span>
+                  <div className={`status-full-width ${getStatusDisplay(ticket.statut).className}`}>
+                    {getStatusDisplay(ticket.statut).text}
+                  </div>
                 </div>
               </div>
             </div>
