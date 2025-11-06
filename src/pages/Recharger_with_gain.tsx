@@ -24,8 +24,8 @@ const RechargerWithGain: React.FC = () => {
       }
 
       const montantNum = parseInt(montant);
-      if (isNaN(montantNum) || montantNum < 500 || montantNum > 500000) {
-        throw new Error("Le montant doit être compris entre 500 et 500000");
+      if (isNaN(montantNum) || montantNum <= 0) {
+        throw new Error("Le montant doit être un nombre positif");
       }
 
       if (montantNum > user.gain) {
@@ -69,14 +69,13 @@ const RechargerWithGain: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
         <label>Montant</label>
-          <input 
-            type="number" 
-            placeholder="Montant (500 - 500000)"
+          <input
+            type="number"
+            placeholder="Montant à recharger"
             value={montant}
             onChange={(e) => setMontant(e.target.value)}
             required
-            min="500"
-            max="500000"
+            min="1"
           />
 
           <button 
