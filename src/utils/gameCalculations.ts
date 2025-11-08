@@ -101,7 +101,7 @@ const gameMultipliers = {
 
 // Liste des jeux qui supportent la double chance
 export const doubleChanceGames: string[] = [
-  "togo8",
+  "togo9",
   "ghana20",
   "coteivoire7",
   "coteivoire8",
