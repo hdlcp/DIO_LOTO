@@ -606,11 +606,11 @@ const BetForm = () => {
               className="form-control"
             >
               <option value="">Sélectionnez</option>
-              {[...Array(10)].map((_, i) => (
+              {[...Array(betType === "Permutations" ? 40 : 10)].map((_, i) => (
                 <option key={i + 1} value={i + 1}>
                   {i + 1}
                 </option>
-          ))}
+            ))}
         </select>
           </div>
         )}
