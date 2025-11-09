@@ -14,6 +14,7 @@ interface UserData {
   firstName: string;
   email: string;
   solde: number;
+  bonus: number; // Nouveau champ pour le solde bonus
   gain: number;
   created: string;
   updatedAt: string;
@@ -116,6 +117,19 @@ const Dashboard: React.FC = () => {
           >
             <h3>💰 Solde principale</h3>
             <p>{userData?.solde?.toLocaleString() || 0} XOF</p>
+          </motion.div>
+          <motion.div
+            className="balance-box bonus-balance"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            <h3>🎁 Solde bonus</h3>
+            <p>{userData?.bonus?.toLocaleString() || 0} XOF</p>
+            <small style={{ fontSize: '11px', opacity: 0.8, lineHeight: '1.2', marginTop: '5px', display: 'block' }}>
+              50% de la première recharge dès le Lundi 10/11 à 00h<br/>
+              À utiliser avant demain 23h59
+            </small>
           </motion.div>
           <motion.div
             className="balance-box gains-balance"

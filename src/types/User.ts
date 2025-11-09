@@ -5,6 +5,7 @@ export interface User {
   firstName: string;
   email: string;
   solde: number;
+  bonus: number; // Nouveau champ pour le solde bonus temporaire
   gain: number;
   created: string;
   updatedAt: string;
@@ -15,4 +16,4 @@ export interface User {
   whatsapp?: string;
   pays?: string;
   status?: string;
-} 
+}

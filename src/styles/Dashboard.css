@@ -97,6 +97,15 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.balance-box small {
+  font-size: 11px;
+  opacity: 0.8;
+  line-height: 1.2;
+  margin-top: 5px;
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* ✅ Icônes pour les soldes */
 .balance-box.main-balance::before {
   background: linear-gradient(90deg, #4CAF50, #45a049);
@@ -104,6 +113,10 @@
 
 .balance-box.reseller-balance::before {
   background: linear-gradient(90deg, #FF9800, #F57C00);
+}
+
+.balance-box.bonus-balance::before {
+  background: linear-gradient(90deg, #FF5722, #D84315);
 }
 
 .balance-box.gains-balance::before {
