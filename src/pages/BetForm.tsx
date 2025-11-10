@@ -330,10 +330,8 @@ const BetForm = () => {
         };
       });
 
-      /// Attendre 5 secondes avant de réinitialiser le formulaire
-      setTimeout(() => {
-        resetForm();
-      }, 5000);
+      // Réinitialiser immédiatement le formulaire
+      resetForm();
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de la création du ticket");
@@ -367,10 +365,8 @@ const BetForm = () => {
       await ticketService.createTicket(ticketData, token);
       setShowCouponDisplay(false);
       setCouponDetails(null);
-      // Réinitialiser le formulaire après 5 secondes (comme pour la validation)
-      setTimeout(() => {
-        resetForm();
-      }, 5000);
+      // Réinitialiser immédiatement le formulaire
+      resetForm();
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de l\'ajout au panier");
       setShowCouponDisplay(false);
