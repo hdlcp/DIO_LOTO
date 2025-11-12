@@ -332,11 +332,10 @@ const BetForm = () => {
           };
         });
 
-        // Afficher l'avertissement si présent
+        // Ticket créé avec succès - pas de message affiché pour ne pas déranger l'utilisateur
+        // Seuls les avertissements sont loggés en console pour le debugging
         if (response.warning) {
           console.warn('Avertissement lors de la création du ticket:', response.warning);
-          // Optionnel: afficher un message utilisateur
-          alert(`Ticket créé avec succès ! ${response.warning}`);
         }
 
         // Réinitialiser immédiatement le formulaire
@@ -382,11 +381,10 @@ const BetForm = () => {
         setShowCouponDisplay(false);
         setCouponDetails(null);
 
-        // Afficher l'avertissement si présent
+        // Ticket ajouté au panier avec succès - pas de message affiché
+        // Seuls les avertissements sont loggés en console pour le debugging
         if (response.warning) {
           console.warn('Avertissement lors de l\'ajout au panier:', response.warning);
-          // Optionnel: afficher un message utilisateur
-          alert(`Ajouté au panier avec succès ! ${response.warning}`);
         }
 
         // Réinitialiser immédiatement le formulaire
