@@ -55,11 +55,13 @@ const BetForm = () => {
   const [numberOfPrises, setNumberOfPrises] = useState<number | "">("");
   const [countryName, setCountryName] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [showCouponDisplay, setShowCouponDisplay] = useState(false);
   const [couponDetails, setCouponDetails] = useState<CouponDetails | null>(null);
   // Ajout d'un état pour l'erreur de mise
   const [stakeError, setStakeError] = useState<string | null>(null);
+  // États pour le modal de message API
+  const [showApiModal, setShowApiModal] = useState(false);
+  const [apiMessage, setApiMessage] = useState<string>("");
 
   // Initialisation du nom du pays
   useEffect(() => {
@@ -300,7 +302,8 @@ const BetForm = () => {
   // Gérer la validation du coupon
   const handleValidateCoupon = async () => {
     if (!user?.uniqueUserId || !token) {
-      setError("Vous devez être connecté pour valider le coupon");
+      setApiMessage("Vous devez être connecté pour valider le coupon");
+      setShowApiModal(true);
       return;
     }
 
@@ -321,34 +324,44 @@ const BetForm = () => {
 
       const response = await ticketService.createTicket(ticketData, token);
 
-      // Vérifier si le ticket a été créé malgré un avertissement
-      if (response.ticketCreated === true) {
-        // Mettre à jour le numéro de ticket
+      // ✅ CORRECTION : Vérifier si c'est vraiment un succès
+      // Le ticket est créé si ticketCreated=true OU si ticket existe OU si message contient "succès"
+      const isRealSuccess = response.ticketCreated === true ||
+                           (response.ticket && response.ticket.numeroTicket) ||
+                           (response.message && (
+                             response.message.toLowerCase().includes('succès') ||
+                             response.message.toLowerCase().includes('créé') ||
+                             response.message.toLowerCase().includes('validé')
+                           ));
+
+      // ✅ TOUJOURS afficher le modal avec le message de l'API
+      setApiMessage(response.message || 'Opération terminée');
+
+      // Mettre à jour le numéro de ticket si succès
+      if (isRealSuccess) {
         setCouponDetails((prev) => {
           if (!prev) return null;
           return {
             ...prev,
-            ticketNumber: response.ticket.numeroTicket
+            ticketNumber: response.ticket?.numeroTicket || 'N/A'
           };
         });
-
-        // Ticket créé avec succès - pas de message affiché pour ne pas déranger l'utilisateur
-        // Seuls les avertissements sont loggés en console pour le debugging
-        if (response.warning) {
-          console.warn('Avertissement lors de la création du ticket:', response.warning);
-        }
-
-        // Réinitialiser immédiatement le formulaire
-        resetForm();
-      } else {
-        // Erreur réelle, pas juste un avertissement
-        throw new Error(response.message);
       }
 
+      // Logging des avertissements pour debug
+      if (response.warning) {
+        console.warn('Avertissement lors de la création du ticket:', response.warning);
+      }
+
+      // Afficher le modal
+      setShowApiModal(true);
+
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Erreur lors de la création du ticket");
-      setShowCouponDisplay(false);
-      setCouponDetails(null);
+      // ✅ Afficher les vraies erreurs dans le modal aussi
+      const errorMessage = error instanceof Error ? error.message : "Erreur lors de la création du ticket";
+      setApiMessage(errorMessage);
+      setShowApiModal(true);
+      // NE PAS fermer l'overlay pour les erreurs
     } finally {
       setLoading(false);
     }
@@ -357,7 +370,8 @@ const BetForm = () => {
   // Nouvelle fonction pour ajouter au panier
   const handleAddToCart = async () => {
     if (!user?.uniqueUserId || !token) {
-      setError("Vous devez être connecté pour ajouter au panier");
+      setApiMessage("Vous devez être connecté pour ajouter au panier");
+      setShowApiModal(true);
       return;
     }
     try {
@@ -376,27 +390,22 @@ const BetForm = () => {
       };
       const response = await ticketService.createTicket(ticketData, token);
 
-      // Vérifier si le ticket a été créé malgré un avertissement
-      if (response.ticketCreated === true) {
-        setShowCouponDisplay(false);
-        setCouponDetails(null);
+      // ✅ TOUJOURS afficher le modal avec le message de l'API
+      setApiMessage(response.message || 'Opération terminée');
 
-        // Ticket ajouté au panier avec succès - pas de message affiché
-        // Seuls les avertissements sont loggés en console pour le debugging
-        if (response.warning) {
-          console.warn('Avertissement lors de l\'ajout au panier:', response.warning);
-        }
-
-        // Réinitialiser immédiatement le formulaire
-        resetForm();
-      } else {
-        // Erreur réelle, pas juste un avertissement
-        throw new Error(response.message);
+      // Logging des avertissements pour debug
+      if (response.warning) {
+        console.warn('Avertissement lors de l\'ajout au panier:', response.warning);
       }
+
+      // Afficher le modal
+      setShowApiModal(true);
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Erreur lors de l\'ajout au panier");
-      setShowCouponDisplay(false);
-      setCouponDetails(null);
+      // ✅ Afficher les vraies erreurs dans le modal aussi
+      const errorMessage = error instanceof Error ? error.message : "Erreur lors de l'ajout au panier";
+      setApiMessage(errorMessage);
+      setShowApiModal(true);
+      // NE PAS fermer l'overlay pour les erreurs
     } finally {
       setLoading(false);
     }
@@ -414,7 +423,6 @@ const BetForm = () => {
     setNumberOfPrises(""); // Reset to empty string
     setShowCouponDisplay(false);
     setCouponDetails(null);
-    setError(null);
   };
 
   // Gérer la suppression du coupon
@@ -432,14 +440,8 @@ const BetForm = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="error-container">
-        <div className="error-message">{error}</div>
-        <Link to="/choicePlay" className="back-button">Retour aux jeux</Link>
-      </div>
-    );
-  }
+  // ❌ SUPPRIMÉ : Plus d'affichage d'erreur bloquant
+  // Les erreurs sont maintenant affichées dans le modal
 
   return (
     <div className="bet-form-container">
@@ -688,6 +690,30 @@ const BetForm = () => {
           onValidate={handleValidateCoupon}
           onAddToCart={handleAddToCart}
         />
+      )}
+
+      {/* Modal pour afficher les messages de l'API */}
+      {showApiModal && (
+        <div className="api-modal-overlay">
+          <div className="api-modal">
+            <div className="api-modal-content">
+              <p>{apiMessage}</p>
+              <button
+                className="api-modal-ok-btn"
+                onClick={() => {
+                  setShowApiModal(false);
+                  setApiMessage("");
+                  // Fermer l'overlay du coupon et réinitialiser le formulaire
+                  setShowCouponDisplay(false);
+                  setCouponDetails(null);
+                  resetForm();
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -56,11 +56,18 @@ const Panier = () => {
     setLoading(true);
     setError(null);
     try {
-      await ticketService.validateTicket(ticketId, token);
-      // Recharger la liste après validation
-      if (user?.uniqueUserId) {
-        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
-        setTickets(response.tickets);
+      const response = await ticketService.validateTicket(ticketId, token);
+
+      // ✅ CORRECTION : Vérifier si c'est un succès basé sur la présence du ticket
+      if (response.ticket) {
+        // Recharger la liste après validation réussie
+        if (user?.uniqueUserId) {
+          const cartResponse = await ticketService.getUserCartTickets(user.uniqueUserId, token);
+          setTickets(cartResponse.tickets);
+        }
+      } else {
+        // Si pas de ticket dans la réponse, considérer comme erreur
+        throw new Error(response.message || 'Erreur lors de la validation du ticket');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur lors de la validation du ticket");

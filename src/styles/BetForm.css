@@ -230,6 +230,116 @@
   transform: none;
 }
 
+/* ✅ Style pour les erreurs - Design professionnel */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.error-message {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #dc3545;
+  padding: 25px 30px;
+  border-radius: 15px;
+  border: 2px solid #dc3545;
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.error-message::before {
+  content: "⚠️";
+  font-size: 1.5em;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  padding: 12px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+  border: 2px solid #dc3545;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #c82333, #dc3545);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+}
+
+/* ✅ Modal pour les messages API */
+.api-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.api-modal {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  margin: 20px;
+}
+
+.api-modal-content {
+  padding: 30px 25px;
+  text-align: center;
+}
+
+.api-modal-content p {
+  color: #333;
+  font-size: 1.1em;
+  margin: 0 0 25px 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.api-modal-ok-btn {
+  background: linear-gradient(135deg, #a359a0, #8a4a87);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(163, 89, 160, 0.3);
+}
+
+.api-modal-ok-btn:hover {
+  background: linear-gradient(135deg, #8a4a87, #a359a0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(163, 89, 160, 0.4);
+}
+
 @media (max-width: 600px) {
   .bet-form-container {
     padding: 10px;
