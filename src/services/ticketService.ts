@@ -31,6 +31,12 @@ export interface CreateTicketData {
 export interface CreateTicketResponse {
   message: string;
   ticket: Ticket;
+  warning?: string;
+  ticketCreated?: boolean;
+  newSolde?: number;
+  newBonus?: number;
+  bonusUsed?: number;
+  soldeUsed?: number;
 }
 
 export interface GetTicketsResponse {

@@ -321,17 +321,30 @@ const BetForm = () => {
 
       const response = await ticketService.createTicket(ticketData, token);
 
-      // Mettre à jour le numéro de ticket
-      setCouponDetails((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          ticketNumber: response.ticket.numeroTicket
-        };
-      });
+      // Vérifier si le ticket a été créé malgré un avertissement
+      if (response.ticketCreated === true) {
+        // Mettre à jour le numéro de ticket
+        setCouponDetails((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            ticketNumber: response.ticket.numeroTicket
+          };
+        });
 
-      // Réinitialiser immédiatement le formulaire
-      resetForm();
+        // Afficher l'avertissement si présent
+        if (response.warning) {
+          console.warn('Avertissement lors de la création du ticket:', response.warning);
+          // Optionnel: afficher un message utilisateur
+          alert(`Ticket créé avec succès ! ${response.warning}`);
+        }
+
+        // Réinitialiser immédiatement le formulaire
+        resetForm();
+      } else {
+        // Erreur réelle, pas juste un avertissement
+        throw new Error(response.message);
+      }
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de la création du ticket");
@@ -362,11 +375,26 @@ const BetForm = () => {
         gains: getGainsForApi(gains, isDoubleChance),
         isCart: true // Ajout au panier
       };
-      await ticketService.createTicket(ticketData, token);
-      setShowCouponDisplay(false);
-      setCouponDetails(null);
-      // Réinitialiser immédiatement le formulaire
-      resetForm();
+      const response = await ticketService.createTicket(ticketData, token);
+
+      // Vérifier si le ticket a été créé malgré un avertissement
+      if (response.ticketCreated === true) {
+        setShowCouponDisplay(false);
+        setCouponDetails(null);
+
+        // Afficher l'avertissement si présent
+        if (response.warning) {
+          console.warn('Avertissement lors de l\'ajout au panier:', response.warning);
+          // Optionnel: afficher un message utilisateur
+          alert(`Ajouté au panier avec succès ! ${response.warning}`);
+        }
+
+        // Réinitialiser immédiatement le formulaire
+        resetForm();
+      } else {
+        // Erreur réelle, pas juste un avertissement
+        throw new Error(response.message);
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur lors de l\'ajout au panier");
       setShowCouponDisplay(false);
