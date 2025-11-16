@@ -14,7 +14,7 @@ interface UserData {
   firstName: string;
   email: string;
   solde: number;
-  bonus: number; // Nouveau champ pour le solde bonus
+  bonus: number; // Solde bonus
   gain: number;
   created: string;
   updatedAt: string;
@@ -126,6 +126,18 @@ const Dashboard: React.FC = () => {
           >
             <h3>🎯 Gains</h3>
             <p>{userData?.gain?.toLocaleString() || 0} XOF</p>
+          </motion.div>
+          <motion.div
+            className="balance-box bonus-balance"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
+            <h3>🎁 Bonus 10%</h3>
+            <p>{userData?.bonus?.toLocaleString() || 0} XOF</p>
+            <small style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.75rem', marginTop: '5px', display: 'block' }}>
+              Valable le 17/08/2025 de 00h00 à 23h59
+            </small>
           </motion.div>
         </div>
 
