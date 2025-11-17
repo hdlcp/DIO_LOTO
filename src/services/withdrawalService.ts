@@ -30,15 +30,15 @@ interface ApiError {
   status?: number;
 }
 
-// Liste des pays valides
+// Liste des pays valides (AVEC ACCENTS pour correspondre à l'API)
 const VALID_COUNTRIES = ["Benin", "Togo", "Ghana", "Côte d'Ivoire", "Niger"];
 
-// Liste des réseaux valides par pays
+// Liste des réseaux valides par pays (AVEC ACCENTS)
 const VALID_NETWORKS: { [key: string]: string[] } = {
   "Benin": ["Moov Benin", "MTN Benin", "Celtice Benin"],
   "Togo": ["Mixx by yas", "Flooz"],
   "Ghana": ["MTN"],
-  "Cote d'Ivoire": ["MTN", "Moov", "Orange"],
+  "Côte d'Ivoire": ["MTN", "Moov", "Orange"], // ✅ AVEC accent
   "Niger": ["MTN", "Moov", "Orange"]
 };
 
@@ -68,8 +68,18 @@ const withdrawalService = {
 
     // Validation du réseau mobile
     const reseauMobile = withdrawalData.reseauMobile?.trim();
-    if (!reseauMobile || !VALID_NETWORKS[pays].includes(reseauMobile)) {
-      throw new Error(`Le réseau mobile doit être l'un des suivants pour ${pays} : ${VALID_NETWORKS[pays].join(", ")}`);
+    const validNetworks = VALID_NETWORKS[pays];
+    
+    if (!reseauMobile) {
+      throw new Error("Le réseau mobile est requis");
+    }
+    
+    if (!validNetworks || !Array.isArray(validNetworks)) {
+      throw new Error(`Aucun réseau disponible pour ${pays}`);
+    }
+    
+    if (!validNetworks.includes(reseauMobile)) {
+      throw new Error(`Le réseau mobile doit être l'un des suivants pour ${pays} : ${validNetworks.join(", ")}`);
     }
 
     // Validation du numéro de téléphone
@@ -142,4 +152,4 @@ const withdrawalService = {
   }
 };
 
-export default withdrawalService; 
+export default withdrawalService;

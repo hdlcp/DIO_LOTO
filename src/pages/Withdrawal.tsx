@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import withdrawalService from "../services/withdrawalService";
-import "../styles/Withdrawal.css"; // ✅ Import du CSS
+import "../styles/Withdrawal.css";
 
 // Définition des types
 type Country = {
   name: string;
+  code: string;
   networks: string[];
 };
 
@@ -14,22 +15,27 @@ type Country = {
 const COUNTRIES: Country[] = [
   {
     name: "Benin",
+    code: "BJ",
     networks: ["Moov Benin", "MTN Benin", "Celtice Benin"]
   },
   {
     name: "Togo",
+    code: "TG",
     networks: ["Mixx by yas", "Flooz"]
   },
   {
     name: "Ghana",
+    code: "GH",
     networks: ["MTN"]
   },
   {
-    name: "Côte d'Ivoire",
+    name: "Côte d'Ivoire", // ✅ AVEC accent
+    code: "CI",
     networks: ["MTN", "Moov", "Orange"]
   },
   {
     name: "Niger",
+    code: "NE",
     networks: ["MTN", "Moov", "Orange"]
   }
 ];
@@ -37,7 +43,7 @@ const COUNTRIES: Country[] = [
 const Withdrawal: React.FC = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>(""); // ✅ Stocke le CODE
   const [selectedNetwork, setSelectedNetwork] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -48,9 +54,10 @@ const Withdrawal: React.FC = () => {
 
   // Gérer le changement de pays
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const country = event.target.value;
-    setSelectedCountry(country);
-    setSelectedNetwork(""); // Réinitialiser le réseau sélectionné
+    const countryCode = event.target.value;
+    console.log("Selected country code:", countryCode);
+    setSelectedCountryCode(countryCode);
+    setSelectedNetwork("");
   };
 
   // Gérer le changement de réseau
@@ -58,17 +65,35 @@ const Withdrawal: React.FC = () => {
     setSelectedNetwork(event.target.value);
   };
 
+  // Obtenir le pays depuis le code
+  const getCountryByCode = (code: string): Country | undefined => {
+    return COUNTRIES.find(c => c.code === code);
+  };
+
   // Obtenir les réseaux disponibles pour le pays sélectionné
   const getAvailableNetworks = (): string[] => {
-    const country = COUNTRIES.find(c => c.name === selectedCountry);
-    return country ? country.networks : [];
+    if (!selectedCountryCode) return [];
+    
+    const country = getCountryByCode(selectedCountryCode);
+    
+    if (!country) {
+      console.error("Pays introuvable:", selectedCountryCode);
+      return [];
+    }
+    
+    if (!country.networks || !Array.isArray(country.networks)) {
+      console.error("Networks invalide pour le pays:", country);
+      return [];
+    }
+    
+    return country.networks;
   };
 
   // Vérifier si le formulaire est valide
   const isFormValid = (): boolean => {
     return (
       fullName.trim() !== "" &&
-      selectedCountry !== "" &&
+      selectedCountryCode !== "" &&
       selectedNetwork !== "" &&
       phone.trim() !== "" &&
       amount.trim() !== "" &&
@@ -81,6 +106,9 @@ const Withdrawal: React.FC = () => {
   // Gérer la soumission du formulaire
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    
+    console.log("Form submission started");
+    
     if (!user?.uniqueUserId || !token) {
       setError("Vous devez être connecté pour effectuer un retrait");
       return;
@@ -91,33 +119,48 @@ const Withdrawal: React.FC = () => {
       return;
     }
 
+    const country = getCountryByCode(selectedCountryCode);
+    
+    if (!country) {
+      setError("Pays invalide");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(null);
 
-    try {
-      const response = await withdrawalService.createWithdrawal({
-        uniqueUserId: user.uniqueUserId,
-        fullName: fullName.trim(),
-        pays: selectedCountry,
-        reseauMobile: selectedNetwork,
-        phoneNumber: phone.trim(),
-        montant: Number(amount)
-      }, token);
+    const withdrawalData = {
+      uniqueUserId: user.uniqueUserId,
+      fullName: fullName.trim(),
+      pays: country.name, // ✅ Envoie le nom avec accent
+      reseauMobile: selectedNetwork,
+      phoneNumber: phone.trim(),
+      montant: Number(amount)
+    };
+    
+    console.log("Withdrawal data:", withdrawalData);
+    console.log("Country name sent:", country.name);
 
+    try {
+      const response = await withdrawalService.createWithdrawal(withdrawalData, token);
+
+      console.log("Withdrawal response:", response);
       setSuccess(response.message);
       
-      // Rediriger vers l'historique des retraits après 2 secondes
       setTimeout(() => {
         navigate('/historyWithdrawal');
       }, 2000);
 
     } catch (err) {
+      console.error("Withdrawal error:", err);
       setError(err instanceof Error ? err.message : "Une erreur est survenue lors du retrait");
     } finally {
       setLoading(false);
     }
   };
+
+  const availableNetworks = getAvailableNetworks();
 
   return (
     <div className="withdrawal-container">
@@ -153,14 +196,14 @@ const Withdrawal: React.FC = () => {
           <div className="form-group">
             <label>Pays</label>
             <select
-              value={selectedCountry}
+              value={selectedCountryCode}
               onChange={handleCountryChange}
               required
               disabled={loading}
             >
               <option value="">Sélectionnez un pays</option>
               {COUNTRIES.map((country) => (
-                <option key={country.name} value={country.name}>
+                <option key={country.code} value={country.code}>
                   {country.name}
                 </option>
               ))}
@@ -173,16 +216,16 @@ const Withdrawal: React.FC = () => {
               value={selectedNetwork}
               onChange={handleNetworkChange}
               required
-              disabled={loading || !selectedCountry || getAvailableNetworks().length === 0}
+              disabled={loading || !selectedCountryCode || availableNetworks.length === 0}
             >
               <option value="">Sélectionnez un réseau</option>
-              {getAvailableNetworks().map((network) => (
+              {availableNetworks.map((network) => (
                 <option key={network} value={network}>
                   {network}
                 </option>
               ))}
             </select>
-            {selectedCountry && getAvailableNetworks().length === 0 && (
+            {selectedCountryCode && availableNetworks.length === 0 && (
               <p className="error-message">Aucun réseau disponible pour ce pays</p>
             )}
           </div>
