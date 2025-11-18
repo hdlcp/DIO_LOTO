@@ -127,6 +127,7 @@ const Dashboard: React.FC = () => {
             <h3>🎯 Gains</h3>
             <p>{userData?.gain?.toLocaleString() || 0} XOF</p>
           </motion.div>
+          {/* Section bonus temporairement masquée - À réactiver pour la promotion
           <motion.div
             className="balance-box bonus-balance"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -139,6 +140,7 @@ const Dashboard: React.FC = () => {
               Valable le 17/11/2025 de 00h00 à 23h59
             </small>
           </motion.div>
+          */}
         </div>
 
         {/* Boutons avec Material UI */}
