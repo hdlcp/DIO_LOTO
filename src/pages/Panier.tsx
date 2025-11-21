@@ -136,7 +136,7 @@ const Panier = () => {
             <div key={ticket.id} className="ticket-card">
               <div className="ticket-header">
                 <span className="ticket-game">{ticket.nomJeu}</span>
-                <span className="ticket-date">{new Date(ticket.created).toLocaleDateString()}</span>
+                <span className="ticket-date">{new Date(ticket.created).toLocaleDateString()} à {new Date(ticket.created).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
               <div className="ticket-details">
                 <div className="ticket-id-row">
