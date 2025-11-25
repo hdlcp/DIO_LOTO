@@ -87,7 +87,7 @@ const Commerciaux: React.FC = () => {
                 {countryResellers.map((reseller, idx) => (
                   <TableRow key={reseller.id} className="table-row">
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{`${reseller.user.firstName} ${reseller.user.lastName}`}</TableCell>
+                    <TableCell>{reseller.pseudo}</TableCell>
                     <TableCell>
                       <div
                         onClick={() => handleWhatsAppClick(reseller.whatsapp)}

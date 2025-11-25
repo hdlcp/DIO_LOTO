@@ -16,6 +16,7 @@ export interface Reseller {
   whatsapp: string;
   pays: string;
   status: string;
+  pseudo: string;
   created: string;
   updatedAt: string;
   user: User;
