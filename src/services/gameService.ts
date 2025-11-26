@@ -23,7 +23,7 @@ const formatCountryName = (country: string): string => {
     'ghana': 'Ghana',
     'coteIvoire': 'Côte d\'Ivoire',
     'togo': 'Togo',
-    'niger': 'Niger'
+    'france': 'France'
   };
   
   const formattedCountry = countryMapping[country.toLowerCase()] || country;

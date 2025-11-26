@@ -25,7 +25,7 @@ const countryNames: { [key: string]: string } = {
   togo: "Togo",
   coteIvoire: "Côte d'Ivoire",
   ghana: "Ghana",
-  niger: "Niger"
+  france: "France"
 };
 
 const BetForm = () => {

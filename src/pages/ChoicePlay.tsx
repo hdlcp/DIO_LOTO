@@ -9,7 +9,7 @@ import "../styles/Games.css";
 // Import des images des drapeaux
 import Benin from "../assets/benin.png";
 import Ghana from "../assets/ghana.png";
-import Niger from "../assets/niger.png";
+import France from "../assets/france.png";
 import CoteIvoire from "../assets/cote-ivoire.png";
 import Togo from "../assets/togo.png";
 
@@ -19,7 +19,7 @@ import lotoImage from "../assets/loto.png";
 const flagMap: { [key: string]: string } = {
   benin: Benin,
   ghana: Ghana,
-  niger: Niger,
+  france: France,
   "Côte d'Ivoire": CoteIvoire,
   togo: Togo
 };
@@ -27,7 +27,7 @@ const flagMap: { [key: string]: string } = {
 const countryNames: { [key: string]: string } = {
   benin: "Bénin",
   ghana: "Ghana",
-  niger: "Niger",
+  france: "France",
   "Côte d'Ivoire": "Côte d'Ivoire",
   togo: "Togo"
 };

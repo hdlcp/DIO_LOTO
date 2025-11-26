@@ -6,7 +6,7 @@ import Benin from "../assets/benin.png";
 import Ghana from "../assets/ghana.png";
 import CoteIvoire from "../assets/cote-ivoire.png";
 import Togo from "../assets/togo.png";
-import Niger from "../assets/niger.png";
+import France from "../assets/france.png";
 
 interface Country {
   name: string;
@@ -19,7 +19,7 @@ const countries: Country[] = [
   { name: "Ghana", flag: Ghana, code: "ghana" },
   { name: "Côte d'Ivoire", flag: CoteIvoire, code: "Côte d'Ivoire" },
   { name: "Togo", flag: Togo, code: "togo" },
-  { name: "Niger", flag: Niger, code: "niger" },
+  { name: "France", flag: France, code: "france" },
 ];
 
 const CountrySelection = () => {

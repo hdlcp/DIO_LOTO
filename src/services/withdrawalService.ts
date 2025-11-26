@@ -31,7 +31,7 @@ interface ApiError {
 }
 
 // Liste des pays valides (AVEC ACCENTS pour correspondre à l'API)
-const VALID_COUNTRIES = ["Benin", "Togo", "Ghana", "Côte d'Ivoire", "Niger"];
+const VALID_COUNTRIES = ["Benin", "Togo", "Ghana", "Côte d'Ivoire", "France"];
 
 // Liste des réseaux valides par pays (AVEC ACCENTS)
 const VALID_NETWORKS: { [key: string]: string[] } = {
@@ -39,7 +39,7 @@ const VALID_NETWORKS: { [key: string]: string[] } = {
   "Togo": ["Mixx by yas", "Flooz"],
   "Ghana": ["MTN"],
   "Côte d'Ivoire": ["MTN", "Moov", "Orange"], // ✅ AVEC accent
-  "Niger": ["MTN", "Moov", "Orange"]
+  "France": ["Orange", "SFR", "Bouygues", "Free"]
 };
 
 const withdrawalService = {

@@ -34,8 +34,8 @@ const COUNTRIES: Country[] = [
     networks: ["MTN", "Moov", "Orange"]
   },
   {
-    name: "Niger",
-    code: "NE",
+    name: "France",
+    code: "FR",
     networks: ["MTN", "Moov", "Orange"]
   }
 ];
