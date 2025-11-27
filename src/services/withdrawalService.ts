@@ -39,7 +39,7 @@ const VALID_NETWORKS: { [key: string]: string[] } = {
   "Togo": ["Mixx by yas", "Flooz"],
   "Ghana": ["MTN"],
   "Côte d'Ivoire": ["MTN", "Moov", "Orange"], // ✅ AVEC accent
-  "France": ["Orange", "SFR", "Bouygues", "Free"]
+  "France": ["Airtel", "Orange", "Moov", "MTN"]
 };
 
 const withdrawalService = {
