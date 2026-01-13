@@ -86,32 +86,32 @@ const Tickets = () => {
           tickets.map((ticket) => (
             <div key={ticket.id} className="ticket-card">
               <div className="ticket-header">
-                <span className="ticket-game">{ticket.nomJeu}</span>
-                <span className="ticket-date">{new Date(ticket.created).toLocaleDateString()} à {new Date(ticket.created).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="ticket-header-left">
+                  <span className="ticket-number-display">🎫 {ticket.numeroTicket}</span>
+                </div>
+                <div className="ticket-header-center">
+                  <span className="ticket-game">{ticket.nomJeu} - {new Date(ticket.created).toLocaleDateString()} {new Date(ticket.created).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
               </div>
               <div className="ticket-details">
-                <div className="ticket-id-row">
-                  <span className="label">N° Ticket:</span>
-                  <span className="value">{ticket.numeroTicket}</span>
-                </div>
-                <div className="ticket-type">
-                  <span className="label">Type:</span>
-                  <span className="value">{ticket.typeJeu}</span>
-                </div>
-                <div className="ticket-formula">
-                  <span className="label">Formule:</span>
-                  <span className="value">{ticket.formule}</span>
-                </div>
-                <div className="ticket-numbers">
-                  <span className="label">Numéros:</span>
+                <div className="ticket-row">
+                  <span className="label">Numéros :</span>
                   <span className="value">{ticket.numerosJoues}</span>
                 </div>
-                <div className="ticket-stake">
-                  <span className="label">Mise:</span>
+                <div className="ticket-row">
+                  <span className="label">Formule :</span>
+                  <span className="value">{ticket.formule}</span>
+                </div>
+                <div className="ticket-row">
+                  <span className="label">Type :</span>
+                  <span className="value">{ticket.typeJeu}</span>
+                </div>
+                <div className="ticket-row">
+                  <span className="label">Mise :</span>
                   <span className="value">{ticket.mise} FCFA</span>
                 </div>
-                <div className="ticket-gain">
-                  <span className="label">Gain potentiel:</span>
+                <div className="ticket-row">
+                  <span className="label">Gains :</span>
                   <span className="value">{formatGainsForDisplay(ticket.gains)}</span>
                 </div>
                 <div className="ticket-status">

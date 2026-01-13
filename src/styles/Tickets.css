@@ -129,67 +129,84 @@
   margin-bottom: 18px;
   padding-bottom: 12px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ticket-header-left {
+  flex: 0 0 auto;
+}
+
+.ticket-header-center {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ticket-number-display {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
 }
 
 .ticket-game {
   font-weight: bold;
   color: #fff;
-  font-size: 1.6em;
-  margin-bottom: 12px;
+  font-size: 1.4rem;
   word-break: break-word;
   line-height: 1.2;
-  text-align: center;
 }
 
 .ticket-date {
   color: #f3eaff;
-  font-size: 1.1rem;
-  display: block;
-  margin-bottom: 8px;
-  text-align: center;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .ticket-details {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   flex: 1;
-  justify-content: space-between;
 }
 
-.ticket-details > div {
-  margin-bottom: 12px;
+.ticket-row {
   width: 100%;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: block;
+}
+
+.ticket-row:last-child {
+  border-bottom: none;
 }
 
 .label {
   color: #f3eaff;
   font-size: 1.2rem;
-  margin-bottom: 4px;
-  display: block;
   font-weight: 700;
-  text-align: center;
-  width: 100%;
+  white-space: nowrap;
+  display: inline;
 }
 
-/* CORRECTION IMPORTANTE : Forcer le centrage des valeurs */
 .value {
-  font-weight: 300;
+  font-weight: 500;
   color: #fff;
   word-break: break-word;
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.4;
-  margin-bottom: 16px;
-  text-align: center !important;
-  width: 100%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  display: inline;
+  margin-left: 8px;
 }
 
 /* Styles spécifiques au numéro de ticket dans les cartes */
@@ -388,35 +405,49 @@
   .ticket-header {
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     text-align: center;
   }
-  
+
+  .ticket-header-left,
+  .ticket-header-center {
+    flex: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .ticket-header-center {
+    gap: 2px;
+  }
+
   .ticket-game {
-    font-size: 1.1em;
-    margin-bottom: 5px;
+    font-size: 1.2rem;
+    margin-bottom: 0;
   }
-  
+
   .ticket-date {
-    font-size: 0.85em;
+    font-size: 0.9rem;
   }
-  
-  .ticket-details > div {
-    font-size: 0.9em;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+
+  .ticket-number-display {
+    font-size: 1rem;
+    padding: 4px 8px;
+  }
+
+  .ticket-row {
+    padding: 10px 0;
     text-align: center;
   }
-  
+
   .label {
-    font-size: 0.85em;
-    min-width: auto;
+    font-size: 1.1rem;
+    display: inline;
   }
-  
+
   .value {
-    font-size: 0.9em;
-    text-align: center !important; /* CENTRÉ SUR MOBILE AUSSI */
+    font-size: 1.1rem;
+    display: inline;
+    margin-left: 6px;
   }
   
   .ticket-id-row .value {
@@ -482,26 +513,31 @@
   }
   
   .ticket-game {
-    font-size: 1em;
+    font-size: 1.1rem;
   }
-  
-  .ticket-details > div {
-    font-size: 0.85em;
+
+  .ticket-number-display {
+    font-size: 0.9rem;
+    padding: 3px 6px;
   }
-  
+
+  .ticket-date {
+    font-size: 0.8rem;
+  }
+
+  .ticket-row {
+    padding: 8px 0;
+  }
+
+  .label {
+    font-size: 1rem;
+    display: inline;
+  }
+
   .value {
-    font-size: 0.85em;
-    text-align: center !important; /* CENTRÉ PARTOUT */
-  }
-  
-  .ticket-id-row .value {
-    font-size: 0.65em;
-    text-align: center !important;
-  }
-  
-  .ticket-numbers .value {
-    font-size: 0.75em;
-    text-align: center !important;
+    font-size: 1rem;
+    display: inline;
+    margin-left: 4px;
   }
   
   /* Statuts sur très petits écrans */
