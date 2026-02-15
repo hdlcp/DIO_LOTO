@@ -28,6 +28,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import EnterCode from "./pages/EnterCode";
 import Notifications from "./pages/Notifications";
 import LoadingScreen from "./components/LoadingScreen";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 const App: React.FC = () => {
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
@@ -68,6 +69,7 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Header />
+      <WhatsAppButton />
       <Routes>
         {/* Routes publiques */}
         <Route path="/" element={<Home />} />
