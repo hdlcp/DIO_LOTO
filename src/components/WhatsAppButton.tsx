@@ -21,13 +21,12 @@ const WhatsAppButton: React.FC = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+    boxShadow: isHovered
+      ? '0 6px 20px rgba(37, 211, 102, 0.5)'
+      : '0 4px 12px rgba(0, 0, 0, 0.3)',
     zIndex: 9999,
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-    boxShadow: isHovered 
-      ? '0 6px 20px rgba(37, 211, 102, 0.5)' 
-      : '0 4px 12px rgba(0, 0, 0, 0.3)',
   };
 
   const svgStyle: React.CSSProperties = {
