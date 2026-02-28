@@ -71,7 +71,7 @@ const DashboardRevendeur: React.FC = () => {
             <h3>🎯 Gains</h3>
             <p>{gain?.toLocaleString() || 0} XOF</p>
           </motion.div>
-          {/* Section bonus - Journée bonus terminée le 04/01/2026
+          {/* Section bonus - Journée bonus 10% - 01/03/2025 */}
           <motion.div
             className="balance-box bonus-balance"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -81,10 +81,9 @@ const DashboardRevendeur: React.FC = () => {
             <h3>🎁 Bonus 10%</h3>
             <p>{user?.bonus?.toLocaleString() || 0} XOF</p>
             <small style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.75rem', marginTop: '5px', display: 'block' }}>
-              Valable le 04/01/2026 de 00h00 à 23h59
+              Valable le 01/03/2025 de 00h00 à 23h59
             </small>
           </motion.div>
-          */}
         </div>
 
         {/* Afficher d'autres informations spécifiques au revendeur si nécessaire */}
