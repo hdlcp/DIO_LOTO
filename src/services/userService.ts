@@ -194,8 +194,12 @@ export const userService = {
     });
     
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erreur lors de la mise à jour du mot de passe');
+      try {
+        const error = await response.json();
+        throw new Error(error.message || 'Erreur lors de la mise à jour du mot de passe');
+      } catch {
+        throw new Error('Erreur lors de la mise à jour du mot de passe');
+      }
     }
   },
 }; 

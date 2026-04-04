@@ -3,13 +3,26 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { userService } from "../services/userService";
 import "../styles/profile.css"; // 🔹 Importation du CSS
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Profil: React.FC = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const showSnackbar = (message: string, severity: "success" | "error") => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   // États pour les informations du profil
   const [firstName, setFirstName] = useState("");
@@ -33,8 +46,6 @@ const Profil: React.FC = () => {
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     try {
       if (!user || !token) throw new Error("Non authentifié");
@@ -45,9 +56,9 @@ const Profil: React.FC = () => {
         email,
       }, token);
 
-      setSuccess("Profil mis à jour avec succès");
+      showSnackbar("Profil mis à jour avec succès", "success");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors de la mise à jour du profil");
+      showSnackbar(err instanceof Error ? err.message : "Erreur lors de la mise à jour du profil", "error");
     } finally {
       setLoading(false);
     }
@@ -56,11 +67,9 @@ const Profil: React.FC = () => {
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     if (newPassword !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas");
+      showSnackbar("Les mots de passe ne correspondent pas", "error");
       setLoading(false);
       return;
     }
@@ -74,13 +83,13 @@ const Profil: React.FC = () => {
         newPassword,
         token
       );
-      
-      setSuccess("Mot de passe mis à jour avec succès");
+
+      showSnackbar("Mot de passe mis à jour avec succès", "success");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors de la mise à jour du mot de passe");
+      showSnackbar(err instanceof Error ? err.message : "Erreur lors de la mise à jour du mot de passe", "error");
     } finally {
       setLoading(false);
     }
@@ -101,7 +110,7 @@ const Profil: React.FC = () => {
       logout();
       navigate("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors de la suppression du compte");
+      showSnackbar(err instanceof Error ? err.message : "Erreur lors de la suppression du compte", "error");
       setLoading(false);
     }
   };
@@ -112,16 +121,16 @@ const Profil: React.FC = () => {
 
   return (
     <div className="profil-container">
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
-      {success && (
-        <div className="success-message">
-          {success}
-        </div>
-      )}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled" sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
       {/* 🔹 Informations du profil */}
       <div className="profil-section">
