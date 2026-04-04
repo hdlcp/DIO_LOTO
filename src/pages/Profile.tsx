@@ -122,21 +122,33 @@ const Profil: React.FC = () => {
       {snackbar.open && (
         <div style={{
           position: "fixed",
-          bottom: "30px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: snackbar.severity === "success" ? "#00c864" : "#e74c3c",
-          color: "white",
-          padding: "14px 24px",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          fontSize: "14px",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           zIndex: 9999,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          minWidth: "280px",
-          textAlign: "center",
+          background: "rgba(0,0,0,0.5)",
         }}>
-          {snackbar.message}
+          <div style={{
+            background: snackbar.severity === "success" ? "#00c864" : "#e74c3c",
+            color: "white",
+            padding: "30px 40px",
+            borderRadius: "12px",
+            fontWeight: "bold",
+            fontSize: "18px",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+            textAlign: "center",
+            maxWidth: "360px",
+            width: "90%",
+          }}>
+            <div style={{ fontSize: "36px", marginBottom: "12px" }}>
+              {snackbar.severity === "success" ? "✅" : "❌"}
+            </div>
+            {snackbar.message}
+          </div>
         </div>
       )}
 
