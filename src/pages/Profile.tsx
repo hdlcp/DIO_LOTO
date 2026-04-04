@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { userService } from "../services/userService";
 import "../styles/profile.css"; // 🔹 Importation du CSS
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Profil: React.FC = () => {
   const { user, token, logout } = useAuth();
@@ -20,10 +17,7 @@ const Profil: React.FC = () => {
 
   const showSnackbar = (message: string, severity: "success" | "error") => {
     setSnackbar({ open: true, message, severity });
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
+    setTimeout(() => setSnackbar((prev) => ({ ...prev, open: false })), 4000);
   };
 
   // États pour les informations du profil
@@ -125,16 +119,26 @@ const Profil: React.FC = () => {
 
   return (
     <div className="profil-container">
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} variant="filled" sx={{ width: "100%" }}>
+      {snackbar.open && (
+        <div style={{
+          position: "fixed",
+          bottom: "30px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: snackbar.severity === "success" ? "#00c864" : "#e74c3c",
+          color: "white",
+          padding: "14px 24px",
+          borderRadius: "8px",
+          fontWeight: "bold",
+          fontSize: "14px",
+          zIndex: 9999,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+          minWidth: "280px",
+          textAlign: "center",
+        }}>
           {snackbar.message}
-        </Alert>
-      </Snackbar>
+        </div>
+      )}
 
       {/* 🔹 Informations du profil */}
       <div className="profil-section">
@@ -185,7 +189,7 @@ const Profil: React.FC = () => {
         <form onSubmit={handleUpdatePassword}>
           <div className="input-group">
             <label>Mot de passe actuel</label>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <input
                 type={showCurrentPassword ? "text" : "password"}
                 value={currentPassword}
@@ -193,13 +197,13 @@ const Profil: React.FC = () => {
                 required
               />
               <div onClick={() => setShowCurrentPassword(!showCurrentPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
-                {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                {showCurrentPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </div>
             </div>
           </div>
           <div className="input-group">
             <label>Nouveau mot de passe</label>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <input
                 type={showNewPassword ? "text" : "password"}
                 value={newPassword}
@@ -207,13 +211,13 @@ const Profil: React.FC = () => {
                 required
               />
               <div onClick={() => setShowNewPassword(!showNewPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
-                {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                {showNewPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </div>
             </div>
           </div>
           <div className="input-group">
             <label>Confirmer le mot de passe</label>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
@@ -221,7 +225,7 @@ const Profil: React.FC = () => {
                 required
               />
               <div onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
-                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </div>
             </div>
           </div>
