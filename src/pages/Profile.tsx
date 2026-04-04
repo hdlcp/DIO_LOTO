@@ -5,6 +5,8 @@ import { userService } from "../services/userService";
 import "../styles/profile.css"; // 🔹 Importation du CSS
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Profil: React.FC = () => {
   const { user, token, logout } = useAuth();
@@ -33,6 +35,9 @@ const Profil: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Pré-remplir les informations au chargement
   useEffect(() => {
@@ -181,30 +186,45 @@ const Profil: React.FC = () => {
         <form onSubmit={handleUpdatePassword}>
           <div className="input-group">
             <label>Mot de passe actuel</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type={showCurrentPassword ? "text" : "password"}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+              />
+              <div onClick={() => setShowCurrentPassword(!showCurrentPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+                {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </div>
+            </div>
           </div>
           <div className="input-group">
             <label>Nouveau mot de passe</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+              <div onClick={() => setShowNewPassword(!showNewPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+                {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </div>
+            </div>
           </div>
           <div className="input-group">
             <label>Confirmer le mot de passe</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <div onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </div>
+            </div>
           </div>
           <button 
             type="submit" 

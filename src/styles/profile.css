@@ -40,12 +40,15 @@ p {
 
 .input-group input {
     padding: 10px;
+    padding-right: 40px;
     border: none;
     border-radius: 5px;
     background: #2a3a4d;
     color: white;
     font-size: 14px;
     outline: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-group input::placeholder {
