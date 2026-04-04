@@ -192,7 +192,7 @@ const Profil: React.FC = () => {
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
               />
-              <div onClick={() => setShowCurrentPassword(!showCurrentPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+              <div onClick={() => setShowCurrentPassword(!showCurrentPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
                 {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </div>
             </div>
@@ -206,7 +206,7 @@ const Profil: React.FC = () => {
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
               />
-              <div onClick={() => setShowNewPassword(!showNewPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+              <div onClick={() => setShowNewPassword(!showNewPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
                 {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </div>
             </div>
@@ -220,7 +220,7 @@ const Profil: React.FC = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-              <div onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}>
+              <div onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "white" }}>
                 {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </div>
             </div>
