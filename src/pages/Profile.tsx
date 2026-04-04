@@ -106,7 +106,6 @@ const Profil: React.FC = () => {
     }
 
     setLoading(true);
-    setError(null);
 
     try {
       if (!user || !token) throw new Error("Non authentifié");
