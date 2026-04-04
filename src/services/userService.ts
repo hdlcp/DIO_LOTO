@@ -134,6 +134,46 @@ export const userService = {
     return data as UserRoleResponse;
   },
 
+  // Mot de passe oublié — étape 1 : envoi de l'email
+  forgotPassword: async (email: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Erreur lors de l\'envoi. Réessayez.');
+    }
+  },
+
+  // Mot de passe oublié — étape 2 : vérification du code OTP
+  verifyOtp: async (email: string, otp: string): Promise<string> => {
+    const response = await fetch(`${API_URL}/auth/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Code invalide ou expiré.');
+    }
+    return data.reset_token as string;
+  },
+
+  // Mot de passe oublié — étape 3 : réinitialisation du mot de passe
+  resetPassword: async (reset_token: string, new_password: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reset_token, new_password }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Session expirée. Recommencez la procédure.');
+    }
+  },
+
   // Mise à jour du mot de passe
   updatePassword: async (
     userId: string | number,

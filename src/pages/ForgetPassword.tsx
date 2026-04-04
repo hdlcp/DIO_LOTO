@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { userService } from '../services/userService';
 import "../styles/Auth.css";
 
 const ForgetPassword: React.FC = () => {
@@ -11,27 +12,21 @@ const ForgetPassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation basique
     if (!email.trim()) {
       setAuthError('L\'email est requis');
       return;
     }
 
     setLoading(true);
+    setAuthError('');
     try {
-      // Simuler un délai de chargement
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Rediriger vers la page EnterCode
-      navigate('/entrerCode');
-    } catch (error) {
-      setAuthError('Une erreur est survenue');
+      await userService.forgotPassword(email.trim());
+      navigate('/entrerCode', { state: { email: email.trim() } });
+    } catch (error: any) {
+      setAuthError(error.message || 'Une erreur est survenue. Réessayez.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
   };
 
   return (
@@ -54,7 +49,7 @@ const ForgetPassword: React.FC = () => {
               required
               placeholder="Email"
               value={email}
-              onChange={handleInputChange}
+              onChange={(e) => setEmail(e.target.value)}
               className={authError ? 'error' : ''}
             />
           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import "../styles/Auth.css";
 import { useAuth } from "../AuthContext";
 // Icons pour afficher/masquer le mot de passe
@@ -13,6 +13,8 @@ const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { login, loading, isRevendeur, error: authError } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const successMessage = (location.state as { message?: string })?.message ?? '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +60,11 @@ const Login: React.FC = () => {
       <div className="auth-box">
         <h2 className="auth-title">Connexion à votre compte</h2>
         <form onSubmit={handleSubmit}>
+          {successMessage && (
+            <div className="success-message" role="status">
+              <span>{successMessage}</span>
+            </div>
+          )}
           {authError && (
             <div className="error-message" role="alert">
               <span>{authError}</span>

@@ -26,6 +26,7 @@ import CountrySelection from "./pages/CountrySelection";
 import RechargerWithGain from "./pages/Recharger_with_gain";
 import ForgetPassword from "./pages/ForgetPassword";
 import EnterCode from "./pages/EnterCode";
+import ResetPassword from "./pages/ResetPassword";
 import Notifications from "./pages/Notifications";
 import LoadingScreen from "./components/LoadingScreen";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -81,6 +82,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/entrerCode" element={<EnterCode />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
 
         {/* Routes protégées pour utilisateurs normaux */}
         <Route path="/dashboard" element={
