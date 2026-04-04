@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { userService } from '../services/userService';
 import "../styles/Auth.css";
@@ -7,7 +7,28 @@ const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [countdown, setCountdown] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const startCountdown = () => {
+    setCountdown(90);
+    timerRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current!);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +42,7 @@ const ForgetPassword: React.FC = () => {
     setAuthError('');
     try {
       await userService.forgotPassword(email.trim());
+      startCountdown();
       navigate('/entrerCode', { state: { email: email.trim() } });
     } catch (error: any) {
       setAuthError(error.message || 'Une erreur est survenue. Réessayez.');
@@ -28,6 +50,8 @@ const ForgetPassword: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const isDisabled = loading || countdown > 0;
 
   return (
     <div className="auth-container">
@@ -56,10 +80,14 @@ const ForgetPassword: React.FC = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isDisabled}
             className="auth-button"
           >
-            {loading ? 'Envoi en cours...' : 'Envoyer le code'}
+            {loading
+              ? 'Envoi en cours...'
+              : countdown > 0
+              ? `Renvoyer un code (${countdown}s)`
+              : 'Envoyer le code'}
           </button>
 
           <div className="auth-text">
