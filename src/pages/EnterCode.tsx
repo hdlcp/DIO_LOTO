@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { userService } from '../services/userService';
 import "../styles/Auth.css";
@@ -6,10 +6,41 @@ import "../styles/Auth.css";
 const EnterCode: React.FC = () => {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [cooldown, setCooldown] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const email = (location.state as { email?: string })?.email ?? '';
+
+  useEffect(() => {
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, []);
+
+  const startCooldown = () => {
+    setCooldown(60);
+    timerRef.current = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) { clearInterval(timerRef.current!); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleResend = async () => {
+    if (!email || cooldown > 0) return;
+    setResending(true);
+    setAuthError('');
+    try {
+      await userService.forgotPassword(email);
+      startCooldown();
+    } catch (error: any) {
+      setAuthError(error.message || 'Erreur lors du renvoi du code.');
+    } finally {
+      setResending(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,9 +105,19 @@ const EnterCode: React.FC = () => {
           </button>
 
           <div className="auth-text">
-            <Link to="/forgetPassword" className="auth-link">
-              Renvoyer un code
-            </Link>
+            {cooldown > 0 ? (
+              <span style={{ color: '#666', cursor: 'not-allowed' }}>
+                Renvoyer le code ({cooldown}s)
+              </span>
+            ) : (
+              <span
+                onClick={handleResend}
+                className="auth-link"
+                style={{ cursor: resending ? 'not-allowed' : 'pointer', opacity: resending ? 0.6 : 1 }}
+              >
+                {resending ? 'Envoi...' : 'Renvoyer le code'}
+              </span>
+            )}
             {' · '}
             <Link to="/login" className="auth-link">
               Retour à la connexion
