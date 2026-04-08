@@ -1,6 +1,5 @@
 import { User } from '../types/User';
-
-const API_URL = 'https://dio-loto-api-jaz1.onrender.com/api';
+import { API_URL } from '../config';
 
 interface UserRoleResponse {
   message: string;

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_URL = 'https://dio-loto-api-jaz1.onrender.com/api';
+import { API_URL } from '../config';
 
 export interface Game {
   id: number;
