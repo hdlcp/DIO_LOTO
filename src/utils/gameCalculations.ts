@@ -103,11 +103,13 @@ const gameMultipliers = {
 export const doubleChanceGames: string[] = [
   "togo9",
   "ghana20",
+  "benin14",
   "coteivoire7",
   "coteivoire8",
   "coteivoire10",
   "coteivoire13",
   "coteivoire16",
+  "coteivoire18",
   "coteivoire21",
   "coteivoire22",
   "coteivoire23",
