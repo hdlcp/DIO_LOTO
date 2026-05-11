@@ -642,10 +642,12 @@ const BetForm = () => {
           value={stake}
           onChange={handleStakeChange}
             placeholder="Entrez votre mise"
-            disabled={( (betType === "NAP" && (formula === "NAP3" || formula === "NAP4")) ||
-                       betType === "Annagrammesimple" ||
-                       betType === "DoubleNumber" ||
-                       betType === "Permutations" ) && numberOfPrises !== ""}
+            disabled={
+              betType === "Annagrammesimple" ||
+              betType === "DoubleNumber" ||
+              betType === "Permutations" ||
+              ((betType === "NAP" && (formula === "NAP3" || formula === "NAP4")) && numberOfPrises !== "")
+            }
           />
         {stakeError && <div className="error-message" style={{ color: 'red', fontSize: '0.95em' }}>{stakeError}</div>}
         </div>
