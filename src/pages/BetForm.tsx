@@ -92,14 +92,9 @@ const BetForm = () => {
     setNumbers([]);
     }
 
-    // Reset prise and stake if changing bet types that don't use prise
-    if (!((betType === "NAP" && (formula === "NAP3" || formula === "NAP4")) ||
-          betType === "Annagrammesimple" ||
-          betType === "DoubleNumber" ||
-          betType === "Permutations")) {
-      setNumberOfPrises("");
-      setStake("");
-    }
+    // Toujours réinitialiser la mise et les prises lors d'un changement de type
+    setNumberOfPrises("");
+    setStake("");
 
     // Mettre à jour les gains si possible
     updateGains();
