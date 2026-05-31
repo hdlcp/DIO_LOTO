@@ -21,29 +21,28 @@ import { useAuth } from "../AuthContext";
 const DRAWER_WIDTH = 280;
 
 const drawerPaper = {
-  backgroundColor: "rgb(65, 105, 225)",
-  borderRight: "1px solid rgba(255,255,255,0.07)",
+  backgroundColor: "rgba(10, 15, 50, 0.97)",
+  borderRight: "1px solid rgba(163, 89, 160, 0.3)",
   width: DRAWER_WIDTH,
   display: "flex",
   flexDirection: "column" as const,
 };
 
 const itemBase = {
-  color: "rgba(255,255,255,0.7)",
+  color: "#ffffff",
   cursor: "pointer",
   borderRadius: "8px",
-  margin: "2px 12px",
-  padding: "10px 12px",
+  margin: "4px 12px",
+  padding: "14px 16px",
+  fontSize: "1rem",
   transition: "all 0.2s ease",
   "&:hover": {
-    backgroundColor: "rgba(163,89,160,0.15)",
+    backgroundColor: "rgba(163, 89, 160, 0.25)",
     color: "#fff",
-    borderLeft: "3px solid rgb(163, 89, 160)",
-    paddingLeft: "9px",
   },
 };
 
-const iconBase = { color: "inherit", minWidth: 36 };
+const iconBase = { color: "inherit", minWidth: 40 };
 
 const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,18 +89,9 @@ const Header: React.FC = () => {
         position="sticky"
         elevation={0}
         sx={{
-          background: "rgb(65, 105, 225)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          background: "rgba(10, 15, 50, 0.97)",
+          borderBottom: "1px solid rgba(163, 89, 160, 0.3)",
           boxShadow: "none",
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "2px",
-            background: "linear-gradient(90deg, rgb(163,89,160), rgb(65,105,225))",
-          },
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: "64px !important", px: "16px" }}>
@@ -197,10 +187,10 @@ const Header: React.FC = () => {
           alignItems: "center",
           gap: 12,
         }}>
-          <img src={logo} alt="Dio Loto" style={{ height: 36, objectFit: "contain" }} />
+          <img src={logo} alt="Dio Loto" style={{ height: 44, objectFit: "contain" }} />
           <div>
-            <div style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem", lineHeight: 1.2 }}>DIO LOTO</div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.7rem", letterSpacing: "1px", textTransform: "uppercase" }}>Plateforme de jeux</div>
+            <div style={{ color: "#ffffff", fontWeight: 800, fontSize: "1.1rem", lineHeight: 1.2 }}>DIO LOTO</div>
+            <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem" }}>Plateforme de jeux</div>
           </div>
         </div>
 
@@ -211,7 +201,7 @@ const Header: React.FC = () => {
               <ListItemIcon sx={iconBase}>{item.icon}</ListItemIcon>
               <ListItemText
                 primary={item.label}
-                primaryTypographyProps={{ fontSize: "0.875rem", fontWeight: 500 }}
+                primaryTypographyProps={{ fontSize: "1rem", fontWeight: 600 }}
               />
             </ListItem>
           ))}
@@ -221,12 +211,12 @@ const Header: React.FC = () => {
           {!isAuthenticated() ? (
             <ListItem onClick={() => handleMenuItemClick("/login")} sx={itemBase}>
               <ListItemIcon sx={iconBase}><LoginIcon /></ListItemIcon>
-              <ListItemText primary="Connexion" primaryTypographyProps={{ fontSize: "0.875rem", fontWeight: 500 }} />
+              <ListItemText primary="Connexion" primaryTypographyProps={{ fontSize: "1rem", fontWeight: 600 }} />
             </ListItem>
           ) : (
-            <ListItem onClick={handleLogout} sx={{ ...itemBase, color: "#ef4444", "&:hover": { backgroundColor: "rgba(239,68,68,0.1)", color: "#ef4444", borderLeft: "3px solid #ef4444", paddingLeft: "9px" } }}>
-              <ListItemIcon sx={{ color: "inherit", minWidth: 36 }}><ExitToAppIcon /></ListItemIcon>
-              <ListItemText primary="Déconnexion" primaryTypographyProps={{ fontSize: "0.875rem", fontWeight: 500 }} />
+            <ListItem onClick={handleLogout} sx={{ ...itemBase, color: "#ef4444", "&:hover": { backgroundColor: "rgba(239,68,68,0.15)", color: "#ef4444" } }}>
+              <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}><ExitToAppIcon /></ListItemIcon>
+              <ListItemText primary="Déconnexion" primaryTypographyProps={{ fontSize: "1rem", fontWeight: 600 }} />
             </ListItem>
           )}
         </List>
@@ -248,7 +238,7 @@ const Header: React.FC = () => {
           }}>
             18+
           </div>
-          <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.3)", fontSize: "0.7rem", lineHeight: 1.4 }}>
+          <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.75)", fontSize: "0.82rem", lineHeight: 1.5 }}>
             Jeu réservé aux personnes majeures. Jouer peut créer une dépendance.
           </Typography>
         </div>
