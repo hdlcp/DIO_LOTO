@@ -190,11 +190,11 @@ a {
   color: var(--color-primary-light);
   text-decoration: none;
   transition: color var(--transition-fast);
+  outline: none;
 }
 
-a:hover {
-  color: var(--color-primary);
-}
+a:hover { color: var(--color-primary); }
+a:focus, a:active { outline: none; }
 
 /* ============================================
    COMPOSANTS GLOBAUX

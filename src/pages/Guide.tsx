@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/Guide.css"; 
+import { FaBookOpen } from "react-icons/fa";
+import "../styles/Guide.css";
 
 const Guide = () => {
   
@@ -18,7 +19,7 @@ const Guide = () => {
       {/* Bouton Retour */}
       <Link to="/" className="back-button">‹ Retour</Link>
 
-      <h2 className="guide-title">📘 Guide</h2>
+      <h2 className="guide-title"><FaBookOpen size={28} style={{ marginRight: 10, verticalAlign: 'middle' }} />Guide</h2>
 
       {/* Section: Informations */}
       <div className="guide-section">

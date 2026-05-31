@@ -30,6 +30,8 @@
   background: rgb(163, 89, 160);
   padding: 10px 28px;
   border-radius: 8px;
+  border: none;
+  outline: none;
   transition: background 0.2s ease;
   text-align: center;
 }
