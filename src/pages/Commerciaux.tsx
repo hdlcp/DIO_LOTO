@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { useNavigate } from "react-router-dom";
+import { FaLock, FaUserCircle, FaWhatsapp, FaEye, FaEyeSlash, FaTimes, FaCopy, FaCheck, FaExternalLinkAlt } from "react-icons/fa";
 import { useAuth } from "../AuthContext";
 import { resellerService, Reseller } from "../services/resellerService";
-import "../styles/Commerciaux.css"; // 🔹 Import du CSS
+import "../styles/Commerciaux.css";
+
+const countryFlags: { [key: string]: string } = {
+  "Benin": "🇧🇯",
+  "Bénin": "🇧🇯",
+  "Togo": "🇹🇬",
+  "Ghana": "🇬🇭",
+  "Côte d'Ivoire": "🇨🇮",
+  "Cote d'Ivoire": "🇨🇮",
+  "France": "🇫🇷",
+};
+
+const getFlag = (pays: string) =>
+  countryFlags[pays] || countryFlags[Object.keys(countryFlags).find(k => pays.toLowerCase().includes(k.toLowerCase())) || ""] || "🌍";
 
 const Commerciaux: React.FC = () => {
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [resellers, setResellers] = useState<Reseller[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [shownNumber, setShownNumber] = useState<number | null>(null);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+
+  const handleCopy = (number: string, id: number) => {
+    navigator.clipboard.writeText(number.replace(/\s/g, ""));
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   useEffect(() => {
     const fetchResellers = async () => {
@@ -19,91 +41,135 @@ const Commerciaux: React.FC = () => {
         const data = await resellerService.getAllResellers(token);
         setResellers(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Erreur lors du chargement des revendeurs");
+        setError(err instanceof Error ? err.message : "Erreur lors du chargement");
       } finally {
         setLoading(false);
       }
     };
-
     fetchResellers();
   }, [token]);
 
-  // Fonction pour gérer l'ouverture de WhatsApp
-  const handleWhatsAppClick = (whatsappNumber: string) => {
-    const cleanNumber = whatsappNumber.replace(/\s/g, "");
-    const whatsappUrl = `https://wa.me/${cleanNumber}`;
-    
-    // Pour les applications mobiles, on utilise window.location.href
-    window.location.href = whatsappUrl;
-  };
-
-  // Grouper les revendeurs par pays
   const resellersByCountry = resellers.reduce((acc, reseller) => {
-    if (!acc[reseller.pays]) {
-      acc[reseller.pays] = [];
-    }
+    if (!acc[reseller.pays]) acc[reseller.pays] = [];
     acc[reseller.pays].push(reseller);
     return acc;
   }, {} as { [key: string]: Reseller[] });
 
+  if (!token) {
+    return (
+      <div className="commerciaux-page">
+        <div className="commerciaux-auth-card">
+          <FaLock size={36} color="rgb(163, 89, 160)" style={{ marginBottom: 14 }} />
+          <h2 className="commerciaux-auth-title">Accès réservé</h2>
+          <p className="commerciaux-auth-text">Connectez-vous pour consulter nos revendeurs.</p>
+          <button className="commerciaux-auth-btn" onClick={() => navigate("/login")}>
+            <FaUserCircle size={15} style={{ marginRight: 7 }} />
+            Se connecter
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
-    return <div className="container">Chargement...</div>;
+    return (
+      <div className="commerciaux-page">
+        <div className="commerciaux-loading">
+          <div className="commerciaux-spinner" />
+          <p>Chargement...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="container error-message">{error}</div>;
+    return (
+      <div className="commerciaux-page">
+        <div className="commerciaux-auth-card">
+          <p style={{ color: '#ef4444' }}>{error}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container">
-      <motion.div
-        className="title"
-        initial={{ opacity: 0, y: -20 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.5 }}
-      >
-        <p>Contactez un commercial pour recharger votre compte via WhatsApp 📲</p>
+    <div className="commerciaux-page">
+
+      <motion.div className="commerciaux-header"
+        initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <h2 className="commerciaux-title">Nos Revendeurs</h2>
+        <p className="commerciaux-subtitle">Contactez un revendeur pour recharger votre compte</p>
       </motion.div>
 
-      {Object.entries(resellersByCountry).map(([country, countryResellers], index) => (
-        <motion.div
-          key={country}
-          className="region-card"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: index * 0.1 }}
-        >
-          <h3 className="region-title">{country}</h3>
-          <TableContainer component={Paper} className="table-container">
-            <Table>
-              <TableHead className="table-head">
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  <TableCell>Revendeur</TableCell>
-                  <TableCell>Contact</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {countryResellers.map((reseller, idx) => (
-                  <TableRow key={reseller.id} className="table-row">
-                    <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{reseller.pseudo}</TableCell>
-                    <TableCell>
-                      <div
-                        onClick={() => handleWhatsAppClick(reseller.whatsapp)}
-                        className="contact-link"
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <WhatsAppIcon className="whatsapp-icon" /> {reseller.whatsapp}
+      <div className="commerciaux-content">
+        {Object.entries(resellersByCountry).map(([country, list], index) => (
+          <motion.div key={country} className="commerciaux-country-section"
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.08 }}>
+
+            <div className="commerciaux-country-title">
+              <span>{getFlag(country)}</span>
+              <span>{country}</span>
+              <span className="commerciaux-country-count">{list.length}</span>
+            </div>
+
+            <div className="commerciaux-list">
+              {list.map((reseller) => (
+                <div key={reseller.id} className="reseller-row">
+                  <span className="reseller-name">{reseller.pseudo}</span>
+
+                  <div className="reseller-actions">
+                    <button
+                      className="reseller-wa-btn"
+                      onClick={() => window.location.href = `https://wa.me/${reseller.whatsapp.replace(/\s/g, "")}`}
+                    >
+                      <FaWhatsapp size={15} />
+                      <span>WhatsApp</span>
+                    </button>
+
+                    <button
+                      className="reseller-num-btn"
+                      onClick={() => setShownNumber(shownNumber === reseller.id ? null : reseller.id)}
+                      title="Voir le numéro"
+                    >
+                      {shownNumber === reseller.id ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+                    </button>
+                  </div>
+
+                  {shownNumber === reseller.id && (
+                    <div className="reseller-number-popup">
+                      <span className="reseller-number-text">{reseller.whatsapp}</span>
+                      <div className="reseller-popup-actions">
+                        <button
+                          className="reseller-popup-btn reseller-popup-copy"
+                          onClick={() => handleCopy(reseller.whatsapp, reseller.id)}
+                          title="Copier"
+                        >
+                          {copiedId === reseller.id ? <FaCheck size={12} /> : <FaCopy size={12} />}
+                        </button>
+                        <button
+                          className="reseller-popup-btn reseller-popup-link"
+                          onClick={() => window.location.href = `https://wa.me/${reseller.whatsapp.replace(/\s/g, "")}`}
+                          title="Ouvrir WhatsApp"
+                        >
+                          <FaExternalLinkAlt size={11} />
+                        </button>
+                        <button
+                          className="reseller-popup-btn reseller-popup-close"
+                          onClick={() => setShownNumber(null)}
+                          title="Fermer"
+                        >
+                          <FaTimes size={11} />
+                        </button>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </motion.div>
-      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };
