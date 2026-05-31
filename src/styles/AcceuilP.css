@@ -1,0 +1,164 @@
+/* ============================================
+   ACCUEIL AUTHENTIFIÉ
+   ============================================ */
+
+.accueil-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center / cover;
+  position: relative;
+  padding: 48px 20px 60px;
+}
+
+.accueil-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.80);
+  z-index: 0;
+}
+
+/* ============================================
+   BIENVENUE
+   ============================================ */
+
+.accueil-welcome {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.accueil-welcome-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.accueil-welcome-sub {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ============================================
+   CARTES D'ACTION
+   ============================================ */
+
+.accueil-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.accueil-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-radius: 14px;
+  padding: 20px 22px;
+  border: 1px solid rgba(163, 89, 160, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+.accueil-card--primary {
+  background: rgba(163, 89, 160, 0.18);
+  border-color: rgba(163, 89, 160, 0.45);
+}
+
+.accueil-card:hover {
+  background: rgba(163, 89, 160, 0.15);
+  border-color: rgba(163, 89, 160, 0.5);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+}
+
+/* Icône */
+.accueil-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(163, 89, 160, 0.25);
+  color: rgb(163, 89, 160);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.accueil-card--primary .accueil-card-icon {
+  background: rgb(163, 89, 160);
+  color: white;
+}
+
+/* Corps */
+.accueil-card-body {
+  flex: 1;
+}
+
+.accueil-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 4px 0;
+}
+
+.accueil-card-desc {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Bouton */
+.accueil-card-btn {
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.accueil-card-btn--primary {
+  background: rgb(163, 89, 160);
+  color: white;
+}
+
+.accueil-card-btn--primary:hover {
+  background: rgb(130, 65, 128);
+  color: white;
+}
+
+.accueil-card-btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.accueil-card-btn--secondary:hover {
+  background: rgba(163, 89, 160, 0.25);
+  color: white;
+  border-color: rgba(163, 89, 160, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .accueil-welcome-title { font-size: 1.6rem; }
+  .accueil-card { flex-wrap: wrap; }
+  .accueil-card-btn { width: 100%; text-align: center; }
+}

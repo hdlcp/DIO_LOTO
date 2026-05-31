@@ -1,76 +1,80 @@
-import { Button } from "@mui/material"; // Boutons Material UI
-import { motion } from "framer-motion"; // Animation Framer Motion
-import "../styles/Games.css"; // Import du fichier CSS
-import retirer from "../assets/retirer.png";
-import recharger from "../assets/recharger.png";
-import rejouer from "../assets/rejouer.png";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { FaPlay, FaWallet, FaArrowDown } from "react-icons/fa";
+import { useAuth } from "../AuthContext";
+import "../styles/AcceuilP.css";
+
+const actions = [
+  {
+    icon: <FaPlay size={28} />,
+    title: "Jouer",
+    desc: "Choisissez un jeu et tentez votre chance",
+    label: "Jouer maintenant",
+    to: "/country",
+    variant: "primary",
+  },
+  {
+    icon: <FaWallet size={28} />,
+    title: "Recharger",
+    desc: "Rechargez votre compte via un revendeur",
+    label: "Recharger",
+    to: "/commerciaux",
+    variant: "secondary",
+  },
+  {
+    icon: <FaArrowDown size={28} />,
+    title: "Retirer",
+    desc: "Retirez vos gains sur votre mobile money",
+    label: "Retirer",
+    to: "/withdrawal",
+    variant: "secondary",
+  },
+];
 
 const AcceuilP = () => {
+  const { user } = useAuth();
+
   return (
-    <div className="games-container">
-     
-      <motion.div 
-        className="games-header"
+    <div className="accueil-page">
+
+      {/* Bienvenue */}
+      <motion.div
+        className="accueil-welcome"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
       >
-        <h2>Rejoignez des milliers d'autres joueurs dans la course et démarquez-vous ! !</h2>
-        <Link to="" className="click-link"><p>Confirmez votre compte ici</p></Link>
-        
+        <h2 className="accueil-welcome-title">
+          Bienvenue{user?.firstName ? `, ${user.firstName}` : ""} 👋
+        </h2>
+        <p className="accueil-welcome-sub">Que souhaitez-vous faire aujourd'hui ?</p>
       </motion.div>
 
-      <div className="games-grid">
-        {/* Carte Loto */}
-        <motion.div 
-          className="game-card"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img src={recharger} alt="Loto" className="game-icon" />
-          <h3><b>Recharger votre compte</b></h3>
-          <Link to="/commerciaux" className="">
-            <Button variant="contained" className="play-button">
-              RECHARGER
-            </Button>
-          </Link>
-        </motion.div>
-
-        {/* Carte Loto */}
-        <motion.div 
-          className="game-card"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img src={rejouer} alt="Loto" className="game-icon" />
-          <h3><b>Rejouer une partie</b></h3>
-          <Link to="/games" className="">
-            <Button variant="contained" className="play-button">
-              JOUER
-            </Button>
-          </Link>
-        </motion.div>
-
-        {/* Carte Loto */}
-        <motion.div 
-          className="game-card"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          <img src={retirer} alt="Loto" className="game-icon" />
-          <h3><b>Retirer mon argent</b></h3>
-          <Link to="/withdrawal" className="">
-            <Button variant="contained" className="play-button">
-              RETIRER
-            </Button>
-          </Link>
-        </motion.div>
-
-      
+      {/* Actions */}
+      <div className="accueil-actions">
+        {actions.map((action, i) => (
+          <motion.div
+            key={action.title}
+            className={`accueil-card accueil-card--${action.variant}`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: i * 0.08 }}
+            whileHover={{ y: -4 }}
+          >
+            <div className="accueil-card-icon">{action.icon}</div>
+            <div className="accueil-card-body">
+              <h3 className="accueil-card-title">{action.title}</h3>
+              <p className="accueil-card-desc">{action.desc}</p>
+            </div>
+            <Link to={action.to} className={`accueil-card-btn accueil-card-btn--${action.variant}`}>
+              {action.label}
+            </Link>
+          </motion.div>
+        ))}
       </div>
+
     </div>
   );
 };
 
-export default AcceuilP ;
+export default AcceuilP;

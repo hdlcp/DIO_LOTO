@@ -138,7 +138,7 @@ const Header: React.FC = () => {
                 onClose={handleProfileMenuClose}
                 PaperProps={{
                   sx: {
-                    backgroundColor: "rgb(65, 105, 225)",
+                    backgroundColor: "rgba(10, 15, 50, 0.97)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: "10px",
                     minWidth: 200,

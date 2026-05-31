@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Button } from "@mui/material";
 import "../styles/Dashboard.css";
 import { useAuth } from "../AuthContext";
 import { getUserNotifications } from "../services/notificationService";
-import { FaWallet, FaTrophy, FaExchangeAlt, FaArrowDown, FaTicketAlt, FaHistory, FaPlay, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaWallet, FaTrophy, FaExchangeAlt, FaArrowDown,
+  FaTicketAlt, FaHistory, FaPlay, FaShoppingCart, FaBell
+} from "react-icons/fa";
 
-// Interface pour les données utilisateur
 interface UserData {
   id: number;
   uniqueUserId: string;
@@ -15,182 +16,151 @@ interface UserData {
   firstName: string;
   email: string;
   solde: number;
-  bonus: number; // Solde bonus
+  bonus: number;
   gain: number;
   created: string;
   updatedAt: string;
 }
+
+const actions = [
+  { icon: <FaPlay size={18} />,         label: "Jouer",                  to: "/games",              primary: true  },
+  { icon: <FaExchangeAlt size={18} />,  label: "Recharger avec gain",    to: "/recharger-with-gain" },
+  { icon: <FaArrowDown size={18} />,    label: "Retrait",                to: "/withdrawal"          },
+  { icon: <FaTicketAlt size={18} />,    label: "Mes tickets",            to: "/tickets"             },
+  { icon: <FaShoppingCart size={18} />, label: "Panier",                 to: "/panier"              },
+  { icon: <FaHistory size={18} />,      label: "Historique retraits",    to: "/historyWithdrawal"   },
+  { icon: <FaBell size={18} />,         label: "Notifications",          to: "/notifications"       },
+];
+
+const getGreeting = (): string => {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12)  return "Bonjour";
+  if (h >= 12 && h < 18) return "Bon après-midi";
+  if (h >= 18 && h < 22) return "Bonsoir";
+  return "Bonne nuit";
+};
 
 const Dashboard: React.FC = () => {
   const { token, logout, refreshUserData } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    // Charger les informations utilisateur depuis l'API
+    if (!token) { navigate("/login"); return; }
     const fetchUserData = async () => {
       try {
         const freshUserData = await refreshUserData();
-        if (freshUserData) {
-          setUserData(freshUserData);
-        } else {
-          throw new Error('Impossible de récupérer les données utilisateur');
-        }
-      } catch (err) {
-        setError("Impossible de charger les informations utilisateur");
-        console.error("Erreur lors du chargement des données:", err);
+        if (freshUserData) setUserData(freshUserData);
+        else throw new Error("Impossible de récupérer les données");
+      } catch {
+        setError("Impossible de charger vos informations");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [token, navigate, location.pathname, refreshUserData]);
 
   useEffect(() => {
-    // Charger les notifications utilisateur
     if (userData?.uniqueUserId && token) {
       getUserNotifications(userData.uniqueUserId, token)
-        .then(res => setNotifications((res.data as { notifications: any[] }).notifications.slice(0, 5)))
+        .then(res => setNotifications((res.data as { notifications: any[] }).notifications.slice(0, 4)))
         .catch(console.error);
     }
   }, [userData, token]);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const handleLogout = () => { logout(); navigate("/login"); };
 
-  if (loading) {
-    return (
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-header">Chargement...</div>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="dash-page">
+      <div className="dash-loading"><div className="dash-spinner" /><p>Chargement...</p></div>
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="dashboard-container">
-        <div className="dashboard-content">
-          <div className="dashboard-header">Erreur</div>
-          <div className="error-message">{error}</div>
-          <Button variant="contained" onClick={handleLogout} className="custom-button">
-            Déconnexion
-          </Button>
-        </div>
+  if (error) return (
+    <div className="dash-page">
+      <div className="dash-error">
+        <p>{error}</p>
+        <button className="dash-logout-btn" onClick={handleLogout}>Se déconnecter</button>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-content">
-        {/* Header avec animation */}
-        <motion.div
-          className="dashboard-header"
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          Bienvenue {userData?.firstName} {userData?.lastName}
+    <div className="dash-page">
+      <div className="dash-content">
+
+        {/* Bienvenue */}
+        <motion.div className="dash-welcome"
+          initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+          <span className="dash-welcome-name">{getGreeting()}, {userData?.firstName} {userData?.lastName}</span>
+          <span className="dash-welcome-email">{userData?.email}</span>
         </motion.div>
 
-        {/* Balance Section avec nouveau design */}
-        <div className="balance-section">
-          <motion.div
-            className="balance-box main-balance"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <h3><FaWallet size={12} style={{marginRight: 6}} />Solde principale</h3>
-            <p>{userData?.solde?.toLocaleString() || 0} XOF</p>
+        {/* Balances */}
+        <div className="dash-balances">
+          <motion.div className="dash-balance-card"
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.35 }}>
+            <div className="dash-balance-icon"><FaWallet size={20} /></div>
+            <div className="dash-balance-info">
+              <span className="dash-balance-label">Solde</span>
+              <span className="dash-balance-amount">{userData?.solde?.toLocaleString() || 0} <small>XOF</small></span>
+            </div>
           </motion.div>
-          <motion.div
-            className="balance-box gains-balance"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
-            <h3><FaTrophy size={12} style={{marginRight: 6}} />Gains</h3>
-            <p>{userData?.gain?.toLocaleString() || 0} XOF</p>
+
+          <motion.div className="dash-balance-card dash-balance-card--gains"
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.35, delay: 0.08 }}>
+            <div className="dash-balance-icon dash-balance-icon--gains"><FaTrophy size={20} /></div>
+            <div className="dash-balance-info">
+              <span className="dash-balance-label">Gains</span>
+              <span className="dash-balance-amount">{userData?.gain?.toLocaleString() || 0} <small>XOF</small></span>
+            </div>
           </motion.div>
-          {/* Section bonus - Journée bonus terminée le 01/03/2025
-          <motion.div
-            className="balance-box bonus-balance"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-          >
-            <h3>🎁 Bonus 10%</h3>
-            <p>{userData?.bonus?.toLocaleString() || 0} XOF</p>
-            <small style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.75rem', marginTop: '5px', display: 'block' }}>
-              Valable le 01/03/2025 de 00h00 à 23h59
-            </small>
-          </motion.div>
-          */}
         </div>
 
-        {/* Boutons avec Material UI */}
-        <div className="buttons-container">
-          <Link to="/recharger-with-gain">
-            <Button variant="contained" className="custom-button"><FaExchangeAlt size={16} /><span>RECHARGER AVEC GAIN</span></Button>
-          </Link>
-          <Link to="/withdrawal">
-            <Button variant="contained" className="custom-button"><FaArrowDown size={16} /><span>RETRAIT</span></Button>
-          </Link>
-          <Link to="/tickets">
-            <Button variant="contained" className="custom-button"><FaTicketAlt size={16} /><span>TICKETS</span></Button>
-          </Link>
-          <Link to="/historyWithdrawal">
-            <Button variant="contained" className="custom-button"><FaHistory size={16} /><span>HISTORIQUE RETRAITS</span></Button>
-          </Link>
-          <Link to="/games">
-            <Button variant="contained" className="custom-button game-btn"><FaPlay size={16} /><span>JOUER</span></Button>
-          </Link>
-          <Link to="/panier">
-            <Button variant="contained" className="custom-button"><FaShoppingCart size={16} /><span>PANIER</span></Button>
-          </Link>
-          <Button variant="contained" onClick={handleLogout} className="custom-button danger-btn"><FaSignOutAlt size={16} /><span>DÉCONNEXION</span></Button>
+        {/* Actions */}
+        <div className="dash-section-title">Actions rapides</div>
+        <div className="dash-actions">
+          {actions.map((action, i) => (
+            <motion.div key={action.to}
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.05 }}>
+              <Link to={action.to} className={`dash-action-btn${action.primary ? " dash-action-btn--primary" : ""}`}>
+                <span className="dash-action-icon">{action.icon}</span>
+                <span className="dash-action-label">{action.label}</span>
+              </Link>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Aperçu Notifications */}
-        <div className="transactions-container">
-          <div className="notifications-list">
-            {notifications.length === 0 ? (
-              <div className="no-notification">Aucune notification</div>
-            ) : notifications.map((notif) => (
-              <div
-                key={notif.id}
-                className={`notification-card${notif.isRead ? ' read' : ' unread'}`}
-                style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/notifications')}
-              >
-                <div className="notif-header">
-                  <span className="notif-title">{notif.title}</span>
-                  <span className="notif-date">{new Date(notif.created).toLocaleString()}</span>
+
+        {/* Notifications */}
+        <div className="dash-notifs">
+          <div className="dash-section-title">Notifications récentes</div>
+          {notifications.length === 0 ? (
+            <div className="dash-notif-empty">Aucune notification pour le moment</div>
+          ) : (
+            <>
+              {notifications.map((notif) => (
+                <div key={notif.id}
+                  className={`dash-notif-card${notif.isRead ? "" : " dash-notif-card--unread"}`}
+                  onClick={() => navigate("/notifications")}>
+                  <span className="dash-notif-title">{notif.title}</span>
+                  <span className="dash-notif-msg">
+                    {notif.message.length > 60 ? notif.message.slice(0, 60) + "…" : notif.message}
+                  </span>
+                  <span className="dash-notif-date">{new Date(notif.created).toLocaleDateString()}</span>
                 </div>
-                <div className="notif-message">
-                  {notif.message.length > 40 ? notif.message.slice(0, 40) + '...' : notif.message}
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="view-more" onClick={() => navigate("/notifications")}>Voir plus...</p>
+              ))}
+              <span className="dash-notif-more" onClick={() => navigate("/notifications")}>Voir toutes les notifications</span>
+            </>
+          )}
         </div>
+
       </div>
     </div>
   );
