@@ -88,11 +88,11 @@
 
 /* Carte ticket */
 .ticket-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(163, 89, 160, 0.7) 0%, rgba(65, 105, 225, 0.7) 100%);
+  border: 1px solid rgba(163, 89, 160, 0.4);
   border-radius: var(--radius-xl);
   padding: var(--space-6) var(--space-5);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 8px 32px rgba(80, 40, 120, 0.3);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   display: flex;
   flex-direction: column;
@@ -100,6 +100,7 @@
   min-height: 240px;
   overflow: hidden;
   position: relative;
+  backdrop-filter: blur(8px);
 }
 
 

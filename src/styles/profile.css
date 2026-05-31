@@ -26,8 +26,8 @@
 }
 
 .profil-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(163, 89, 160, 0.35);
   border-radius: var(--radius-xl);
   padding: var(--space-8);
   margin-bottom: var(--space-5);
@@ -93,7 +93,7 @@
 
 /* Bouton enregistrer */
 .save-btn {
-  background: var(--gradient-primary);
+  background: rgb(163, 89, 160);
   color: var(--text-primary);
   border: none;
   padding: var(--space-3) var(--space-6);

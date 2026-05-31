@@ -21,7 +21,7 @@ import { useAuth } from "../AuthContext";
 const DRAWER_WIDTH = 280;
 
 const drawerPaper = {
-  backgroundColor: "rgb(20, 20, 45)",
+  backgroundColor: "rgb(65, 105, 225)",
   borderRight: "1px solid rgba(255,255,255,0.07)",
   width: DRAWER_WIDTH,
   display: "flex",
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
         position="sticky"
         elevation={0}
         sx={{
-          background: "rgb(20, 20, 45)",
+          background: "rgb(65, 105, 225)",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
           boxShadow: "none",
           "&::after": {
@@ -148,7 +148,7 @@ const Header: React.FC = () => {
                 onClose={handleProfileMenuClose}
                 PaperProps={{
                   sx: {
-                    backgroundColor: "rgb(20, 20, 45)",
+                    backgroundColor: "rgb(65, 105, 225)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: "10px",
                     minWidth: 200,

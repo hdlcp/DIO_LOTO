@@ -32,13 +32,13 @@
 .auth-box {
   position: relative;
   z-index: var(--z-above);
-  background: var(--bg-card);
-  border: 1px solid var(--color-primary-border);
+  background: rgba(0, 0, 0, 0.82);
+  border: 1px solid rgb(163, 89, 160);
   border-radius: var(--radius-2xl);
   padding: var(--space-10) var(--space-8);
   width: 100%;
   max-width: 420px;
-  box-shadow: var(--shadow-lg), 0 0 40px rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 20px rgba(163, 89, 160, 0.25);
   text-align: center;
 }
 
@@ -47,9 +47,8 @@
 .auth-title {
   font-size: var(--text-3xl);
   font-weight: var(--font-extrabold);
-  color: var(--text-primary);
+  color: rgb(163, 89, 160);
   margin-bottom: var(--space-3);
-  letter-spacing: -0.5px;
 }
 
 /* Sous-texte descriptif */
@@ -182,8 +181,8 @@
 .auth-button {
   width: 100%;
   padding: var(--space-4);
-  background: var(--gradient-primary);
-  color: var(--text-primary);
+  background: rgb(163, 89, 160);
+  color: white;
   font-size: var(--text-base);
   font-weight: var(--font-bold);
   font-family: var(--font-family);
