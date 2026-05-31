@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Button } from "@mui/material";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { gameService } from "../services/gameService";
@@ -151,16 +150,11 @@ const ChoicePlay = () => {
                   <p className="game-description">{game.description}</p>
                   <h3 className="game-time">{getGameTime(game.nom)} H</h3>
                 </div>
-                <Link 
+                <Link
                   to={`/loto/bet?country=${country}&time=${getGameTime(game.nom)}&gameName=${game.nom}`}
-                  className="play-link"
+                  className="play-button"
                 >
-                  <Button 
-                    variant="contained" 
-                    className="play-button"
-                  >
-                    JOUER
-                  </Button>
+                  JOUER
                 </Link>
               </motion.div>
             ))

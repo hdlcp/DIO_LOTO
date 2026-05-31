@@ -1,27 +1,23 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaTicketAlt } from "react-icons/fa";
+import { FaShoppingCart, FaCheck, FaTrash } from "react-icons/fa";
 import { useAuth } from "../AuthContext";
 import ticketService, { Ticket } from "../services/ticketService";
 import { formatGainsForDisplay } from "../utils/formatUtils";
 import "../styles/Tickets.css";
-import "../styles/BetCouponDisplay.css";
 
-// Fonction pour mapper les statuts API vers un affichage user-friendly
 const getStatusDisplay = (apiStatus: string) => {
   switch (apiStatus.toLowerCase()) {
-    case 'validé':
-      return { text: 'GAGNÉ', className: 'status-won' };
-    case 'invalidé':
-      return { text: 'PERDU', className: 'status-lost' };
-    case 'attribué':
-      return { text: 'ATTRIBUÉ', className: 'status-attributed' };
-    case 'en attente':
-      return { text: 'EN ATTENTE', className: 'status-pending' };
-    default:
-      return { text: apiStatus.toUpperCase(), className: 'status-default' };
+    case 'validé':      return { text: 'Gagné',      className: 'status-won' };
+    case 'invalidé':    return { text: 'Perdu',      className: 'status-lost' };
+    case 'attribué':    return { text: 'Attribué',   className: 'status-attributed' };
+    case 'en attente':  return { text: 'En attente', className: 'status-pending' };
+    default:            return { text: apiStatus,    className: 'status-default' };
   }
 };
+
+const parseNumbers = (str: string): string[] =>
+  str.split(/[,\s\-\|]+/).map(n => n.trim()).filter(n => n.length > 0 && n.length <= 3);
 
 const Panier = () => {
   const { user, token } = useAuth();
@@ -29,167 +25,123 @@ const Panier = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const reload = async () => {
+    if (user?.uniqueUserId && token) {
+      const r = await ticketService.getUserCartTickets(user.uniqueUserId, token);
+      setTickets(r.tickets);
+    }
+  };
+
   useEffect(() => {
-    const fetchTickets = async () => {
-      if (!user?.uniqueUserId || !token) {
-        setError("Vous devez être connecté pour voir vos tickets");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
-        setTickets(response.tickets);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Erreur lors du chargement des tickets");
-      } finally {
-        setLoading(false);
-      }
+    const fetch = async () => {
+      if (!user?.uniqueUserId || !token) { setError("Connectez-vous pour voir votre panier"); setLoading(false); return; }
+      try { await reload(); }
+      catch (err) { setError(err instanceof Error ? err.message : "Erreur de chargement"); }
+      finally { setLoading(false); }
     };
-
-    fetchTickets();
+    fetch();
   }, [user, token]);
 
-  // Nouvelle fonction pour valider un ticket
-  const handleValidate = async (ticketId: number) => {
+  const handleValidate = async (id: number) => {
     if (!token) return;
     setLoading(true);
-    setError(null);
     try {
-      const response = await ticketService.validateTicket(ticketId, token);
-
-      // ✅ CORRECTION : Vérifier si c'est un succès basé sur la présence du ticket
-      if (response.ticket) {
-        // Recharger la liste après validation réussie
-        if (user?.uniqueUserId) {
-          const cartResponse = await ticketService.getUserCartTickets(user.uniqueUserId, token);
-          setTickets(cartResponse.tickets);
-        }
-      } else {
-        // Si pas de ticket dans la réponse, considérer comme erreur
-        throw new Error(response.message || 'Erreur lors de la validation du ticket');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors de la validation du ticket");
-    } finally {
-      setLoading(false);
-    }
+      const r = await ticketService.validateTicket(id, token);
+      if (r.ticket) await reload();
+      else throw new Error(r.message);
+    } catch (err) { setError(err instanceof Error ? err.message : "Erreur validation"); }
+    finally { setLoading(false); }
   };
 
-  // Nouvelle fonction pour supprimer un ticket
-  const handleDelete = async (ticketId: number) => {
-    if (!token) return;
-    // Confirmation avant suppression
-    const confirmDelete = window.confirm("Voulez-vous vraiment supprimer ce ticket du panier ?");
-    if (!confirmDelete) return;
+  const handleDelete = async (id: number) => {
+    if (!token || !window.confirm("Supprimer ce ticket du panier ?")) return;
     setLoading(true);
-    setError(null);
     try {
-      await ticketService.deleteTicket(ticketId, token);
-      // Recharger la liste après suppression
-      if (user?.uniqueUserId) {
-        const response = await ticketService.getUserCartTickets(user.uniqueUserId, token);
-        setTickets(response.tickets);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors de la suppression du ticket");
-    } finally {
-      setLoading(false);
-    }
+      await ticketService.deleteTicket(id, token);
+      await reload();
+    } catch (err) { setError(err instanceof Error ? err.message : "Erreur suppression"); }
+    finally { setLoading(false); }
   };
 
-  if (loading) {
-    return (
-      <div className="tickets-container">
-        <Link to="/dashboard" className="back-link">‹ Retour</Link>
-        <div className="loading">Chargement des tickets...</div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="tickets-container">
+      <Link to="/dashboard" className="back-link">‹ Retour</Link>
+      <div className="loading">Chargement du panier...</div>
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="tickets-container">
-        <Link to="/dashboard" className="back-link">‹ Retour</Link>
-        <div className="error-message">{error}</div>
-      </div>
-    );
-  }
+  if (error) return (
+    <div className="tickets-container">
+      <Link to="/dashboard" className="back-link">‹ Retour</Link>
+      <div className="error-message">{error}</div>
+    </div>
+  );
 
   return (
     <div className="tickets-container">
       <Link to="/dashboard" className="back-link">‹ Retour</Link>
-      
+
       <div className="tickets-header">
         <div className="tickets-info">
           <span className="ticket-number">{tickets.length}</span>
           <span className="ticket-text">Panier</span>
-          <FaTicketAlt className="ticket-icon" />
+          <FaShoppingCart className="ticket-icon" />
         </div>
       </div>
 
       <div className="tickets-list">
         {tickets.length === 0 ? (
-          <div className="no-tickets">Aucun ticket trouvé</div>
-        ) : (
-          tickets.map((ticket) => (
-            <div key={ticket.id} className="ticket-card">
-              <div className="ticket-header">
-                <div className="ticket-header-left">
-                  <span className="ticket-number-display">🎫 {ticket.numeroTicket}</span>
-                </div>
-                <div className="ticket-header-center">
-                  <span className="ticket-game">{ticket.nomJeu} - {new Date(ticket.created).toLocaleDateString()} {new Date(ticket.created).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
+          <div className="no-tickets">Votre panier est vide</div>
+        ) : tickets.map(ticket => {
+          const status = getStatusDisplay(ticket.statut);
+          const nums = parseNumbers(ticket.numerosJoues);
+          const date = new Date(ticket.created);
+
+          return (
+            <div key={ticket.id} className="tcard">
+              <div className="tcard-header">
+                <span className="tcard-game">{ticket.nomJeu.toUpperCase()}</span>
+                <span className={`tcard-status ${status.className}`}>{status.text}</span>
               </div>
-              <div className="ticket-details">
-                <div className="ticket-row">
-                  <span className="label">Numéros :</span>
-                  <span className="value">{ticket.numerosJoues}</span>
+
+              <div className="tcard-meta">
+                <span>{date.toLocaleDateString('fr-FR')} · {date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                <span>{ticket.typeJeu} · {ticket.formule}</span>
+              </div>
+
+              {nums.length > 0 && nums.length <= 20 && (
+                <div className="tcard-numbers">
+                  {nums.map((n, i) => <span key={i} className="tcard-ball">{n}</span>)}
                 </div>
-                <div className="ticket-row">
-                  <span className="label">Formule :</span>
-                  <span className="value">{ticket.formule}</span>
+              )}
+
+              <div className="tcard-amounts">
+                <div className="tcard-amount-box">
+                  <span className="tcard-amount-label">Mise</span>
+                  <span className="tcard-amount-value">{ticket.mise.toLocaleString()} <small>XOF</small></span>
                 </div>
-                <div className="ticket-row">
-                  <span className="label">Type :</span>
-                  <span className="value">{ticket.typeJeu}</span>
-                </div>
-                <div className="ticket-row">
-                  <span className="label">Mise :</span>
-                  <span className="value">{ticket.mise} FCFA</span>
-                </div>
-                <div className="ticket-row">
-                  <span className="label">Gains :</span>
-                  <span className="value">{formatGainsForDisplay(ticket.gains)}</span>
-                </div>
-                <div className="ticket-status">
-                  <span className="label">Statut:</span>
-                  <span className={`value ${getStatusDisplay(ticket.statut).className}`}>
-                    {getStatusDisplay(ticket.statut).text}
+                <div className="tcard-divider" />
+                <div className="tcard-amount-box tcard-amount-box--gains">
+                  <span className="tcard-amount-label">Gains potentiels</span>
+                  <span className="tcard-amount-value tcard-amount-value--gains">
+                    {formatGainsForDisplay(ticket.gains)} <small>XOF</small>
                   </span>
                 </div>
-                {/* Boutons dynamiques pour tickets non validés */}
-                {ticket.statut !== "validé" && (
-                  <div className="ticket-actions" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <button
-                      className="validate-button"
-                      onClick={() => handleValidate(ticket.id)}
-                    >
-                      Valider
-                    </button>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDelete(ticket.id)}
-                    >
-                      Supprimer
-                    </button>
-                  </div>
-                )}
               </div>
+
+              {ticket.statut !== 'validé' && (
+                <div className="tcard-actions">
+                  <button className="tcard-btn tcard-btn--validate" onClick={() => handleValidate(ticket.id)}>
+                    <FaCheck size={13} /><span>Valider</span>
+                  </button>
+                  <button className="tcard-btn tcard-btn--delete" onClick={() => handleDelete(ticket.id)}>
+                    <FaTrash size={13} /><span>Supprimer</span>
+                  </button>
+                </div>
+              )}
             </div>
-          ))
-        )}
+          );
+        })}
       </div>
     </div>
   );
