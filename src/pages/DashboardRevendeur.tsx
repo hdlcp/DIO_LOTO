@@ -2,9 +2,10 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@mui/material";
-import "../styles/Dashboard.css"; // ✅ Import du CSS
-import { useAuth } from "../AuthContext"; // Importer le hook useAuth
+import "../styles/Dashboard.css";
+import { useAuth } from "../AuthContext";
 import { getUserNotifications } from "../services/notificationService";
+import { FaWallet, FaStore, FaTrophy, FaUserCheck, FaWhatsapp, FaGlobe, FaExchangeAlt, FaArrowDown, FaTicketAlt, FaHistory, FaPlay, FaShoppingCart, FaUserPlus } from "react-icons/fa";
 
 const DashboardRevendeur: React.FC = () => {
   const { user, token } = useAuth(); // Accéder aux informations de l'utilisateur via le contexte
@@ -50,7 +51,7 @@ const DashboardRevendeur: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h3>💰 Solde principale</h3>
+            <h3><FaWallet size={12} style={{marginRight: 6}} />Solde principale</h3>
             <p>{solde?.toLocaleString() || 0} XOF</p>
           </motion.div>
           <motion.div
@@ -59,7 +60,7 @@ const DashboardRevendeur: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <h3>🏪 Solde revendeur</h3>
+            <h3><FaStore size={12} style={{marginRight: 6}} />Solde revendeur</h3>
             <p>{soldeRevendeur?.toLocaleString() || 0} XOF</p>
           </motion.div>
           <motion.div
@@ -68,7 +69,7 @@ const DashboardRevendeur: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.15 }}
           >
-            <h3>🎯 Gains</h3>
+            <h3><FaTrophy size={12} style={{marginRight: 6}} />Gains</h3>
             <p>{gain?.toLocaleString() || 0} XOF</p>
           </motion.div>
           {/* Section bonus - Journée bonus terminée le 01/03/2025
@@ -94,33 +95,33 @@ const DashboardRevendeur: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-            <p><b>📱 WhatsApp:</b> {whatsapp}</p>
-            <p><b>🌍 Pays:</b> {pays}</p>
-            <p><b>✅ Statut:</b> {status}</p>
+            <p><b><FaWhatsapp size={13} style={{marginRight: 6, verticalAlign: 'middle'}} />WhatsApp:</b> {whatsapp}</p>
+            <p><b><FaGlobe size={13} style={{marginRight: 6, verticalAlign: 'middle'}} />Pays:</b> {pays}</p>
+            <p><b><FaUserCheck size={13} style={{marginRight: 6, verticalAlign: 'middle'}} />Statut:</b> {status}</p>
         </motion.div>
 
         {/* ✅ Boutons avec Material UI */}
         <div className="buttons-container">
           <Link to="/recharger_user">
-            <Button variant="contained" className="custom-button"> RECHARGER</Button>
+            <Button variant="contained" className="custom-button recharge-btn"><FaUserPlus size={16} /><span>RECHARGER USER</span></Button>
           </Link>
           <Link to="/recharger-with-gain">
-            <Button variant="contained" className="custom-button">💰 RECHARGER AVEC GAIN</Button>
+            <Button variant="contained" className="custom-button recharge-btn"><FaExchangeAlt size={16} /><span>RECHARGER AVEC GAIN</span></Button>
           </Link>
           <Link to="/withdrawal">
-            <Button variant="contained" className="custom-button">🏦 RETRAIT</Button>
+            <Button variant="contained" className="custom-button withdrawal-btn"><FaArrowDown size={16} /><span>RETRAIT</span></Button>
           </Link>
           <Link to="/tickets">
-            <Button variant="contained" className="custom-button">🎟️ TICKETS</Button>
+            <Button variant="contained" className="custom-button"><FaTicketAlt size={16} /><span>TICKETS</span></Button>
           </Link>
           <Link to="/historyWithdrawal">
-            <Button variant="contained" className="custom-button">💸 HISTORIQUE DES RETRAITS</Button>
+            <Button variant="contained" className="custom-button"><FaHistory size={16} /><span>HISTORIQUE RETRAITS</span></Button>
           </Link>
           <Link to="/games">
-            <Button variant="contained" className="custom-button">🎲 JOUER</Button>
+            <Button variant="contained" className="custom-button game-btn"><FaPlay size={16} /><span>JOUER</span></Button>
           </Link>
           <Link to="/panier">
-            <Button variant="contained" className="custom-button">PANIER</Button>
+            <Button variant="contained" className="custom-button"><FaShoppingCart size={16} /><span>PANIER</span></Button>
           </Link>
         </div>
 

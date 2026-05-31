@@ -11,13 +11,13 @@ import "../styles/BetCouponDisplay.css";
 const getStatusDisplay = (apiStatus: string) => {
   switch (apiStatus.toLowerCase()) {
     case 'validé':
-      return { text: '🎉 GAGNÉ', className: 'status-won' };
+      return { text: 'GAGNÉ', className: 'status-won' };
     case 'invalidé':
-      return { text: '❌ PERDU', className: 'status-lost' };
+      return { text: 'PERDU', className: 'status-lost' };
     case 'attribué':
-      return { text: '💰 ATTRIBUÉ', className: 'status-attributed' };
+      return { text: 'ATTRIBUÉ', className: 'status-attributed' };
     case 'en attente':
-      return { text: '⏳ EN ATTENTE', className: 'status-pending' };
+      return { text: 'EN ATTENTE', className: 'status-pending' };
     default:
       return { text: apiStatus.toUpperCase(), className: 'status-default' };
   }

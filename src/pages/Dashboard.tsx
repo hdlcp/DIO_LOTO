@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import "../styles/Dashboard.css";
 import { useAuth } from "../AuthContext";
 import { getUserNotifications } from "../services/notificationService";
+import { FaWallet, FaTrophy, FaExchangeAlt, FaArrowDown, FaTicketAlt, FaHistory, FaPlay, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 
 // Interface pour les données utilisateur
 interface UserData {
@@ -115,7 +116,7 @@ const Dashboard: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h3>💰 Solde principale</h3>
+            <h3><FaWallet size={12} style={{marginRight: 6}} />Solde principale</h3>
             <p>{userData?.solde?.toLocaleString() || 0} XOF</p>
           </motion.div>
           <motion.div
@@ -124,7 +125,7 @@ const Dashboard: React.FC = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <h3>🎯 Gains</h3>
+            <h3><FaTrophy size={12} style={{marginRight: 6}} />Gains</h3>
             <p>{userData?.gain?.toLocaleString() || 0} XOF</p>
           </motion.div>
           {/* Section bonus - Journée bonus terminée le 01/03/2025
@@ -146,24 +147,24 @@ const Dashboard: React.FC = () => {
         {/* Boutons avec Material UI */}
         <div className="buttons-container">
           <Link to="/recharger-with-gain">
-            <Button variant="contained" className="custom-button">💰 RECHARGER AVEC GAIN</Button>
+            <Button variant="contained" className="custom-button"><FaExchangeAlt size={16} /><span>RECHARGER AVEC GAIN</span></Button>
           </Link>
           <Link to="/withdrawal">
-            <Button variant="contained" className="custom-button">🏦 RETRAIT</Button>
+            <Button variant="contained" className="custom-button"><FaArrowDown size={16} /><span>RETRAIT</span></Button>
           </Link>
           <Link to="/tickets">
-            <Button variant="contained" className="custom-button">🎟️ TICKETS</Button>
+            <Button variant="contained" className="custom-button"><FaTicketAlt size={16} /><span>TICKETS</span></Button>
           </Link>
           <Link to="/historyWithdrawal">
-            <Button variant="contained" className="custom-button">💸 HISTORIQUE DES RETRAITS</Button>
+            <Button variant="contained" className="custom-button"><FaHistory size={16} /><span>HISTORIQUE RETRAITS</span></Button>
           </Link>
           <Link to="/games">
-            <Button variant="contained" className="custom-button">🎲 JOUER</Button>
+            <Button variant="contained" className="custom-button game-btn"><FaPlay size={16} /><span>JOUER</span></Button>
           </Link>
           <Link to="/panier">
-            <Button variant="contained" className="custom-button">PANIER</Button>
+            <Button variant="contained" className="custom-button"><FaShoppingCart size={16} /><span>PANIER</span></Button>
           </Link>
-          <Button variant="contained" onClick={handleLogout} className="custom-button">🚪 DÉCONNEXION</Button>
+          <Button variant="contained" onClick={handleLogout} className="custom-button danger-btn"><FaSignOutAlt size={16} /><span>DÉCONNEXION</span></Button>
         </div>
 
         {/* Aperçu Notifications */}

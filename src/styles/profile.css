@@ -1,122 +1,174 @@
-/* 📌 Profil.css - Style moderne et responsive */
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+
 .profil-container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #131920;
-    color: #fff;
-    border-radius: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-5);
+  min-height: 100vh;
 }
 
 .profil-section {
-    background: #1d2630;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-5);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-normal);
 }
 
-h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+.profil-section:hover {
+  box-shadow: var(--shadow-md);
 }
 
-p {
-    font-size: 14px;
-    color: #ccc;
-    margin-bottom: 15px;
+.profil-section h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
 }
 
+.profil-section p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+  line-height: var(--leading-relaxed);
+}
+
+/* Inputs */
 .input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-4);
 }
 
 .input-group label {
-    font-size: 14px;
-    margin-bottom: 5px;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
 }
 
 .input-group input {
-    padding: 10px;
-    padding-right: 40px;
-    border: none;
-    border-radius: 5px;
-    background: #2a3a4d;
-    color: white;
-    font-size: 14px;
-    outline: none;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.input-group input::placeholder {
-    color: #aaa;
+  padding: var(--space-3) var(--space-4);
+  padding-right: var(--space-10);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-family);
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .input-group input:focus {
-    border: 1px solid #1abc9c;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-muted);
 }
 
-/* 🔹 Boutons */
+.input-group input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Bouton enregistrer */
 .save-btn {
-    background: rgb(65, 105, 225);
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: background 0.3s;
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  width: 100%;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  margin-top: var(--space-4);
+  min-height: 48px;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-primary);
+  letter-spacing: 0.5px;
 }
 
-.save-btn:hover {
-    background:rgba(65, 34, 64, 0.988);
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.5);
 }
 
-/* 🔥 Suppression de compte */
+.save-btn:disabled {
+  background: var(--bg-elevated);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Section suppression */
 .delete-section {
-    background: #1d2630;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
+  background: var(--bg-card);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-card);
+}
+
+.delete-section h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-error);
+  margin-bottom: var(--space-2);
+}
+
+.delete-section p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+  line-height: var(--leading-relaxed);
 }
 
 .delete-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
+  background: var(--color-error-muted);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+  padding: var(--space-3) var(--space-6);
+  width: 100%;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  min-height: 48px;
+  transition: all var(--transition-normal);
+  letter-spacing: 0.5px;
 }
 
-.delete-btn:hover {
-    background: #c0392b;
+.delete-btn:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
 }
 
-/* ✅ RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-    .profil-container {
-        width: 90%;
-        padding: 15px;
-    }
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-    .profil-section {
-        padding: 15px;
-    }
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 
-    h2 {
-        font-size: 18px;
-    }
+@media (max-width: 600px) {
+  .profil-container {
+    padding: var(--space-5) var(--space-4);
+  }
 
-    .input-group input {
-        font-size: 13px;
-    }
+  .profil-section,
+  .delete-section {
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+  }
 }

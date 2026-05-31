@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Assure-toi que c'est bien importé
+import { useNavigate } from "react-router-dom";
+import { FaBullhorn } from "react-icons/fa";
 import "../styles/Home.css";
 import { gameService } from "../services/gameService";
 
@@ -62,11 +63,11 @@ const Home: React.FC = () => {
           )}
           {!loading && !error && annonces.map((annonce) => (
             <div className="announcement-item" key={annonce.id}>
-              <div className="announcement-icon">📢</div>
+              <div className="announcement-icon"><FaBullhorn size={24} color="var(--color-accent)" /></div>
               <div className="announcement-content">
                 <h3>{annonce.titre}</h3>
                 <p>{annonce.description}</p>
-                <small style={{ color: '#888' }}>Publié le {new Date(annonce.created).toLocaleDateString()}</small>
+                <small style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)', display: 'block', marginTop: '8px' }}>Publié le {new Date(annonce.created).toLocaleDateString()}</small>
               </div>
             </div>
           ))}

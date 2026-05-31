@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { userService } from "../services/userService";
 import "../styles/profile.css"; // 🔹 Importation du CSS
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const Profil: React.FC = () => {
   const { user, token, logout } = useAuth();
@@ -144,8 +144,10 @@ const Profil: React.FC = () => {
             maxWidth: "360px",
             width: "90%",
           }}>
-            <div style={{ fontSize: "36px", marginBottom: "12px" }}>
-              {snackbar.severity === "success" ? "✅" : "❌"}
+            <div style={{ marginBottom: "12px", display: "flex", justifyContent: "center" }}>
+              {snackbar.severity === "success"
+                ? <FaCheckCircle size={36} color="white" />
+                : <FaTimesCircle size={36} color="white" />}
             </div>
             {snackbar.message}
           </div>

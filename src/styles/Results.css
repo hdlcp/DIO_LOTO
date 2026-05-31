@@ -1,104 +1,148 @@
+/* ============================================
+   RESULTS PAGE
+   ============================================ */
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--bg-base);
+  padding: var(--space-8) var(--space-5);
+  position: relative;
+}
+
+.results-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.results-title span {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Grille des résultats */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-6);
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* Carte résultat */
+.result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
 
 
-  .results-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
-    padding: 20px;
-  }
+.result-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary-border);
+  box-shadow: var(--shadow-primary);
+}
 
-  .results-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9); /* Assombrissement */
-    z-index: 0;
-  }
+.result-card:hover::before {
+  opacity: 1;
+}
 
-  .results-title{
-    z-index: 1;
-    color: yellow;
-  }
+/* Boules de loto */
+.ball-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-3);
+  display: block;
+}
 
-  
-  /* Grille des résultats */
+/* Overlay gagnants */
+.winners-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-modal);
+  backdrop-filter: blur(8px);
+}
+
+.winners-content {
+  background: var(--bg-card);
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-10) var(--space-8);
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(168, 85, 247, 0.15);
+}
+
+.winners-content h2 {
+  color: var(--color-accent);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-4);
+}
+
+.winners-content p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.winner-image {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-4);
+  display: block;
+}
+
+/* Bouton fermeture dans l'overlay */
+.winners-content button {
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  margin-top: var(--space-4);
+  transition: all var(--transition-normal);
+  min-height: 44px;
+  box-shadow: var(--shadow-primary);
+}
+
+.winners-content button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 600px) {
+  .results-title { font-size: var(--text-2xl); }
   .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-    z-index: 1;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-3);
   }
-  
-  /* Carte de chaque résultat */
-  .result-card {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .result-card:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Image des boules de billard */
-  .ball-icon {
-    width: 50px;
-    margin-bottom: 10px;
-  }
-  
-  /* Overlay des gagnants */
-  .winners-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 1;
-  }
-  
-  /* Contenu des gagnants */
-  .winners-content {
-    background: white;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 400px;
-  }
-  
-  /* Image du gagnant */
-  .winner-image {
-    width: 80px;
-    margin-bottom: 10px;
-  }
-  
-  /* Bouton de fermeture */
-  button {
-    background: #ffcc00;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-    background: #ff9900;
-  }
-  
+}
