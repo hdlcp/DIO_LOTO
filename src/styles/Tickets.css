@@ -4,11 +4,29 @@
 
 .tickets-container {
   min-height: 100vh;
-  background: var(--bg-base);
+  background: url("../assets/lotto-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
   padding: var(--space-6) var(--space-5);
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.tickets-container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 0;
+}
+
+.tickets-header,
+.tickets-list,
+.loading,
+.no-tickets {
+  position: relative;
+  z-index: 1;
 }
 
 /* Header */

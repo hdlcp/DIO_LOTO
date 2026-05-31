@@ -7,9 +7,24 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: var(--bg-base);
-  padding: var(--space-8) var(--space-5);
+  background: url("../assets/lotto-bg.jpg") no-repeat center center / cover;
   position: relative;
+  padding: var(--space-8) var(--space-5);
+}
+
+.results-container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 0;
+}
+
+.results-title,
+.results-grid,
+.winners-overlay {
+  position: relative;
+  z-index: 1;
 }
 
 .results-title {

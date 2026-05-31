@@ -9,29 +9,29 @@
 /* --- CSS Variables --- */
 :root {
   /* Backgrounds */
-  --bg-base:       #060b18;
-  --bg-card:       #0d1526;
-  --bg-surface:    #1a2540;
-  --bg-elevated:   #243050;
-  --bg-overlay:    rgba(6, 11, 24, 0.85);
+  --bg-base:       rgba(0, 0, 0, 0.85);
+  --bg-card:       rgba(0, 0, 0, 0.75);
+  --bg-surface:    rgba(255, 255, 255, 0.08);
+  --bg-elevated:   rgba(255, 255, 255, 0.12);
+  --bg-overlay:    rgba(0, 0, 0, 0.85);
 
-  /* Primary (violet) */
-  --color-primary:       #a855f7;
-  --color-primary-dark:  #7c3aed;
-  --color-primary-light: #c084fc;
-  --color-primary-muted: rgba(168, 85, 247, 0.15);
-  --color-primary-border: rgba(168, 85, 247, 0.35);
+  /* Primary (mauve original DIO LOTO) */
+  --color-primary:        rgb(163, 89, 160);
+  --color-primary-dark:   rgb(130, 65, 128);
+  --color-primary-light:  rgb(200, 130, 197);
+  --color-primary-muted:  rgba(163, 89, 160, 0.15);
+  --color-primary-border: rgba(163, 89, 160, 0.4);
 
-  /* Secondary (royal blue) */
-  --color-secondary:       #4169e1;
-  --color-secondary-dark:  #2d4fc4;
-  --color-secondary-light: #6b8ef5;
+  /* Secondary (bleu royal original) */
+  --color-secondary:       rgb(65, 105, 225);
+  --color-secondary-dark:  rgb(45, 80, 190);
+  --color-secondary-light: rgb(100, 140, 240);
   --color-secondary-muted: rgba(65, 105, 225, 0.15);
 
-  /* Accent (gold) */
+  /* Accent (or) */
   --color-accent:       #ffd700;
-  --color-accent-dark:  #f59e0b;
-  --color-accent-light: #fef08a;
+  --color-accent-dark:  #f0c000;
+  --color-accent-light: #ffe44d;
   --color-accent-muted: rgba(255, 215, 0, 0.15);
 
   /* Status */
@@ -56,8 +56,8 @@
   --border-strong:  rgba(255, 255, 255, 0.25);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #a855f7, #7c3aed);
-  --gradient-gold:    linear-gradient(135deg, #ffd700, #f59e0b);
+  --gradient-primary: linear-gradient(135deg, rgb(163, 89, 160), rgb(65, 105, 225));
+  --gradient-gold:    linear-gradient(135deg, #ffd700, #f0c000);
   --gradient-card:    linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(65, 105, 225, 0.08));
   --gradient-dark:    linear-gradient(180deg, #060b18 0%, #0d1526 100%);
   --gradient-hero:    linear-gradient(135deg, #060b18 0%, #1a0a2e 50%, #060b18 100%);

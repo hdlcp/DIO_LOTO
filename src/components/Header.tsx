@@ -21,7 +21,7 @@ import { useAuth } from "../AuthContext";
 const DRAWER_WIDTH = 280;
 
 const drawerPaper = {
-  backgroundColor: "#0d1526",
+  backgroundColor: "rgb(20, 20, 45)",
   borderRight: "1px solid rgba(255,255,255,0.07)",
   width: DRAWER_WIDTH,
   display: "flex",
@@ -36,9 +36,9 @@ const itemBase = {
   padding: "10px 12px",
   transition: "all 0.2s ease",
   "&:hover": {
-    backgroundColor: "rgba(168,85,247,0.1)",
+    backgroundColor: "rgba(163,89,160,0.15)",
     color: "#fff",
-    borderLeft: "3px solid #a855f7",
+    borderLeft: "3px solid rgb(163, 89, 160)",
     paddingLeft: "9px",
   },
 };
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
         position="sticky"
         elevation={0}
         sx={{
-          background: "#0d1526",
+          background: "rgb(20, 20, 45)",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
           boxShadow: "none",
           "&::after": {
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
             left: 0,
             right: 0,
             height: "2px",
-            background: "linear-gradient(90deg, #a855f7, #4169e1)",
+            background: "linear-gradient(90deg, rgb(163,89,160), rgb(65,105,225))",
           },
         }}
       >
@@ -111,7 +111,7 @@ const Header: React.FC = () => {
             onClick={handleDrawerToggle}
             sx={{
               color: "rgba(255,255,255,0.6)",
-              "&:hover": { color: "#fff", backgroundColor: "rgba(168,85,247,0.1)" },
+              "&:hover": { color: "#fff", backgroundColor: "rgba(163,89,160,0.15)" },
               borderRadius: "8px",
               p: "8px",
             }}
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
               onClick={handleProfileMenuOpen}
               sx={{
                 color: "rgba(255,255,255,0.6)",
-                "&:hover": { color: "#fff", backgroundColor: "rgba(168,85,247,0.1)" },
+                "&:hover": { color: "#fff", backgroundColor: "rgba(163,89,160,0.15)" },
                 borderRadius: "8px",
                 p: "8px",
               }}
@@ -148,7 +148,7 @@ const Header: React.FC = () => {
                 onClose={handleProfileMenuClose}
                 PaperProps={{
                   sx: {
-                    backgroundColor: "#0d1526",
+                    backgroundColor: "rgb(20, 20, 45)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: "10px",
                     minWidth: 200,
@@ -159,13 +159,13 @@ const Header: React.FC = () => {
               >
                 <MenuItem
                   onClick={() => { handleProfileMenuClose(); navigate("/dashboard"); }}
-                  sx={{ color: "rgba(255,255,255,0.8)", fontSize: "0.875rem", gap: 1, "&:hover": { backgroundColor: "rgba(168,85,247,0.1)", color: "#fff" } }}
+                  sx={{ color: "rgba(255,255,255,0.8)", fontSize: "0.875rem", gap: 1, "&:hover": { backgroundColor: "rgba(163,89,160,0.15)", color: "#fff" } }}
                 >
                   <DashboardIcon sx={{ fontSize: 18 }} /> Dashboard
                 </MenuItem>
                 <MenuItem
                   onClick={() => { handleProfileMenuClose(); navigate("/profile"); }}
-                  sx={{ color: "rgba(255,255,255,0.8)", fontSize: "0.875rem", gap: 1, "&:hover": { backgroundColor: "rgba(168,85,247,0.1)", color: "#fff" } }}
+                  sx={{ color: "rgba(255,255,255,0.8)", fontSize: "0.875rem", gap: 1, "&:hover": { backgroundColor: "rgba(163,89,160,0.15)", color: "#fff" } }}
                 >
                   <PersonIcon sx={{ fontSize: 18 }} /> Mon Compte
                 </MenuItem>

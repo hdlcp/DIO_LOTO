@@ -118,6 +118,7 @@ const Profil: React.FC = () => {
   }
 
   return (
+    <div className="profil-page">
     <div className="profil-container">
       {snackbar.open && (
         <div style={{
@@ -268,6 +269,7 @@ const Profil: React.FC = () => {
           {loading ? "SUPPRESSION..." : "SUPPRIMER LE COMPTE"}
         </button>
       </div>
+    </div>
     </div>
   );
 };

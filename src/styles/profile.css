@@ -2,11 +2,27 @@
    PROFILE PAGE
    ============================================ */
 
+.profil-page {
+  min-height: 100vh;
+  background: url("../assets/lotto-bg.jpg") no-repeat center center / cover;
+  position: relative;
+}
+
+.profil-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 0;
+}
+
 .profil-container {
   max-width: 700px;
   margin: 0 auto;
   padding: var(--space-8) var(--space-5);
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .profil-section {
