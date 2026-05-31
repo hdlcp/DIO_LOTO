@@ -218,6 +218,16 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Override global MUI boutons contained sans className custom */
+.MuiButton-containedPrimary:not([class*="custom-button"]):not([class*="play-button"]) {
+  background-color: rgb(163, 89, 160) !important;
+  color: white !important;
+}
+
+.MuiButton-containedPrimary:not([class*="custom-button"]):not([class*="play-button"]):hover {
+  background-color: rgb(130, 65, 128) !important;
+}
+
 /* Inputs globaux */
 input, select, textarea {
   font-family: var(--font-family);

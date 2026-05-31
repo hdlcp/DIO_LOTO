@@ -6,44 +6,54 @@
     min-height: 100vh;
     background: url("../assets/lotto-bg.jpg") no-repeat center center/cover;
     padding: 20px;
+    position: relative;
   }
-  
+
   .country-selection-container::before {
     content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Assombrissement */
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
     z-index: 0;
   }
-  
+
   .back-button {
-    display: inline-block;
+    display: block;
+    width: fit-content;
+    margin: 0 auto 20px auto;
     text-decoration: none;
-    color:rgb(163, 89, 160);
-    margin-bottom: 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
     z-index: 2;
+    background: rgb(163, 89, 160);
+    padding: 10px 28px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    text-align: center;
   }
-  
+
   .back-button:hover {
-    color: #402cd7; /* Orange */
+    background: rgb(130, 65, 128);
+    color: white;
   }
   
   .title {
     color: rgb(163, 89, 160);
     font-size: 24px;
     font-weight: bold;
+    position: relative;
     z-index: 2;
   }
-  
+
   .countries-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 20px;
     justify-content: center;
     padding: 20px;
+    position: relative;
     z-index: 2;
   }
   

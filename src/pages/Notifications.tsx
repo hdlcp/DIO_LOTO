@@ -61,10 +61,10 @@ const Notifications: React.FC = () => {
         <div style={{ margin: '20px 0', textAlign: 'right' }}>
           <Button
             variant="contained"
-            color="primary"
             startIcon={<DoneAllIcon />}
             onClick={handleMarkAllAsRead}
             disabled={notifications.length === 0 || notifications.every(n => n.isRead)}
+            sx={{ backgroundColor: 'rgb(163, 89, 160)', '&:hover': { backgroundColor: 'rgb(130, 65, 128)' } }}
           >
             Tout marquer comme lu
           </Button>
@@ -100,7 +100,11 @@ const Notifications: React.FC = () => {
           ))}
         </div>
         <div style={{ marginTop: 30 }}>
-          <Button variant="contained" onClick={() => navigate(-1)}>
+          <Button
+            variant="contained"
+            onClick={() => navigate(-1)}
+            sx={{ backgroundColor: 'rgb(163, 89, 160)', '&:hover': { backgroundColor: 'rgb(130, 65, 128)' } }}
+          >
             Retour
           </Button>
         </div>
