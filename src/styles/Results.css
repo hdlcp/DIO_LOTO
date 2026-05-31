@@ -9,7 +9,7 @@
   min-height: 100vh;
   background: url("../assets/lotto-bg.jpg") no-repeat center center / cover;
   position: relative;
-  padding: var(--space-8) var(--space-5);
+  padding: 40px 20px 60px;
 }
 
 .results-container::before {
@@ -20,134 +20,312 @@
   z-index: 0;
 }
 
-.results-title,
+.results-header,
 .results-grid,
-.winners-overlay {
+.results-loading,
+.results-error {
   position: relative;
   z-index: 1;
 }
 
-.results-title {
-  font-size: var(--text-3xl);
-  font-weight: var(--font-extrabold);
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
+/* Header */
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  width: 100%;
+  max-width: 1100px;
   text-align: center;
-  letter-spacing: -0.5px;
 }
 
-.results-title span {
-  background: var(--gradient-gold);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.results-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
 }
 
-/* Grille des résultats */
+/* Grille */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--space-4);
-  justify-content: center;
-  margin-top: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
 }
 
-/* Carte résultat */
+/* Card */
 .result-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: var(--space-5) var(--space-4);
-  text-align: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(163, 89, 160, 0.3);
+  border-radius: 14px;
+  padding: 20px;
   cursor: pointer;
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-card);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(6px);
 }
-
 
 .result-card:hover {
+  background: rgba(163, 89, 160, 0.15);
+  border-color: rgba(163, 89, 160, 0.6);
   transform: translateY(-4px);
-  border-color: var(--color-primary-border);
-  box-shadow: var(--shadow-primary);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
-.result-card:hover::before {
-  opacity: 1;
+/* Header de la card */
+.result-card-header {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
 }
 
-/* Boules de loto */
-.ball-icon {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto var(--space-3);
-  display: block;
+.result-game-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgb(163, 89, 160);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Overlay gagnants */
+/* Méta infos */
+.result-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  justify-content: center;
+}
+
+.result-meta-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+  background: rgba(255,255,255,0.06);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Label numéros */
+.result-numbers-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Numéros */
+.result-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+  justify-content: center;
+}
+
+.result-ball {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgb(163, 89, 160);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(163, 89, 160, 0.4);
+  flex-shrink: 0;
+}
+
+.result-ball-blue {
+  background: rgb(65, 105, 225);
+  box-shadow: 0 2px 8px rgba(65, 105, 225, 0.4);
+}
+
+.result-ball-large {
+  width: 46px;
+  height: 46px;
+  font-size: 1rem;
+}
+
+/* Footer card */
+.result-card-footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: white;
+  font-weight: 600;
+  background: rgb(163, 89, 160);
+  padding: 8px 0;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.result-card:hover .result-card-footer {
+  background: rgb(130, 65, 128);
+}
+
+/* ============================================
+   OVERLAY GAGNANTS
+   ============================================ */
+
 .winners-overlay {
   position: fixed;
-  inset: 0;
-  background: var(--bg-overlay);
+  top: 64px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 64px);
+  background: rgba(0,0,0,0.88);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: var(--z-modal);
-  backdrop-filter: blur(8px);
+  z-index: 200;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .winners-content {
-  background: var(--bg-card);
-  border: 1px solid var(--color-primary-border);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-10) var(--space-8);
+  background: rgba(20, 10, 35, 0.97);
+  border: 1px solid rgba(163, 89, 160, 0.4);
+  border-radius: 20px;
+  padding: 36px 32px;
   text-align: center;
-  max-width: 420px;
-  width: 90%;
-  box-shadow: var(--shadow-lg), 0 0 40px rgba(168, 85, 247, 0.15);
+  max-width: 460px;
+  width: calc(100% - 40px);
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.winners-content h2 {
-  color: var(--color-accent);
-  font-size: var(--text-2xl);
-  margin-bottom: var(--space-4);
-}
-
-.winners-content p {
-  color: var(--text-secondary);
-  margin-bottom: var(--space-3);
-}
-
-.winner-image {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto var(--space-4);
-  display: block;
-}
-
-/* Bouton fermeture dans l'overlay */
-.winners-content button {
-  background: var(--gradient-primary);
-  color: var(--text-primary);
+.winners-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255,255,255,0.08);
   border: none;
-  padding: var(--space-3) var(--space-8);
-  border-radius: var(--radius-md);
-  font-family: var(--font-family);
-  font-size: var(--text-sm);
-  font-weight: var(--font-bold);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-height: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.6);
   cursor: pointer;
-  margin-top: var(--space-4);
-  transition: all var(--transition-normal);
-  min-height: 44px;
-  box-shadow: var(--shadow-primary);
+  transition: background 0.2s;
+  padding: 0;
 }
 
-.winners-content button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.5);
+.winners-close:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+.winners-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.winners-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.winners-info:last-of-type { border-bottom: none; }
+
+.winners-info-label {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.winners-info-value {
+  font-size: 0.95rem;
+  color: white;
+  font-weight: 600;
+}
+
+.winners-numbers-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,215,0,0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 18px 0 10px;
+}
+
+.winners-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.winners-btn {
+  margin-top: 24px;
+  background: rgb(163, 89, 160);
+  color: white;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: unset;
+}
+
+.winners-btn:hover {
+  background: rgb(130, 65, 128);
+}
+
+/* States */
+.results-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px;
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+}
+
+.results-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(163, 89, 160, 0.3);
+  border-top-color: rgb(163, 89, 160);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.results-error {
+  color: #ef4444;
+  font-size: 1rem;
+  padding: 40px;
+  text-align: center;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ============================================
@@ -155,9 +333,9 @@
    ============================================ */
 
 @media (max-width: 600px) {
-  .results-title { font-size: var(--text-2xl); }
   .results-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--space-3);
+    grid-template-columns: 1fr;
   }
+  .results-title { font-size: 1.4rem; }
+  .winners-content { padding: 28px 20px; }
 }

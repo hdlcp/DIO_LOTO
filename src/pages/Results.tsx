@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import "../styles/Results.css"; // Ajoute les styles ici
-import rejouer from "../assets/loto.png";
+import { FaTrophy, FaCalendarAlt, FaClock, FaGlobe, FaTimes } from "react-icons/fa";
+import "../styles/Results.css";
 import { getResults, Result } from "../services/resultService";
 
 const Results: React.FC = () => {
@@ -10,7 +10,7 @@ const Results: React.FC = () => {
   const [results, setResults] = useState<Result[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { width, height } = useWindowSize(); // Pour s'assurer que les confettis couvrent tout l'écran
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -21,33 +21,34 @@ const Results: React.FC = () => {
         setError(null);
       } catch (err) {
         setError("Erreur lors du chargement des résultats");
-        console.error(err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchResults();
   }, []);
 
-  const handleClick = (id: number) => {
-    setSelectedResult(id);
-  };
-
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR');
+    return new Date(dateString).toLocaleDateString('fr-FR');
   };
 
   const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    return new Date(dateString).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   };
+
+  const parseNumbers = (numbersStr: string): string[] => {
+    return numbersStr.split(/[,\s-]+/).map(n => n.trim()).filter(n => n.length > 0);
+  };
+
+  const selected = results.find(r => r.id === selectedResult);
 
   if (loading) {
     return (
       <div className="results-container">
-        <div className="loading">Chargement des résultats...</div>
+        <div className="results-loading">
+          <div className="results-spinner" />
+          <p>Chargement des résultats...</p>
+        </div>
       </div>
     );
   }
@@ -55,60 +56,118 @@ const Results: React.FC = () => {
   if (error) {
     return (
       <div className="results-container">
-        <div className="error">{error}</div>
+        <div className="results-error">{error}</div>
       </div>
     );
   }
 
   return (
     <div className="results-container">
-      <h2 className="results-title">🎱 Résultats</h2>
 
-      {/* Affichage des résultats sous forme de grille */}
+      {/* Titre */}
+      <div className="results-header">
+        <FaTrophy size={28} color="rgb(163, 89, 160)" />
+        <h2 className="results-title">Résultats des tirages</h2>
+      </div>
+
+      {/* Grille */}
       <div className="results-grid">
         {results.map((result) => (
-          <div key={result.id} className="result-card" onClick={() => handleClick(result.id)}>
-            <img src={rejouer} alt="Ball" className="ball-icon" />
-            <p>📅 {formatDate(result.createdAt)}</p>
-            <p>⏰ {formatTime(result.createdAt)}</p>
-            <p>🏳️ {result.game.pays}</p>
-            <p>🎮 {result.game.nom}</p>
-            <p>
-              <strong>Numéros :</strong> {result.numbers}
-              {result.numbers2 && (
-                <>
-                  <br />
-                  <strong>Double Chance :</strong> {result.numbers2}
-                </>
-              )}
-            </p>
+          <div
+            key={result.id}
+            className="result-card"
+            onClick={() => setSelectedResult(result.id)}
+          >
+            {/* Nom du jeu */}
+            <div className="result-card-header">
+              <span className="result-game-name">{result.game.nom}</span>
+            </div>
+
+            {/* Infos */}
+            <div className="result-card-meta">
+              <span className="result-meta-item">
+                <FaGlobe size={12} style={{ marginRight: 5 }} />
+                {result.game.pays}
+              </span>
+              <span className="result-meta-item">
+                <FaCalendarAlt size={12} style={{ marginRight: 5 }} />
+                {formatDate(result.createdAt)}
+              </span>
+              <span className="result-meta-item">
+                <FaClock size={12} style={{ marginRight: 5 }} />
+                {formatTime(result.createdAt)}
+              </span>
+            </div>
+
+            {/* Numéros */}
+            <div className="result-numbers-label">Numéros tirés</div>
+            <div className="result-numbers">
+              {parseNumbers(result.numbers).map((num, i) => (
+                <span key={i} className="result-ball">{num}</span>
+              ))}
+            </div>
+
+            {result.numbers2 && (
+              <>
+                <div className="result-numbers-label" style={{ color: 'rgb(65, 105, 225)' }}>Double Chance</div>
+                <div className="result-numbers">
+                  {parseNumbers(result.numbers2).map((num, i) => (
+                    <span key={i} className="result-ball result-ball-blue">{num}</span>
+                  ))}
+                </div>
+              </>
+            )}
+
+            <div className="result-card-footer">Voir</div>
           </div>
         ))}
       </div>
 
-      {/* Si un résultat est sélectionné, afficher les gagnants */}
-      {selectedResult !== null && (
-        <div className="winners-overlay">
-          <Confetti width={width} height={height} />
-          <div className="winners-content">
-            <img src={rejouer} alt="Winner" className="winner-image" />
-            <h3>Félicitations aux heureux gagnants ! 🎉</h3>
-            <p>
-              <strong>Numéros gagnants :</strong> {results.find((r) => r.id === selectedResult)?.numbers}
-              {results.find((r) => r.id === selectedResult)?.numbers2 && (
-                <>
-                  <br />
-                  <strong>Numéros gagnants (Double Chance) :</strong> {results.find((r) => r.id === selectedResult)?.numbers2}
-                </>
-              )}
-            </p>
-            <p>
-              <strong>Jeu :</strong> {results.find((r) => r.id === selectedResult)?.game.nom}
-              </p>
-            <p>
-              <strong>Pays :</strong> {results.find((r) => r.id === selectedResult)?.game.pays}
-            </p>
-            <button onClick={() => setSelectedResult(null)}>Fermer</button>
+      {/* Overlay gagnants */}
+      {selectedResult !== null && selected && (
+        <div className="winners-overlay" onClick={() => setSelectedResult(null)}>
+          <Confetti width={width} height={height} numberOfPieces={180} />
+          <div className="winners-content" onClick={e => e.stopPropagation()}>
+
+            <button className="winners-close" onClick={() => setSelectedResult(null)}>
+              <FaTimes size={16} />
+            </button>
+
+            <FaTrophy size={40} color="#ffd700" style={{ marginBottom: 12 }} />
+            <h3 className="winners-title">Détails du tirage</h3>
+
+            <div className="winners-info">
+              <span className="winners-info-label">Jeu</span>
+              <span className="winners-info-value">{selected.game.nom}</span>
+            </div>
+            <div className="winners-info">
+              <span className="winners-info-label">Pays</span>
+              <span className="winners-info-value">{selected.game.pays}</span>
+            </div>
+            <div className="winners-info">
+              <span className="winners-info-label">Date</span>
+              <span className="winners-info-value">{formatDate(selected.createdAt)} — {formatTime(selected.createdAt)}</span>
+            </div>
+
+            <div className="winners-numbers-label">Numéros gagnants</div>
+            <div className="winners-numbers">
+              {parseNumbers(selected.numbers).map((num, i) => (
+                <span key={i} className="result-ball result-ball-large">{num}</span>
+              ))}
+            </div>
+
+            {selected.numbers2 && (
+              <>
+                <div className="winners-numbers-label" style={{ color: 'rgb(65, 105, 225)' }}>Double Chance</div>
+                <div className="winners-numbers">
+                  {parseNumbers(selected.numbers2).map((num, i) => (
+                    <span key={i} className="result-ball result-ball-blue result-ball-large">{num}</span>
+                  ))}
+                </div>
+              </>
+            )}
+
+            <button className="winners-btn" onClick={() => setSelectedResult(null)}>Fermer</button>
           </div>
         </div>
       )}
