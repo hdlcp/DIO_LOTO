@@ -11,11 +11,12 @@
   background: rgba(0,0,0,0.88);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 150;
   padding: 20px;
   box-sizing: border-box;
   backdrop-filter: blur(4px);
+  overflow-y: auto;
 }
 
 .coupon-modal {
@@ -26,6 +27,8 @@
   max-width: 420px;
   box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(163,89,160,0.15);
   overflow: hidden;
+  margin: auto 0;
+  flex-shrink: 0;
 }
 
 /* Header */
