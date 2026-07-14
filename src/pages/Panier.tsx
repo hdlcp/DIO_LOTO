@@ -16,8 +16,26 @@ const getStatusDisplay = (apiStatus: string) => {
   }
 };
 
-const parseNumbers = (str: string): string[] =>
-  str.split(/[,\s\-\|]+/).map(n => n.trim()).filter(n => n.length > 0 && n.length <= 3);
+const parseNumbers = (val: unknown): string[] => {
+  if (val == null) return [];
+  if (Array.isArray(val)) return val.map(String);
+  if (typeof val === 'number') return [String(val)];
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.map(String);
+      } catch {
+        // continue avec le fallback ci-dessous
+      }
+    }
+    return trimmed.includes(',')
+      ? trimmed.split(',').map(s => s.trim()).filter(Boolean)
+      : [trimmed];
+  }
+  return [];
+};
 
 const Panier = () => {
   const { user, token } = useAuth();
