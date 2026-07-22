@@ -133,13 +133,18 @@ export const getBetTypeConfig = (betType: BetType, currentGameHasDoubleChance: b
         );
       }
       break;
-    case "NAP":
-      options = ["NAP3", "NAP4", "NAP5"];
+    case "NAP": {
+      if (numberOfBalls >= 3) options.push("NAP3");
+      if (numberOfBalls >= 4) options.push("NAP4");
+      if (numberOfBalls >= 5) options.push("NAP5");
       minNums = maxNums = numberOfBalls;
       if (currentGameHasDoubleChance) {
-        options.push("NAP3DoubleChance", "NAP4DoubleChance", "NAP5DoubleChance");
+        if (numberOfBalls >= 3) options.push("NAP3DoubleChance");
+        if (numberOfBalls >= 4) options.push("NAP4DoubleChance");
+        if (numberOfBalls >= 5) options.push("NAP5DoubleChance");
       }
       break;
+    }
     case "Twosûrs":
       options = ["Directe", "Turbo2", "Turbo3", "Turbo4"];
       minNums = maxNums = 2;
@@ -220,59 +225,46 @@ export const calculateGains = (
 
     case "NAP":
       if (formula === "NAP3") {
+        if (numberOfBalls < 3) return "";
         if (numberOfBalls === 3) {
-          // Cas simple : 3 boules, NAP3, pas de prises
           if (amount < 10) return "";
           calculatedGain = amount * 3000;
-        } else if (numberOfBalls === 4) {
-          // Cas avec prises : 4 boules, NAP3
-          calculatedGain = prises * 30000;
-        } else if (numberOfBalls === 5) {
-          // Cas avec prises : 5 boules, NAP3
+        } else {
           calculatedGain = prises * 30000;
         }
       } else if (formula === "NAP4") {
+        if (numberOfBalls < 4) return "";
         if (numberOfBalls === 4) {
-          // Cas simple : 4 boules, NAP4, pas de prises
           if (amount < 10) return "";
           calculatedGain = amount * 8000;
-        } else if (numberOfBalls === 5) {
-          // Cas avec prises : 5 boules, NAP4
+        } else {
           calculatedGain = prises * 80000;
         }
       } else if (formula === "NAP5") {
-        // Cas simple : 5 boules, NAP5, pas de prises
-        if (amount < 10) return "";
+        if (numberOfBalls < 5 || amount < 10) return "";
         calculatedGain = amount * 50000;
       } else if (formula === "NAP3DoubleChance") {
+        if (numberOfBalls < 3) return "";
         if (numberOfBalls === 3) {
-          // Cas simple : 3 boules, NAP3DoubleChance, pas de prises
           if (amount < 10) return "";
           calculatedGain = amount * 3000;
           return applyDoubleChanceSplit(calculatedGain);
-        } else if (numberOfBalls === 4) {
-          // Cas avec prises : 4 boules, NAP3DoubleChance
-          calculatedGain = prises * 30000;
-          return applyDoubleChanceSplit(calculatedGain);
-        } else if (numberOfBalls === 5) {
-          // Cas avec prises : 5 boules, NAP3DoubleChance
+        } else {
           calculatedGain = prises * 30000;
           return applyDoubleChanceSplit(calculatedGain);
         }
       } else if (formula === "NAP4DoubleChance") {
+        if (numberOfBalls < 4) return "";
         if (numberOfBalls === 4) {
-          // Cas simple : 4 boules, NAP4DoubleChance, pas de prises
           if (amount < 10) return "";
           calculatedGain = amount * 8000;
           return applyDoubleChanceSplit(calculatedGain);
-        } else if (numberOfBalls === 5) {
-          // Cas avec prises : 5 boules, NAP4DoubleChance
+        } else {
           calculatedGain = prises * 80000;
           return applyDoubleChanceSplit(calculatedGain);
         }
       } else if (formula === "NAP5DoubleChance") {
-        // Cas simple : 5 boules, NAP5DoubleChance, pas de prises
-        if (amount < 10) return "";
+        if (numberOfBalls < 5 || amount < 10) return "";
         calculatedGain = amount * 50000;
         return applyDoubleChanceSplit(calculatedGain);
       } else {
@@ -471,6 +463,18 @@ export const validateCoupon = (
   }
 
   if (betType === "NAP") {
+    const napMinBalls = {
+      NAP3: 3,
+      NAP4: 4,
+      NAP5: 5,
+      NAP3DoubleChance: 3,
+      NAP4DoubleChance: 4,
+      NAP5DoubleChance: 5
+    } as const;
+    const minBalls = napMinBalls[formula as keyof typeof napMinBalls];
+    if (minBalls && numberOfBalls && numberOfBalls < minBalls) {
+      return false;
+    }
     return numbers.length === numberOfBalls;
   }
   
