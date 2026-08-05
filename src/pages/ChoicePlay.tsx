@@ -75,8 +75,14 @@ const ChoicePlay = () => {
     return days[currentTime.getDay()];
   };
 
+  // Jeux dont le nom ne contient pas l'heure (pas de convention pays+heure)
+  const specialGameTimes: { [key: string]: string } = {
+    togodetente: "16:00",
+  };
+
   // Fonction pour extraire l'heure du nom du jeu
   const getGameTime = (gameName: string): string => {
+    if (specialGameTimes[gameName]) return specialGameTimes[gameName];
     const timeMatch = gameName.match(/\d+/);
     return timeMatch ? `${timeMatch[0]}:00` : "00:00";
   };
