@@ -12,6 +12,7 @@ import {
   FormulaOption,
   CouponDetails,
   doubleChanceGames,
+  blockedFormulas,
   getBetTypeConfig,
   calculateGains,
   generateAutoNumbers,
@@ -282,6 +283,9 @@ const BetForm = () => {
 
   // Validation du coupon
   const isCouponValid = () => {
+    if (blockedFormulas.includes(formula)) {
+      return false;
+    }
     if (betType === "Annagrammesimple") {
       return stake !== "" && parseFloat(stake) > 0 && numberOfPrises !== "" && numbers.length > 0;
     }

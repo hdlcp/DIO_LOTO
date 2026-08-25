@@ -100,6 +100,9 @@ const gameMultipliers = {
 };
 
 // Liste des jeux qui supportent la double chance
+// Formules temporairement désactivées (bloquées à la validation même si sélectionnées via un état/bundle obsolète)
+export const blockedFormulas: FormulaOption[] = ["Turbo2", "Turbo2DoubleChance"];
+
 export const doubleChanceGames: string[] = [
   "togo9",
   "togodetente",
