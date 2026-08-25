@@ -147,24 +147,27 @@ export const getBetTypeConfig = (betType: BetType, currentGameHasDoubleChance: b
       break;
     }
     case "Twosûrs":
-      options = ["Directe", "Turbo2", "Turbo3", "Turbo4"];
+      // Turbo2 retiré temporairement
+      options = ["Directe", "Turbo3", "Turbo4"];
       minNums = maxNums = 2;
       if (currentGameHasDoubleChance) {
-        options.push("DirecteDoubleChance", "Turbo2DoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
+        options.push("DirecteDoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
       }
       break;
     case "Permutations":
-      options = ["Directe", "Turbo2", "Turbo3", "Turbo4"];
+      // Turbo2 retiré temporairement
+      options = ["Directe", "Turbo3", "Turbo4"];
       minNums = maxNums = numberOfBalls;
       if (currentGameHasDoubleChance) {
-         options.push("DirecteDoubleChance", "Turbo2DoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
+         options.push("DirecteDoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
       }
       break;
     case "DoubleNumber":
-      options = ["Directe", "Turbo2", "Turbo3", "Turbo4"];
+      // Turbo2 retiré temporairement
+      options = ["Directe", "Turbo3", "Turbo4"];
       minNums = maxNums = 8;
       if (currentGameHasDoubleChance) {
-        options.push("DirecteDoubleChance", "Turbo2DoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
+        options.push("DirecteDoubleChance", "Turbo3DoubleChance", "Turbo4DoubleChance");
       }
       break;
     case "Annagrammesimple":
